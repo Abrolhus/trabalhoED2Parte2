@@ -114,8 +114,17 @@ void NoB::insert( int val )
         exit(1);
     }
 
-    for( int i = 0; i < size; i++ )
+    int i;
+
+    for( i = 0; i < size; i++ )
     {
+        if( values[i] == -1 )
+        {
+            values[i] = val;
+            pos++;
+            return;
+        }
+        else
         if( val < values[i] )
         {
             for( int k = size+1; k > i; k-- )
@@ -128,14 +137,10 @@ void NoB::insert( int val )
             pos++;
             return;
         }
-        else if( values[i] == -1 )
-        {
-            values[i] = val;
-            pos++;
-            return;
-        }
     }
 
+    values[i] = val;
+    pos++;
 }
 
 void NoB::insert( int val, int k )

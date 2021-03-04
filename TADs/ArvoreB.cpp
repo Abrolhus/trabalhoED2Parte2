@@ -40,19 +40,6 @@ bool ArvoreB::Busca( int val )
 
 void ArvoreB::Insere( int val )
 {
-    // if( root == nullptr )
-    // {
-    //     root = new NoB( size );
-    //     root->setLeaf();
-    // }
-
-    // bool done = false;
-    // int ov = -1;
-    // NoB* oc = root;
-    // NoB* on = root;
-    // insereAux( val, root, done, ov, oc, on );
-    // return;
-
     NoB* aux = root;
     int i;
 
@@ -60,32 +47,37 @@ void ArvoreB::Insere( int val )
     {
         if( aux->get(i) == -1 ) // INSERE SE VAZIO
         {
-            aux->insert( val, i );
-            cout << "Inserido " << val << endl;
-            return;
+            if( aux->getChild(i) == nullptr ) // SE NÃO POSSUI VALORES A DIREITA DE AUX-1, INSERE
+            {
+                aux->insert( val, i );
+                cout << "Inserido " << val << endl;
+                return;
+            }
+            else
+            {
+                aux = aux->getChild(i);
+                i = -1;
+            }
         }
-
+        else
         if( aux->get(i) > val ) // INSERE SE ESTIVER ENTRE ALGUM VALOR
         {
-            // if( aux->full() ) // SE CHEIO, BUSCA NO FILHO OU COMEÇA OVERFLOW
-            // {
-                if( aux->isLeaf() ) // SE NO FOLHA, OVERFLOW, SAI DO FOR
-                    break;
+            if( aux->isLeaf() ) // SE NO FOLHA, OVERFLOW, SAI DO FOR
+            {
+                overflow( val, aux, nullptr, nullptr );
+                return;
+            }
 
+            if( aux->getChild(i) != nullptr )
+            {
                 aux = aux->getChild(i); // CASO NAO SEJA NO FOLHA, CONTINUA BUSCANDO LOCAL DE INSERCAO
                 i = -1;
-            // }
-            // else
-            // {
-                // aux->insert( val );
-                // cout << "Inserido " << val << endl;
-                // return; // SE NÃO OVERFLOW, INSERIU COM SUCESSO DE MANEIRA ORDENADA
-            // }
+            }
         }
     }
 
-    cout << "Overflow" << endl;
     overflow( val, aux, nullptr, nullptr );
+    // cout << "ERROR: O vetor foi percorrido e nada aconteceu" << endl;
 }
 
 void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right )
@@ -101,12 +93,16 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right )
         if( current->get(i) > val || current->get(i) == -1 ) break;
 
     current->insert( val );
-    current->setChild( i, left );
-    current->setChild( i+1, right );
+    current->setChild( (i == size ? i-1:i), left );
+    current->setChild( (i == size ? i:i+1), right );
+
+    if( left != nullptr ) left->setParent( current );
+    if( right != nullptr ) right->setParent( current );
 
     cout << "Inserido " << val << endl;
-
-    if( current->getPos() <= size ) return;
+    // Print(true);
+    // cout << "pos: " << current->getPos() << endl;
+    if( current->getPos() < size+1 ) return;
 
     int pivo = current->get( size/2 );
     NoB* newRight = new NoB(size);
@@ -121,8 +117,9 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right )
         current->setChild( j, nullptr );
     }
     newRight->appendChild( current->getChild(size) );
-
     newRight->setLeaf( current->isLeaf() ); // SE AUX E FOLHA, NO DA DIREITA TAMBEM SERA
+
+    current->setPos( size/2 );
 
     overflow( pivo, current->getParent(), current, newRight );
 
