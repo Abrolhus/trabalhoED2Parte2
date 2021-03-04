@@ -1,3 +1,6 @@
+#ifndef ARVOREAVL_H
+#define ARVOREAVL_H
+
 #include <iostream>
 #include "NoAVL.h"
 
@@ -28,3 +31,5 @@ class ArvoreAVL
 
         void Print();
 };
+
+#endif

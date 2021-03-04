@@ -1,3 +1,6 @@
+#ifndef NOAVL_H
+#define NOAVL_H
+
 #include <iostream>
 
 using namespace std;
@@ -37,3 +40,5 @@ class NoAVL
 
         void print();
 };
+
+#endif
