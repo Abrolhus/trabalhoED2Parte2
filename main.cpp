@@ -1,14 +1,19 @@
-#include "HashTable.h"
-int main(){
-    HashTable ht = HashTable(5);
-    ht.insert({"Belo Horizonte", "MG", 11});
-    ht.insert({"Betin", "MG", 21});
-    ht.insert({"Juiz de Fora", "MG", 31});
-    ht.insert({"Rio de Janeiro", "RJ", 71});
-    ht.insert({"Sao Paulo", "SP", 13});
-    ht.print();
+#include "TADs\ArvoreB.h"
+
+int main( int argc, char** argv ){
+
+    ArvoreB arvore( 4 );
+
+    arvore.Insere( 10 );
+    arvore.Insere( 58 );
+    arvore.Insere( 37 );
+    arvore.Insere( 15 );
+
+    arvore.Insere( 5 );
+    arvore.Insere( 16 );
+    // arvore.Insere( 43 );
+
+    arvore.Print(true);
+
     return 0;
-
-
-
 }

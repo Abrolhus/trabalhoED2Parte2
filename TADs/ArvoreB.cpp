@@ -2,7 +2,8 @@
 
 ArvoreB::ArvoreB( int size )
 {
-    root = nullptr;
+    root = new NoB(size);
+    root->setLeaf();
     this->size = size;
 }
 
@@ -39,217 +40,117 @@ bool ArvoreB::Busca( int val )
 
 void ArvoreB::Insere( int val )
 {
-    if( root == nullptr )
+    // if( root == nullptr )
+    // {
+    //     root = new NoB( size );
+    //     root->setLeaf();
+    // }
+
+    // bool done = false;
+    // int ov = -1;
+    // NoB* oc = root;
+    // NoB* on = root;
+    // insereAux( val, root, done, ov, oc, on );
+    // return;
+
+    NoB* aux = root;
+    int i;
+
+    for( i = 0; i < size; i++ )
     {
-        root = new NoB( size );
-        root->setLeaf();
-    }
-
-    bool done = false;
-    int ov = -1;
-    NoB* oc = root;
-    NoB* on = root;
-    insereAux( val, root, done, ov, oc, on );
-    return;
-
-    if( root == nullptr )
-    {
-        root = new NoB( size );
-        root->setLeaf();
-    }
-
-    NoB* it = root;
-
-    for( int i = 0; i < size; i++ )
-    {
-        if( it->get(i) == -1 )
+        if( aux->get(i) == -1 ) // INSERE SE VAZIO
         {
-            it->append( val );
+            aux->insert( val, i );
+            cout << "Inserido " << val << endl;
             return;
         }
-        else if( it->get(i) > val )
+
+        if( aux->get(i) > val ) // INSERE SE ESTIVER ENTRE ALGUM VALOR
         {
-            if( it->full() )
-            {
-                if( it->isLeaf() )
-                {
-                    NoB* newNode = new NoB( size );
-                    newNode->setLeaf();
-                    newNode->setParent( it->getParent() );
+            // if( aux->full() ) // SE CHEIO, BUSCA NO FILHO OU COMEÇA OVERFLOW
+            // {
+                if( aux->isLeaf() ) // SE NO FOLHA, OVERFLOW, SAI DO FOR
+                    break;
 
-                    // INSERE O OVERFLOW
-                    it->insert( val, i );
-
-                    // BUSCA CHAVE DO MEIO
-                    int middle = it->get(size/2);
-
-                    // REPOPULAR SEGUNDO NÓ COM size/2 ELEMENTOS
-                    // DO PRIMEIRO
-                    for( int j = (size/2)+1; j < size+1; j++ )
-                    {
-                        newNode->append( it->get(j) );
-                        newNode->appendChild( it->getChild(j) );
-                        it->setChild( j, nullptr );
-                        it->set( j, -1 );
-                    }
-                    it->setPos( size/2 );
-
-                    NoB* aux = it->getParent();
-
-                    // INSERE O OVERFLOW
-                    aux->insert( middle );
-
-                    val = middle;
-
-                    it = it->getParent();
-                    i = -1;
-                }
-                else
-                {
-                    it = it->getChild( i );
-                    i = -1;
-                }
-            }
-            else
-            {
-                // INSERE ORDENADO
-                it->insert( val, i );
-                return;
-            }
+                aux = aux->getChild(i); // CASO NAO SEJA NO FOLHA, CONTINUA BUSCANDO LOCAL DE INSERCAO
+                i = -1;
+            // }
+            // else
+            // {
+                // aux->insert( val );
+                // cout << "Inserido " << val << endl;
+                // return; // SE NÃO OVERFLOW, INSERIU COM SUCESSO DE MANEIRA ORDENADA
+            // }
         }
     }
+
+    cout << "Overflow" << endl;
+    overflow( val, aux, nullptr, nullptr );
 }
 
-void ArvoreB::insereAux( int val, NoB* no, bool& done, int& overflowValue, NoB*& overflowChild, NoB*& overflowNode )
+void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right )
 {
-    cout << "rec" << endl;
+    if( current == nullptr )
+    {
+        root = new NoB(size);
+        current = root;
+    }
+
+    int i;
+    for( i = 0; i < size; i++ ) // BUSCA POSICAO NA QUAL VAL SERA INSERIDO
+        if( current->get(i) > val || current->get(i) == -1 ) break;
+
+    current->insert( val );
+    current->setChild( i, left );
+    current->setChild( i+1, right );
+
+    cout << "Inserido " << val << endl;
+
+    if( current->getPos() <= size ) return;
+
+    int pivo = current->get( size/2 );
+    NoB* newRight = new NoB(size);
+
+    current->set( size/2, -1 );
+    for( int j = (size/2)+1; j < size+1; j++ )
+    {
+        newRight->append( current->get(j) );
+        newRight->appendChild( current->getChild(j) );
+
+        current->set( j, -1 );
+        current->setChild( j, nullptr );
+    }
+    newRight->appendChild( current->getChild(size) );
+
+    newRight->setLeaf( current->isLeaf() ); // SE AUX E FOLHA, NO DA DIREITA TAMBEM SERA
+
+    overflow( pivo, current->getParent(), current, newRight );
+
+}
+
+void ArvoreB::Print( bool overflow )
+{
+    bool of = overflow;
+    int layer = 0;
+    printAux( root, layer, of );
+}
+void ArvoreB::printAux( NoB* no, int& layer, bool& overflow )
+{   
     if( no == nullptr ) return;
 
-    for( int i = 0; i < size; i++ )
+    for( int j = 0; j < layer; j++ ) cout << "  ";
+    for( int i = 0; i < size+(overflow ? 1:0); i++ )
     {
-        if( no->get(i) == -1 )
-        {
-            no->set( i, val );
-            no->setPos( no->getPos() + 1 );
-            cout << "Inserido " << val << endl;
-            done = true;
-            return;
-        }
-        else if( val < no->get(i) )
-        {
-            insereAux( val, no->getChild( i ), done, overflowValue, overflowChild, overflowNode );
-            break;
-        }
-        else if( i == size )
-        {
-            insereAux( val, no->getChild( i+1 ), done, overflowValue, overflowChild, overflowNode );
-            break;
-        }
-    }
+        cout << no->get( i ) << ( i==size-1+(overflow ? 1:0) ? "":", ");
 
-    if( done ) return;
-
-    if( no->isLeaf() )
-    {
-        no->insert( val );
-        cout << "Inserido " << val << endl;
-    }
-    else
-    {
-        no->insert( overflowValue, overflowChild );
-        for( int i = 0; i < size+1; i++ )
-        {
-            if( no->get(i) == overflowValue )
-                no->setChild( i+1, overflowNode );
-        }
-    }
-
-    if( no->full() )
-    {
-        cout << "overflow" << endl;
-        overflowValue = no->get( size/2 );
-        overflowChild = no;
-        overflowNode = new NoB( size );
-        overflowNode->setLeaf( no->isLeaf() );
-        overflowNode->setParent( no->getParent() );
-
-        int i;
-        for( i = (size/2)+1; i < size+1; i++ )
-        {
-            overflowNode->append( no->get( i ) );
-            overflowNode->appendChild( no->getChild( i ) );
-            no->set( i, -1 );
-            no->setChild( i, nullptr );
-            no->setPos( no->getPos()-1 );
-            no->setPosChild( no->getPosChild()-1 );
-        }
-        overflowNode->appendChild( no->getChild( i+1 ) );
-
-        no->setPos( size/2 );
-
-        if( no == root )
-        {
-            NoB* parent = new NoB( size );
-            
-            parent->append( val );
-            parent->appendChild( overflowChild );
-            parent->appendChild( overflowNode );
-
-            no->setParent( parent );
-            overflowNode->setParent( parent );
-
-            root = parent;
-        }
-
-        return;
-    }
-
-    done = true;
-}
-
-void ArvoreB::overflow( int val, NoB* no, NoB* newNo )
-{
-    NoB* aux = no->getParent();
-
-    if( aux == nullptr )
-    {
-        aux = new NoB( size );
-        root = aux;
-        no->setParent( root );
-    }
-
-    if( aux->full() )
-    {
-        aux->insert( val, newNo );
-        // overflow( aux->get( size/2 ), aux->getChild() )
-        return;
-    }
-
-    aux->insert( val, newNo );
-}
-
-void ArvoreB::Print()
-{
-    int layer = 0;
-    printAux( root, layer );
-}
-void ArvoreB::printAux( NoB* no, int& layer )
-{   
-    for( int i = 0; i < size; i++ )
-    {
         if( no->getChild(i) != nullptr )
         {
             layer++;
-            printAux( no->getChild(i), layer );
+            cout << endl;
+            printAux( no->getChild(i), layer, overflow );
             layer--;
         }
-        cout << "Layer: " << layer << endl;
 
-        if( layer > 0 )
-        {
-            cout << "|";
-            for( int j = 0; j < layer; j++ ) cout << "-";
-        }
-        cout << " " << no->get( i ) << ( i==size-1 ? "\n":", ");
     }
+    cout << endl;
 }

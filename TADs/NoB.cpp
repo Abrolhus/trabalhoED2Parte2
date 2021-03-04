@@ -81,7 +81,7 @@ void NoB::setLeaf( bool x )
 
 bool NoB::full()
 {
-    return ( pos > size );
+    return ( pos >= size );
 }
 
 void NoB::setParent( NoB* no )

@@ -1,3 +1,6 @@
+#ifndef ARVOREB_H
+#define ARVOREB_H
+
 #include <iostream>
 #include "NoB.h"
 
@@ -10,11 +13,9 @@ class ArvoreB
 
         int size;
 
-        void printAux( NoB* no, int& layer );
+        void printAux( NoB* no, int& layer, bool& overflow );
 
-        void overflow( int val, NoB* no, NoB* newNo );
-
-        void insereAux( int val, NoB* no, bool& done, int& overflowValue, NoB*& overflowChild, NoB*& overflowNode );
+        void overflow( int val, NoB* current, NoB* left, NoB* right );
 
     public:
         ArvoreB( int size );
@@ -24,5 +25,7 @@ class ArvoreB
 
         void Insere( int val );
 
-        void Print();
+        void Print( bool overflow = false );
 };
+
+#endif

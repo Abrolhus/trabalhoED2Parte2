@@ -1,3 +1,6 @@
+#ifndef NOB_H
+#define NOB_H
+
 #include <iostream>
 
 using namespace std;
@@ -43,3 +46,5 @@ class NoB
         void setParent( NoB* no );
         NoB* getParent();
 };
+
+#endif
