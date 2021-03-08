@@ -9,8 +9,14 @@ private:
     folhaQuadTree* SE;
     folhaQuadTree* NW;
     folhaQuadTree* SW;
+    string stateCode;
+    string cityCode;
+    string cidade;
+    float longitude;
+    float latitude;
+    string capital;
 public:
-    folhaQuadTree(/* args */);
+    folhaQuadTree(string stateCode, string cityCode, string cidade, float longitude, float latitude, string capital);
     ~folhaQuadTree();
     float getLatitude();
     float getLongitude();
@@ -20,6 +26,12 @@ public:
     folhaQuadTree* getSE();
     folhaQuadTree* getNW();
     folhaQuadTree* getSW();
+    void setCidade(string cidade);
+    string getCidade();
+    void setStateCode(string stateCode);
+    string getStateCode();
+    void setCityCode(string cityCode);
+    string getCityCode();
 };
 
 
