@@ -26,12 +26,12 @@ public:
     folhaQuadTree* getSE();
     folhaQuadTree* getNW();
     folhaQuadTree* getSW();
-    void setCidade(string cidade);
+    /*void setCidade(string cidade);
     string getCidade();
     void setStateCode(string stateCode);
     string getStateCode();
     void setCityCode(string cityCode);
-    string getCityCode();
+    string getCityCode();*/
 };
 
 

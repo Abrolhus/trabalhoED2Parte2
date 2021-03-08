@@ -14,10 +14,10 @@ private:
 public:
     quadTree(ifstream &arquivo);
     ~quadTree();
-    bool inserir(folhaQuadTree p);
+    void inserir(folhaQuadTree* raiz,folhaQuadTree *p);
     /*bool marcarComoRemovido();
     quadTree reconstruir();*/
-    folhaQuadTree compara();
+    folhaQuadTree* compara(folhaQuadTree *r, folhaQuadTree* i);
 };
 
 

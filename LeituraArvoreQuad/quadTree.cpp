@@ -21,10 +21,10 @@ quadTree::quadTree(ifstream& file)
      * INICIA AS VARIAVEIS DA CLASSE
     **/
     string line;
-    this->tam = -1;
+    this->tam = 0;
     //this->pos = 0;
-    while( getline(file,line) )
-        this->tam++;
+    //while( getline(file,line) )
+    //    this->tam++;
     //this->raiz = new folhaQuadTree[this->tam];
     file.clear(ios_base::goodbit);
     file.seekg(0, file.beg);
@@ -57,12 +57,51 @@ quadTree::quadTree(ifstream& file)
         line_aux = line_aux.substr(line_aux.find(',')+1);
 
         //vet.push_back( new No(data,estado,cidade,codigo,casos,mortes) );
-        this->raiz = &folhaQuadTree(stateCode, cityCode, cidade, longitude, latitude, capital);
-
-        //this->pos++;
+        if (tam == 0)this->raiz = new folhaQuadTree(stateCode, cityCode, cidade, longitude, latitude, capital);
+        else {
+            folhaQuadTree *p = new folhaQuadTree(stateCode, cityCode, cidade, longitude, latitude, capital);
+            inserir(raiz, p);
+        }
+        this->tam++;
     }
 }
 
 quadTree::~quadTree()
 {
+}
+
+folhaQuadTree* quadTree::compara(folhaQuadTree *raiz, folhaQuadTree* i){
+    if (i->getLatitude() < raiz->getLatitude()){
+        if(i->getLongitude() < raiz->getLongitude()){
+            return raiz->getSW();
+        }
+        else {
+            return raiz->getNW();
+        }
+    }
+    else {
+        if(i->getLongitude() < raiz->getLongitude()){
+            return raiz->getSE();
+        }
+        else{
+            return raiz->getNE();
+        }
+    }
+}
+
+void quadTree::inserir(folhaQuadTree* raiz, folhaQuadTree* i){
+    folhaQuadTree* quadrante = NULL;
+    if(raiz == NULL){
+        this->raiz = i;
+    }
+    else{
+        while(raiz != NULL){
+            folhaQuadTree* pai = raiz;
+            quadrante = compara(pai, i);
+            raiz = quadrante; 
+        }
+        if(raiz == NULL){
+            quadrante = i;
+        }
+    }
 }

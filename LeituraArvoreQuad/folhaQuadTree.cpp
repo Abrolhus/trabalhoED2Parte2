@@ -13,10 +13,10 @@ folhaQuadTree::folhaQuadTree(string stateCode, string cityCode, string cidade, f
     this->longitude = longitude;
     this->latitude = latitude;
     this->capital = capital;
-    this->NE = nullptr;
-    this->SE = nullptr;
-    this->SW = nullptr;
-    this->NW = nullptr;
+    this->NE = NULL;
+    this->SE = NULL;
+    this->SW = NULL;
+    this->NW = NULL;
 }
 
 folhaQuadTree::~folhaQuadTree()
