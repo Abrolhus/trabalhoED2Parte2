@@ -1,0 +1,17 @@
+#ifndef REGISTRO_H
+#define REGISTRO_H
+#include <iostream>
+class Registro {
+    private:
+        std::string estado;
+        std::string data;
+        int codigo;
+        std::string cidade;
+        int casos;
+        int mortes;
+    public:
+        Registro(std::string data, std::string estado, std::string cidade, int codigo, int casos, int mortes);
+        std::string getData(){ return this->data; }
+        std::string getCidade(){ return this->cidade; }
+};
+#endif

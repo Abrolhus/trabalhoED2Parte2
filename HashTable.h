@@ -4,26 +4,22 @@
 #include <iostream>
 #include <list>
 #include <vector>
+#include "Registro.h"
 
-typedef struct{
-    std::string cidade;
-    std::string estado;
-    int nCasos;
-} Registro;
 class HashTable{
     public:
         HashTable(int size);
         void insert(Registro);
-        void remove(std::string estado, std::string cidade);
+        void remove(std::string cidade, std::string data);
         float getLoadFactor();
         int getSize();
-        Registro at(std::string estado, std::string cidade);
+        Registro at(std::string cidade, std::string data);
         void print();
     private:
         // std::list<Registro>
         std::vector<std::list<Registro>*> table; // using std::list for now, I may implement a linked list container later.
         int size;
-        int hashFunction(std::string estado, std::string cidade);
+        int hashFunction(std::string cidade, std::string data);
 };
 
 

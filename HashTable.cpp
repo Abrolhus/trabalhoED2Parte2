@@ -8,14 +8,14 @@ HashTable::HashTable(int size){
 }
 
 void HashTable::insert(Registro reg){
-    int index = this->hashFunction(reg.estado, reg.cidade);
+    int index = this->hashFunction(reg.getCidade(), reg.getData());
     this->table[index]->push_back(reg);
 }
 
-void HashTable::remove(std::string estado, std::string cidade){
-    int index = hashFunction(estado, cidade);
+void HashTable::remove(std::string cidade, std::string data){
+    int index = hashFunction(cidade, data);
     for(auto it = this->table[index]->begin(); it != this->table[index]->end(); ++it){ // TODO: substitute this->table[index] for a more readable pointer.
-        if(it->estado == estado && it->cidade == cidade){
+        if(it->getCidade() == cidade && it->getData() == cidade){
             this->table[index]->erase(it); //
             return;
         }
@@ -26,15 +26,15 @@ void HashTable::print(){
     for(auto* lista : this->table){
         std::cout << "nLista:" << std::endl;
         for(auto reg : *lista){
-            std::cout << reg.cidade << " (" << reg.estado << ") " << reg.nCasos << std::endl;
+            std::cout << reg.getCidade() << " (" << reg.getData() << ") " << std::endl;
         }
         std::cout << std::endl;
     }
 }
 
-int HashTable::hashFunction(std::string estado, std::string cidade){
+int HashTable::hashFunction(std::string cidade, std::string data){
     //simplest hashFunction for testing
-    return (int)(((int)estado[0] + (int)(cidade[0]) )% this->getSize());
+    return (int)(((int)cidade[0] + (int)(data[0]) )% this->getSize());
 }
 int HashTable::getSize(){
     return this->size;
