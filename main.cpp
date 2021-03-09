@@ -2,8 +2,17 @@
 #include "Registro.h"
 #include <iostream>
 #include <fstream>
+#include "TADs\ArvoreB.h"
+#include "TADs\ArvoreAVL.h"
+#include "TADs\interface.h"
+
 using namespace std;
 int main(){
+    ArvoreAVL avlTree;
+    ArvoreB bTree( 8 );
+
+    interface( avlTree, bTree );
+
     void lerRegistrosParaHashTable(std::ifstream& file, HashTable& ht);
     HashTable ht = HashTable(40);
     string fname = "brazil_covid19_cities_processado.csv";
@@ -11,8 +20,6 @@ int main(){
     lerRegistrosParaHashTable(file, ht);
     // ht.print();
     return 0;
-
-
 
 }
 void lerRegistrosParaHashTable(std::ifstream& file, HashTable& ht){
