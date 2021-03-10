@@ -3,8 +3,11 @@
 
 #include <iostream>
 #include "NoAVL.h"
+#include "../HashTable.h"
 
 using namespace std;
+
+int DataCompare( string, string );
 
 class ArvoreAVL
 {
@@ -13,19 +16,21 @@ class ArvoreAVL
 
         void balanceamento();
 
-        void InsereAux( int val, NoAVL* no );
-        void PrintAux( NoAVL* no );
+        void InsereAux( int, NoAVL* );
+        void PrintAux( NoAVL* );
 
-        void rotSEsq( NoAVL* no );
-        void rotSDir( NoAVL* no );
-        void rotDEsq( NoAVL* no );
-        void rotDDir( NoAVL* no );
+        void rotSEsq( NoAVL* );
+        void rotSDir( NoAVL* );
+        void rotDEsq( NoAVL* );
+        void rotDDir( NoAVL* );
+
+        HashTable* HashRef;
 
     public:
-        ArvoreAVL();
+        ArvoreAVL( HashTable* Hash );
         ~ArvoreAVL();
 
-        void Insere( int val );
+        void Insere( int );
 
         bool Busca( int val );
 

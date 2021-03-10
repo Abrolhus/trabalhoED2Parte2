@@ -1,7 +1,10 @@
 #include "ArvoreAVL.h"
 
-ArvoreAVL::ArvoreAVL()
+#include <string>
+
+ArvoreAVL::ArvoreAVL( HashTable* Hash )
 {
+    HashRef = Hash;
     raiz = nullptr;
 }
 
@@ -10,35 +13,58 @@ ArvoreAVL::~ArvoreAVL()
 
 }
 
-void ArvoreAVL::Insere( int val )
+void ArvoreAVL::Insere( int key )
 {
     if( raiz == nullptr )
     {
-        raiz = new NoAVL(val);
+        raiz = new NoAVL( key );
         raiz->setEsq(nullptr);
         raiz->setDir(nullptr);
     }
     else
-        InsereAux( val, raiz );
+        InsereAux( key, raiz );
 }
-void ArvoreAVL::InsereAux( int val, NoAVL* no )
+void ArvoreAVL::InsereAux( int key, NoAVL* no )
 {
     if( no == nullptr ) return;
 
-    NoAVL* prox = ( no->get() > val ? no->esq():no->dir() );
+    Registro* reg_cur = HashRef->get( no->get() );
+    Registro* reg_new = HashRef->get( key );
+
+    char decision = 'r';
+
+    decision = ( 
+        reg_new->getId() > reg_cur->getId() ? // COMPARA NO DE ID MAIOR
+            'r':
+            reg_new->getId() < reg_cur->getId() ?
+                'l':
+                stoi(reg_new->getData().substr(0,4)) > stoi( reg_cur->getData().substr(0,4) ) ? // COMPARA O ANO
+                    'r':
+                    stoi(reg_new->getData().substr(0,4)) < stoi( reg_cur->getData().substr(0,4) ) ?
+                        'l':
+                        stoi(reg_new->getData().substr(5,2)) > stoi( reg_cur->getData().substr(5,2) ) ? // COMPARA O MES
+                            'r':
+                            stoi(reg_new->getData().substr(5,2)) < stoi( reg_cur->getData().substr(5,2) ) ?
+                                'l':
+                                stoi(reg_new->getData().substr(8,2)) > stoi(reg_cur->getData().substr(8,2)) ? // COMPARA O DIA
+                                    'r':
+                                    'l'
+    );
+
+    NoAVL* prox = ( decision == 'r' ? no->dir():no->esq() );
     
     if( prox == nullptr )
     {
-        NoAVL* aux = new NoAVL(val);
+        NoAVL* aux = new NoAVL( key );
         aux->setDir(nullptr);
         aux->setEsq(nullptr);
-        if( no->get() > val )
-            no->setEsq(aux);
-        else
+        if( decision == 'r' )
             no->setDir(aux);
+        else
+            no->setEsq(aux);
     }
 
-    InsereAux( val, prox );
+    InsereAux( key, prox );
 
     int fd,fe;
     fd = fe = 0;
@@ -70,13 +96,29 @@ void ArvoreAVL::InsereAux( int val, NoAVL* no )
 bool ArvoreAVL::Busca( int val )
 {
     NoAVL* aux = raiz;
+    Registro* reg_cur = HashRef->get( val );
+    Registro* reg_aux;
+
     while( aux != nullptr )
-        if( aux->get() > val )
+    {
+        if( aux->get() == val ) return true;
+
+        reg_aux = HashRef->get( aux->get() );
+
+        if( reg_aux->getId() > reg_cur->getId() )
             aux = aux->esq();
-        else if( aux->get() < val )
+        else if( reg_aux->getId() < reg_cur->getId() )
             aux = aux->dir();
         else
-            return true;
+        {
+            int DataComp = DataCompare( reg_aux->getData(), reg_cur->getData() );
+            if( DataComp == -1 )
+                aux = aux->esq();
+            else if( DataComp == 1 )
+                aux = aux->dir();
+        }
+    }
+
     return false;
 }
 
@@ -163,4 +205,28 @@ void ArvoreAVL::rotDDir( NoAVL* no )
 {
     rotSEsq( no->esq() );
     rotSDir( no );
+}
+
+/**
+ * @param data01 Data principal
+ * @param data02 Data a ser comparada
+ * @return -1 Caso data02 < data01 | 1 Caso data02 > data01 | 0 Caso data02 = data01  
+ */
+int DataCompare( string data01, string data02 )
+{
+    return (
+        stoi(data01.substr(0,4)) < stoi(data02.substr(0,4)) ?
+            1:
+            stoi(data01.substr(0,4)) > stoi(data02.substr(0,4)) ?
+                -1:
+                stoi(data01.substr(5,2)) < stoi(data02.substr(5,2)) ?
+                    1:
+                    stoi(data01.substr(5,2)) > stoi(data02.substr(5,2)) ?
+                        -1:
+                        stoi(data01.substr(8,2)) < stoi(data02.substr(8,2)) ?
+                            1:
+                            stoi(data01.substr(8,2)) > stoi(data02.substr(8,2)) ?
+                                -1:
+                                0
+    );
 }

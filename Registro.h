@@ -13,5 +13,6 @@ class Registro {
         Registro(std::string data, std::string estado, std::string cidade, int codigo, int casos, int mortes);
         std::string getData(){ return this->data; }
         std::string getCidade(){ return this->cidade; }
+        int getId(){ return this->codigo; }
 };
 #endif

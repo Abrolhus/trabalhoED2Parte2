@@ -1,10 +1,13 @@
 #include "ArvoreB.h"
 
-ArvoreB::ArvoreB( int size )
+#include <string>
+
+ArvoreB::ArvoreB( HashTable* Hash, int size )
 {
     root = new NoB(size);
     root->setLeaf();
     this->size = size;
+    HashRef = Hash;
 }
 
 ArvoreB::~ArvoreB()
@@ -16,21 +19,34 @@ bool ArvoreB::Busca( int val )
 {
     NoB* aux = root;
 
+    Registro* reg_cur = HashRef->get( val );
+    Registro* reg_aux;
+
     while( aux != nullptr )
     {
         for( int i = 0; i < size; i++ )
         {
             if( aux->get(i) == val )
                 return true;
-            else if( aux->get(i) > val )
+            else
             {
-                aux = aux->getChild( i );
-                break;
-            }
-            else if( i == size-1 )
-            {
-                aux = aux->getChild(size);
-                break;
+                reg_aux = HashRef->get( aux->get(i) );
+
+                if( reg_aux->getId() > reg_cur->getId() )
+                {
+                    aux = aux->getChild( i );
+                    break;
+                }
+                else if( DataCompare( reg_aux->getData(), reg_cur->getData() ) == -1 )
+                {
+                    aux = aux->getChild( i );
+                    break;
+                }
+                else if( i == size-1 )
+                {
+                    aux = aux->getChild(size);
+                    break;
+                }
             }
         }
     }
@@ -43,8 +59,13 @@ void ArvoreB::Insere( int val )
     NoB* aux = root;
     int i;
 
+    Registro* reg_cur;
+    Registro* reg_new = HashRef->get( val );
+
     for( i = 0; i < size; i++ )
     {
+        reg_cur = HashRef->get( aux->get(i) ); // BUSCA REGISTRO ASSOCIADO A CHAVE AUX[i]
+
         if( aux->get(i) == -1 ) // INSERE SE VAZIO
         {
             if( aux->getChild(i) == nullptr ) // SE NÃO POSSUI VALORES A DIREITA DE AUX-1, INSERE
@@ -60,7 +81,7 @@ void ArvoreB::Insere( int val )
             }
         }
         else
-        if( aux->get(i) > val ) // INSERE SE ESTIVER ENTRE ALGUM VALOR
+        if( reg_cur->getId() > reg_new->getId() || DataCompare( reg_cur->getData(), reg_new->getData() ) == -1 ) // INSERE SE ESTIVER ENTRE ALGUM VALOR
         {
             if( aux->isLeaf() ) // SE NO FOLHA, OVERFLOW, SAI DO FOR
             {
@@ -88,11 +109,17 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right )
         current = root;
     }
 
+    Registro* reg_cur = HashRef->get( val );
+    Registro* reg_aux;
+
     int i;
     for( i = 0; i < size; i++ ) // BUSCA POSICAO NA QUAL VAL SERA INSERIDO
-        if( current->get(i) > val || current->get(i) == -1 ) break;
+    {
+        reg_aux = HashRef->get( current->get(i) );
+        if( reg_aux->getId() > reg_cur->getId() || DataCompare(reg_aux->getData(), reg_cur->getData()) == -1 || current->get(i) == -1 ) break;
+    }
 
-    current->insert( val );
+    current->insert( val, i );
     current->setChild( (i == size ? i-1:i), left );
     current->setChild( (i == size ? i:i+1), right );
 
@@ -150,4 +177,28 @@ void ArvoreB::printAux( NoB* no, int& layer, bool& overflow )
 
     }
     cout << endl;
+}
+
+/**
+ * @param data01 Data principal
+ * @param data02 Data a ser comparada
+ * @return -1 Caso data02 < data01 | 1 Caso data02 > data01 | 0 Caso data02 = data01  
+ */
+int DataCompare( string data01, string data02 )
+{
+    return (
+        stoi(data01.substr(0,4)) < stoi(data02.substr(0,4)) ?
+            1:
+            stoi(data01.substr(0,4)) > stoi(data02.substr(0,4)) ?
+                -1:
+                stoi(data01.substr(5,2)) < stoi(data02.substr(5,2)) ?
+                    1:
+                    stoi(data01.substr(5,2)) > stoi(data02.substr(5,2)) ?
+                        -1:
+                        stoi(data01.substr(8,2)) < stoi(data02.substr(8,2)) ?
+                            1:
+                            stoi(data01.substr(8,2)) > stoi(data02.substr(8,2)) ?
+                                -1:
+                                0
+    );
 }

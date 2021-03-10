@@ -3,8 +3,11 @@
 
 #include <iostream>
 #include "NoB.h"
+#include "./HashTable.h"
 
 using namespace std;
+
+int DataCompare( string,string );
 
 class ArvoreB
 {
@@ -17,8 +20,10 @@ class ArvoreB
 
         void overflow( int val, NoB* current, NoB* left, NoB* right );
 
+        HashTable* HashRef;
+
     public:
-        ArvoreB( int size );
+        ArvoreB( HashTable*, int );
         ~ArvoreB();
 
         bool Busca( int val );

@@ -15,6 +15,8 @@ class HashTable{
         int getSize();
         Registro at(std::string cidade, std::string data);
         void print();
+
+        Registro* get( int chave ); // IMPLEMENTAR POSTERIORMENTE PARA AUXILIO A ARVORE AVL E B
     private:
         // std::list<Registro>
         std::vector<std::list<Registro>*> table; // using std::list for now, I may implement a linked list container later.
