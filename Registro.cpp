@@ -7,3 +7,12 @@ Registro::Registro(std::string data, std::string estado, std::string cidade, int
     this->casos = casos;
     this->mortes = mortes;
 }
+Registro::Registro(){
+    this->data = "";
+    this->estado = "";
+    this->cidade = "";
+    this->codigo = 0;
+    this->casos = 0;
+    this->mortes = 0;
+
+}

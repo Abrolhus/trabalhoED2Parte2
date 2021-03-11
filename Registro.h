@@ -11,6 +11,7 @@ class Registro {
         int mortes;
     public:
         Registro(std::string data, std::string estado, std::string cidade, int codigo, int casos, int mortes);
+        Registro();
         std::string getData(){ return this->data; }
         std::string getCidade(){ return this->cidade; }
 };
