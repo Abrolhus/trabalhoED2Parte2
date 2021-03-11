@@ -32,10 +32,11 @@ class HashTable{
         int getSize();
         Registro& at(std::string cidade, std::string data);
         Registro& at(int id);
+        int getIndexOf(std::string cidade, std::string data);
         void print();
     private:
         // std::list<Registro>
-        std::vector<Element> table; // using std::list for now, I may implement a linked list container later.
+        std::vector<Element> table;
         int size;
         long hashFunction(std::string cidade, std::string data, int i);
 };

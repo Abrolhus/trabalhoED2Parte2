@@ -27,10 +27,15 @@ void HashTable::remove(std::string cidade, std::string data){
 }
 
 void HashTable::print(){
+    int count = 0;
     for(int i = 0; i < this->table.size(); i++){
-        // if(this->table.at(i).flag == FULL)
+        if(this->table.at(i).flag == FULL){
+            count++;
             std::cout << this->table.at(i).value.getCidade() << " (" << this->table.at(i).value.getData() << ") " << std::endl;
+        }
     }
+    std::cout << count << std::endl;
+    std::cout << this->table.size() << std::endl;
 }
 
 long HashTable::hashFunction(std::string cidade, std::string data, int i){
@@ -73,5 +78,24 @@ Registro& HashTable::at(std::string cidade, std::string data){
 Registro& HashTable::at(int index){
     // TODO: throw exception
     return this->table.at(index).value;
+}
+int HashTable::getIndexOf(std::string cidade, std::string data){
+    int i = 0;
+    int index;
+    while(i < this->getSize()){
+        index = this->hashFunction(cidade, data, i);
+        Element* element = &this->table.at(index);
+        if(element->flag == FULL){
+            if(element->value.getCidade() == cidade && element->value.getData() == data){
+                return element->key;
+            }
+        }
+        i++;
+    }
+    // if(this->table.at(index).flag == FULL || this->table.at(index).flag == DELETE_ME){ // TODO: tirar redundancia;
+    // TODO: throw error;
+    return -1;
+
+
 }
 
