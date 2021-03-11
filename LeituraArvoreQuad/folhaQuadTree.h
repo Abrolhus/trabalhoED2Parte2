@@ -18,14 +18,14 @@ private:
 public:
     folhaQuadTree(string stateCode, string cityCode, string cidade, float longitude, float latitude, string capital);
     ~folhaQuadTree();
-    float getLatitude();
-    float getLongitude();
-    void setLatitude(float latitude);
-    void setLongitude(float longitude);
-    folhaQuadTree* getNE();
-    folhaQuadTree* getSE();
-    folhaQuadTree* getNW();
-    folhaQuadTree* getSW();
+    float getLatitude() {return latitude;};
+    float getLongitude(){return longitude;};
+    //void setLatitude(float latitude);
+    //void setLongitude(float longitude);
+    folhaQuadTree* getNE() {return NE;};
+    folhaQuadTree* getSE() {return SE;};
+    folhaQuadTree* getNW() {return NW;};
+    folhaQuadTree* getSW() {return SW;};
     /*void setCidade(string cidade);
     string getCidade();
     void setStateCode(string stateCode);
