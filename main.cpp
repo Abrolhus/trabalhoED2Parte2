@@ -2,15 +2,20 @@
 #include "Registro.h"
 #include <iostream>
 #include <fstream>
-#include "TADs\ArvoreB.h"
-#include "TADs\ArvoreAVL.h"
-#include "TADs\interface.h"
+#include "ArvoresBalanceadas\ArvoreB.h"
+#include "ArvoresBalanceadas\ArvoreAVL.h"
+#include "interface.h"
 
 using namespace std;
-int main(){
+int main( int argc, char** argv ){
+
+    string fname = "brazil_covid19_cities_processado.csv";
+
+    if( argc == 2 )
+        fname = argv[0]+fname;        
+
     void lerRegistrosParaHashTable(std::ifstream& file, HashTable& ht);
     HashTable ht = HashTable(40);
-    string fname = "brazil_covid19_cities_processado.csv";
     ifstream file(fname);
     lerRegistrosParaHashTable(file, ht);
     // ht.print();
