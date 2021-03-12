@@ -34,6 +34,8 @@ class HashTable{
         Registro& at(int id);
         int getIndexOf(std::string cidade, std::string data);
         void print();
+
+        Registro* get( int chave ); // IMPLEMENTAR POSTERIORMENTE PARA AUXILIO A ARVORE AVL E B
     private:
         // std::list<Registro>
         std::vector<Element> table;
