@@ -21,6 +21,9 @@ public:
     /*bool marcarComoRemovido();
     quadTree reconstruir();*/
     folhaQuadTree* compara(folhaQuadTree *r, folhaQuadTree* i);
+    void buscaIntervalo(folhaQuadTree* r, float x0, float x1, float y0, float y1);
+    bool confereIntervalo(folhaQuadTree* r, float x0, float x1, float y0, float y1);
+    folhaQuadTree* comparaComIntervalo(folhaQuadTree *r, float x0, float x1, float y0, float y1);
 };
 
 #endif
