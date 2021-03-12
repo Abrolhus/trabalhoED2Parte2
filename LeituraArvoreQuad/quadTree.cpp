@@ -105,3 +105,133 @@ void quadTree::inserir(folhaQuadTree* raiz, folhaQuadTree* i){
         }
     }
 }
+
+bool quadTree::confereIntervalo(folhaQuadTree* r, float x0, float x1, float y0, float y1, vector<string>& s){
+    /*if (x0 < x1 && y0 < y1){
+        if(raiz->getLatitude() >= x0 && raiz->getLatitude()<=x1){
+            if(raiz->getLongitude() >= y0 && raiz->getLongitude()<= y1){
+                raiz->getCityCode(); //adicionar ao retorno
+            }
+        }
+    }
+    if(x0 > x1 && y0 > y1){
+        if(raiz->getLatitude() <= x0 && raiz->getLatitude() >= x1){
+            if(raiz->getLongitude() <= y0 && raiz->getLongitude() >= y1){
+                raiz->getCityCode(); //adicionar ao retorno
+            }
+        }
+    }
+    if(x0 < x1 && y0 > y1){
+        if(raiz->getLatitude() <= x0 && raiz->getLatitude() >= x1){
+            if(raiz->getLongitude() <= y0 && raiz->getLongitude() >= y1){
+                raiz->getCityCode(); //adicionar ao retorno
+            }
+        }
+    }*/
+
+    if (x0 == x1){
+        if(r->getLatitude() == x0){
+                if(r->getLongitude() >= y0 && r->getLongitude()<= y1){
+                    s.push_back(r->getCityCode());
+                    return true; //adicionar ao retorno
+                }
+        }
+    }
+    if (y0 == y1){
+        if (r->getLongitude() == y0){
+            if(r->getLatitude() >= x0 && r->getLatitude()<=x1){
+                s.push_back(r->getCityCode());
+                return true;
+            }
+        }
+    }
+
+    if(r->getLatitude() >= x0 && r->getLatitude()<=x1){
+        if(r->getLongitude() >= y0 && r->getLongitude()<= y1){
+            s.push_back(r->getCityCode());
+            return true; //adicionar ao retorno
+        }
+    }
+
+    return false;
+    
+    /*else{
+        if(r->getLatitude() <= x0 && r->getLatitude() >= x1){
+            if(y0 < y1){
+                if(r->getLongitude() >= y0 && r->getLongitude()<= y1){
+                    r->getCityCode(); //adicionar ao retorno
+                }
+            }
+            else{
+                if(r->getLongitude() <= y0 && r->getLongitude() >= y1){
+                    r->getCityCode(); //adicionar ao retorno
+                }
+            }
+        } 
+    }*/
+}
+
+
+void quadTree:: buscaIntervalo(folhaQuadTree* r, float x0, float x1, float y0, float y1, vector<string>& s){
+    if(x1 < x0){
+        float aux = 0;
+        aux  = x0;
+        x0 = x1;
+        x1 = aux;
+    } 
+    if(y1 < y0){
+        float aux = 0;
+        aux = y0;
+        y0 = y1;
+        y1 = aux;
+    }
+    if(r != NULL){
+        if(confereIntervalo(r, x0, x1, y0, y1, s)){
+            if(r->getNE() != NULL) buscaIntervalo(r->getNE(), x0, x1, y0, y1, s);
+            if(r->getSE() != NULL) buscaIntervalo(r->getSE(), x0, x1, y0, y1, s);
+            if(r->getNW() != NULL) buscaIntervalo(r->getNW(), x0, x1, y0, y1, s);
+            if(r->getSW() != NULL) buscaIntervalo(r->getSW(), x0, x1, y0, y1, s);
+        }
+        else{
+            if(r->getLatitude() > x0 && r->getLatitude() > x1){
+                if (r->getLongitude() > y0 && r->getLongitude() > y1){
+                    if(r->getSW() != NULL) buscaIntervalo(r->getSW(), x0, x1, y0, y1, s);
+                }
+                if (r->getLongitude() > y0 && r->getLongitude() < y1){
+                    if(r->getSW() != NULL) buscaIntervalo(r->getSW(), x0, x1, y0, y1, s);
+                    if(r->getNW() != NULL) buscaIntervalo(r->getNW(), x0, x1, y0, y1, s);
+                }
+                if(r->getLongitude() < y0 && r->getLongitude() < y1){
+                    if(r->getNW() != NULL) buscaIntervalo(r->getNW(), x0, x1, y0, y1, s);
+                }
+            }
+            if(r->getLatitude() > x0 && r->getLongitude() < x1){
+                if (r->getLongitude() > y0 && r->getLongitude() > y1){
+                    if(r->getSW() != NULL) buscaIntervalo(r->getSW(), x0, x1, y0, y1, s);
+                    if(r->getSE() != NULL) buscaIntervalo(r->getSE(), x0, x1, y0, y1, s);
+                }
+                if(r->getLongitude() < y0 && r->getLongitude() < y1){
+                    if(r->getNW() != NULL) buscaIntervalo(r->getNW(), x0, x1, y0, y1, s);
+                    if(r->getNE() != NULL) buscaIntervalo(r->getNE(), x0, x1, y0, y1, s);
+                }
+            }
+            if(r->getLatitude() < x0 && r->getLatitude() < x1){
+                if (r->getLongitude() > y0 && r->getLongitude() > y1){
+                    if(r->getSE() != NULL) buscaIntervalo(r->getSE(), x0, x1, y0, y1, s);
+                }
+                if (r->getLongitude() > y0 && r->getLongitude() < y1){
+                    if(r->getSE() != NULL) buscaIntervalo(r->getSE(), x0, x1, y0, y1, s);
+                    if(r->getNE() != NULL) buscaIntervalo(r->getNE(), x0, x1, y0, y1, s);
+                }
+                if(r->getLongitude() < y0 && r->getLongitude() < y1){
+                    if(r->getNE() != NULL) buscaIntervalo(r->getNE(), x0, x1, y0, y1, s);
+                }
+            }
+        }
+    }
+}
+
+vector<string>* quadTree::buscaIntervaloAux(vector<string>* s, float x0, float x1, float y0, float y1){
+    buscaIntervalo(raiz, x0, x1, y0, y1, *s);
+    return s;
+}

@@ -42,7 +42,7 @@ class HashTable{
         int numeroDeImpares = 0;
 
 
-        Registro* get( int chave ); // IMPLEMENTAR POSTERIORMENTE PARA AUXILIO A ARVORE AVL E B
+        // Registro* get( int chave ); // IMPLEMENTAR POSTERIORMENTE PARA AUXILIO A ARVORE AVL E B
     private:
         // std::list<Registro>
         std::vector<Element> table;

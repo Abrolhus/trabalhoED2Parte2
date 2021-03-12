@@ -1,3 +1,6 @@
+#ifndef FOLHAQUAD_H
+#define FOLHAQUAD_H
+
 #include <iostream>
 
 using namespace std;
@@ -26,12 +29,12 @@ public:
     folhaQuadTree* getSE() {return SE;};
     folhaQuadTree* getNW() {return NW;};
     folhaQuadTree* getSW() {return SW;};
-    /*void setCidade(string cidade);
-    string getCidade();
-    void setStateCode(string stateCode);
-    string getStateCode();
-    void setCityCode(string cityCode);
-    string getCityCode();*/
+    //void setCidade(string cidade);
+    string getCidade() {return cidade;};
+    //void setStateCode(string stateCode);
+    string getStateCode() {return stateCode;};
+    //void setCityCode(string cityCode);
+    string getCityCode(){return cityCode;};
 };
 
-
+#endif

@@ -22,6 +22,7 @@ NoB::NoB( int n )
 NoB::~NoB()
 {
     delete [] childs;
+    delete [] values;
 }
 
 int NoB::get( int i )

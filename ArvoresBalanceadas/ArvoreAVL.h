@@ -4,10 +4,9 @@
 #include <iostream>
 #include "NoAVL.h"
 #include "../HashTable.h"
+#include "auxiliar.h"
 
 using namespace std;
-
-int DataCompare( string, string );
 
 class ArvoreAVL
 {

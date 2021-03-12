@@ -5,7 +5,8 @@
 
 using namespace std;
 
-void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& hash, vector<Registro>& regs )
+void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Registro>& regs )
+// void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& hash, vector<Registro>& regs )
 {
     string args[10];
     char command;
@@ -46,7 +47,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
             {
                 if( args[0].compare("quad") == 0 )
                 {
-
+                    
                 }
                 else if( args[0].compare("hash") == 0 )
                 {
