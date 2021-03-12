@@ -4,8 +4,7 @@
 
 ArvoreB::ArvoreB( HashTable* Hash, int size )
 {
-    root = new NoB(size);
-    root->setLeaf();
+    root = nullptr;
     this->size = size;
     HashRef = Hash;
 }
@@ -56,6 +55,12 @@ bool ArvoreB::Busca( int val )
 
 void ArvoreB::Insere( int val )
 {
+    if( root == nullptr )
+    {
+        root = new NoB(size);
+        root->setLeaf();
+    }
+
     NoB* aux = root;
     int i;
 
@@ -64,14 +69,13 @@ void ArvoreB::Insere( int val )
 
     for( i = 0; i < size; i++ )
     {
-        reg_cur = &HashRef->at( aux->get(i) ); // BUSCA REGISTRO ASSOCIADO A CHAVE AUX[i]
-
+        if( aux->get(i) != -1 )
+            reg_cur = &HashRef->at( aux->get(i) ); // BUSCA REGISTRO ASSOCIADO A CHAVE AUX[i]
         if( aux->get(i) == -1 ) // INSERE SE VAZIO
         {
             if( aux->getChild(i) == nullptr ) // SE NÃO POSSUI VALORES A DIREITA DE AUX-1, INSERE
             {
                 aux->insert( val, i );
-                cout << "Inserido " << val << endl;
                 return;
             }
             else
@@ -98,7 +102,6 @@ void ArvoreB::Insere( int val )
     }
 
     overflow( val, aux, nullptr, nullptr );
-    // cout << "ERROR: O vetor foi percorrido e nada aconteceu" << endl;
 }
 
 void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right )
@@ -115,7 +118,8 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right )
     int i;
     for( i = 0; i < size; i++ ) // BUSCA POSICAO NA QUAL VAL SERA INSERIDO
     {
-        reg_aux = &HashRef->at( current->get(i) );
+        if( current->get(i) != -1 )
+            reg_aux = &HashRef->at( current->get(i) );
         if( reg_aux->getId() > reg_cur->getId() || DataCompare(reg_aux->getData(), reg_cur->getData()) == -1 || current->get(i) == -1 ) break;
     }
 
@@ -126,9 +130,6 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right )
     if( left != nullptr ) left->setParent( current );
     if( right != nullptr ) right->setParent( current );
 
-    cout << "Inserido " << val << endl;
-    // Print(true);
-    // cout << "pos: " << current->getPos() << endl;
     if( current->getPos() < size+1 ) return;
 
     int pivo = current->get( size/2 );
