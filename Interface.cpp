@@ -42,29 +42,25 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
                 << endl;
             cin >> args[0];
 
-            if( args[0].compare("quad") == 0 )
+            for( int i = 0; i < argsI[0]; i++ )
             {
-                for( int i = 0; i < argsI[0]; i++ )
+                if( args[0].compare("quad") == 0 )
+                {
+
+                }
+                else if( args[0].compare("hash") == 0 )
+                {
+
+                }
+                else if( args[0].compare("avl") == 0 )
+                {
+                    // avlTree.Insere( hash. );
+                }
+                else if( args[0].compare("b") == 0 )
                 {
                     
-                    // quad.inserir();
                 }
-            }
-            else if( args[0].compare("hash") == 0 )
-            {
-
-            }
-            else if( args[0].compare("avl") == 0 )
-            {
-
-            }
-            else if( args[0].compare("b") == 0 )
-            {
-
-            }
-            else
-            {
-                goto notUnderstoodTree;
+                else goto notUnderstoodTree;
             }
 
         break;
