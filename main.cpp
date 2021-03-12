@@ -10,29 +10,28 @@
 
 using namespace std;
 
-vector<Registro> registros;
+vector<Registro> lerRegistrosParaHashTable( std::ifstream&, HashTable& );
 
 int main( int argc, char** argv ){
 
-    string fname = "brazil_covid19_cities_processado.csv";
-    string f2name = "brazil_cities_coordinates.csv";
+    string filename_covid = "brazil_covid19_cities_processado.csv";
+    string filename_coords = "brazil_cities_coordinates.csv";
 
     if( argc == 2 )
     {
-        fname = argv[0]+fname;
-        f2name = argv[0]+f2name;
+        filename_covid = argv[0]+filename_covid;
+        filename_coords = argv[0]+filename_coords;
     }        
 
-    void lerRegistrosParaHashTable(std::ifstream& file, HashTable& ht);
+    ifstream file_covid(filename_covid);
+    ifstream file_coords(filename_coords);
+    
     HashTable ht = HashTable(40);
-    ifstream file(fname);
-    lerRegistrosParaHashTable(file, ht);
-
-    ifstream file2(f2name);
-    quadTree qTree(file2);
-
     ArvoreAVL avlTree( &ht );
+    quadTree qTree(file_coords);
     ArvoreB bTree( &ht , 8 );
+
+    vector<Registro> registros = lerRegistrosParaHashTable(file_covid, ht);
 
     for( int i = 0; i < registros.size(); i++ )
     {
@@ -45,7 +44,7 @@ int main( int argc, char** argv ){
     return 0;
 
 }
-void lerRegistrosParaHashTable(std::ifstream& file, HashTable& ht){
+vector<Registro> lerRegistrosParaHashTable(std::ifstream& file, HashTable& ht){
     /**
      * VERIFICA SE ARQUIVO FOI ABERTO CORRETAMENTE
      * CASO NAO TENHA SIDO, FECHA O PROGRAMA COM CODIGO DE ERRO
@@ -64,6 +63,11 @@ void lerRegistrosParaHashTable(std::ifstream& file, HashTable& ht){
         size++;
     file.clear(ios_base::goodbit);
     file.seekg(0, file.beg);
+
+    /**
+     * SEPARA VETOR
+     */
+    vector<Registro> regs;
 
     /**
      * REALIZA A LEITURA DOS DADOS SALVANDO EM FORMA DE NÓS
@@ -93,8 +97,10 @@ void lerRegistrosParaHashTable(std::ifstream& file, HashTable& ht){
 
         //vet.push_back( new No(data,estado,cidade,codigo,casos,mortes) );
         Registro reg(data, estado, cidade, int(codigo), casos, mortes);
-        registros.push_back( reg );
+        regs.push_back( reg );
         ht.insert(reg);
     }
+
+    return regs;
 
 }
