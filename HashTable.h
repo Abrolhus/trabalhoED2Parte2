@@ -33,7 +33,14 @@ class HashTable{
         Registro& at(std::string cidade, std::string data);
         Registro& at(int id);
         int getIndexOf(std::string cidade, std::string data);
+        std::vector<int> getNRandomHashCodes(int);
+
+        void clear();
         void print();
+        int numeroDePares = 0;
+        int nConfitos = 0;
+        int numeroDeImpares = 0;
+
 
         // Registro* get( int chave ); // IMPLEMENTAR POSTERIORMENTE PARA AUXILIO A ARVORE AVL E B
     private:

@@ -6,12 +6,20 @@ HashTable::HashTable(int size){
         this->table.push_back(Element(i, EMPTY));
     }
     this->size = size;
+
+
+    // for testing hash function
+    this->numeroDePares = 0;
+    this->numeroDeImpares = 0;
+    this->nConfitos = 0;
 }
 
 void HashTable::insert(Registro reg){
     int i = 0;
     int index;
     do {
+    if(i >10)
+        std::cout << i << " " ;
         index = this->hashFunction(reg.getCidade(), reg.getData(), i);
         i++;
     } while(this->table.at(index).flag == FULL && i != this->table.size());
@@ -19,6 +27,8 @@ void HashTable::insert(Registro reg){
         std::cout << "couldnt insert" << std::endl;
         return;
     }
+    this->nConfitos += i -1;
+
     this->table.at(index).value = reg;
     this->table.at(index).flag = FULL;
 }
@@ -42,7 +52,7 @@ long HashTable::hashFunction(std::string cidade, std::string data, int i){
     //simplest hashFunction for testing
     unsigned long hash = 5381;
     unsigned long hash2 = 0;
-    std::string str = cidade + data;
+    std::string str = data + cidade;
     int c;
     int j = 0;
 
@@ -52,7 +62,15 @@ long HashTable::hashFunction(std::string cidade, std::string data, int i){
         hash2 = c + (hash2 << 6) + (hash2 << 16) - hash2;
         j++;
     }
+    // if(hash2 % 2 == 1){ // garante que hash2 eh impar
+        // this->numeroDePares++;
+    // }
+    // else {
+        // hash2++;
+        // this->numeroDeImpares++;
+    // }
     return (hash + i*(hash2))%this->table.size();
+
     // return (int)(((int)cidade[0] + (int)(data[0]) + i )% this->getSize());
 }
 int HashTable::getSize(){
@@ -98,4 +116,30 @@ int HashTable::getIndexOf(std::string cidade, std::string data){
 
 
 }
+void HashTable::clear(){
+
+    // this->table.clear();
+    for(auto element : this->table){
+        element.flag = EMPTY;
+    }// the elements are not erased, so if you are willing to some heavy elements, this solution may not work;
+}
+std::vector<int> HashTable::getNRandomHashCodes(int n){
+    std::vector<int> hashCodes;
+    std::vector<int> nRandomHashCodes(n);
+    for(auto element : this->table){
+        if(element.flag == FULL){
+            hashCodes.push_back(element.key);
+        }
+    } // copies all hashCodes to this vector
+    int index;
+    int aux;
+    for(int i = 0; i < n; i++){ // based on Fisher–Yates shuffle
+        index = rand()%(hashCodes.size() - i) + i;
+        nRandomHashCodes.push_back(hashCodes.at(index));
+        hashCodes.at(index) = hashCodes.at(i);
+    }
+    return nRandomHashCodes;
+}
+
+
 
