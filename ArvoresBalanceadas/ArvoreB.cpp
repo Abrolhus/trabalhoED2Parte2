@@ -19,7 +19,7 @@ bool ArvoreB::Busca( int val )
 {
     NoB* aux = root;
 
-    Registro* reg_cur = HashRef->get( val );
+    Registro* reg_cur = &HashRef->at( val );
     Registro* reg_aux;
 
     while( aux != nullptr )
@@ -30,7 +30,7 @@ bool ArvoreB::Busca( int val )
                 return true;
             else
             {
-                reg_aux = HashRef->get( aux->get(i) );
+                reg_aux = &HashRef->at( aux->get(i) );
 
                 if( reg_aux->getId() > reg_cur->getId() )
                 {
@@ -60,11 +60,11 @@ void ArvoreB::Insere( int val )
     int i;
 
     Registro* reg_cur;
-    Registro* reg_new = HashRef->get( val );
+    Registro* reg_new = &HashRef->at( val );
 
     for( i = 0; i < size; i++ )
     {
-        reg_cur = HashRef->get( aux->get(i) ); // BUSCA REGISTRO ASSOCIADO A CHAVE AUX[i]
+        reg_cur = &HashRef->at( aux->get(i) ); // BUSCA REGISTRO ASSOCIADO A CHAVE AUX[i]
 
         if( aux->get(i) == -1 ) // INSERE SE VAZIO
         {
@@ -109,13 +109,13 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right )
         current = root;
     }
 
-    Registro* reg_cur = HashRef->get( val );
+    Registro* reg_cur = &HashRef->at( val );
     Registro* reg_aux;
 
     int i;
     for( i = 0; i < size; i++ ) // BUSCA POSICAO NA QUAL VAL SERA INSERIDO
     {
-        reg_aux = HashRef->get( current->get(i) );
+        reg_aux = &HashRef->at( current->get(i) );
         if( reg_aux->getId() > reg_cur->getId() || DataCompare(reg_aux->getData(), reg_cur->getData()) == -1 || current->get(i) == -1 ) break;
     }
 
@@ -177,28 +177,4 @@ void ArvoreB::printAux( NoB* no, int& layer, bool& overflow )
 
     }
     cout << endl;
-}
-
-/**
- * @param data01 Data principal
- * @param data02 Data a ser comparada
- * @return -1 Caso data02 < data01 | 1 Caso data02 > data01 | 0 Caso data02 = data01  
- */
-int DataCompare( string data01, string data02 )
-{
-    return (
-        stoi(data01.substr(0,4)) < stoi(data02.substr(0,4)) ?
-            1:
-            stoi(data01.substr(0,4)) > stoi(data02.substr(0,4)) ?
-                -1:
-                stoi(data01.substr(5,2)) < stoi(data02.substr(5,2)) ?
-                    1:
-                    stoi(data01.substr(5,2)) > stoi(data02.substr(5,2)) ?
-                        -1:
-                        stoi(data01.substr(8,2)) < stoi(data02.substr(8,2)) ?
-                            1:
-                            stoi(data01.substr(8,2)) > stoi(data02.substr(8,2)) ?
-                                -1:
-                                0
-    );
 }

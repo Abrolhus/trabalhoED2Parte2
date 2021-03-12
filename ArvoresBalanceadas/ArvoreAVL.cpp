@@ -28,8 +28,8 @@ void ArvoreAVL::InsereAux( int key, NoAVL* no )
 {
     if( no == nullptr ) return;
 
-    Registro* reg_cur = HashRef->get( no->get() );
-    Registro* reg_new = HashRef->get( key );
+    Registro* reg_cur = &HashRef->at( no->get() );
+    Registro* reg_new = &HashRef->at( key );
 
     char decision = 'r';
 
@@ -96,14 +96,14 @@ void ArvoreAVL::InsereAux( int key, NoAVL* no )
 bool ArvoreAVL::Busca( int val )
 {
     NoAVL* aux = raiz;
-    Registro* reg_cur = HashRef->get( val );
+    Registro* reg_cur = &HashRef->at( val );
     Registro* reg_aux;
 
     while( aux != nullptr )
     {
         if( aux->get() == val ) return true;
 
-        reg_aux = HashRef->get( aux->get() );
+        reg_aux = &HashRef->at( aux->get() );
 
         if( reg_aux->getId() > reg_cur->getId() )
             aux = aux->esq();
@@ -205,28 +205,4 @@ void ArvoreAVL::rotDDir( NoAVL* no )
 {
     rotSEsq( no->esq() );
     rotSDir( no );
-}
-
-/**
- * @param data01 Data principal
- * @param data02 Data a ser comparada
- * @return -1 Caso data02 < data01 | 1 Caso data02 > data01 | 0 Caso data02 = data01  
- */
-int DataCompare( string data01, string data02 )
-{
-    return (
-        stoi(data01.substr(0,4)) < stoi(data02.substr(0,4)) ?
-            1:
-            stoi(data01.substr(0,4)) > stoi(data02.substr(0,4)) ?
-                -1:
-                stoi(data01.substr(5,2)) < stoi(data02.substr(5,2)) ?
-                    1:
-                    stoi(data01.substr(5,2)) > stoi(data02.substr(5,2)) ?
-                        -1:
-                        stoi(data01.substr(8,2)) < stoi(data02.substr(8,2)) ?
-                            1:
-                            stoi(data01.substr(8,2)) > stoi(data02.substr(8,2)) ?
-                                -1:
-                                0
-    );
 }

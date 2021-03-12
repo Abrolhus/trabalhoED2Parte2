@@ -1,3 +1,6 @@
+#ifndef FOLHAQUAD_H
+#define FOLHAQUAD_H
+
 #include <iostream>
 
 using namespace std;
@@ -34,4 +37,4 @@ public:
     string getCityCode();*/
 };
 
-
+#endif

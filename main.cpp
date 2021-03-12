@@ -19,8 +19,8 @@ int main( int argc, char** argv ){
 
     if( argc == 2 )
     {
-        filename_covid = argv[0]+filename_covid;
-        filename_coords = argv[0]+filename_coords;
+        filename_covid = argv[1]+("/"+filename_covid);
+        filename_coords = argv[1]+("/"+filename_coords);
     }        
 
     ifstream file_covid(filename_covid);
@@ -35,8 +35,8 @@ int main( int argc, char** argv ){
 
     for( int i = 0; i < registros.size(); i++ )
     {
-        avlTree.Insere( ht.getIndexOf( registros[i].getCidade(), registros[i].getData() ) ) );
-        bTree.Insere( ht.getIndexOf( registros[i].getCidade(), registros[i].getData() ) ) );
+        avlTree.Insere( ht.getIndexOf( registros[i].getCidade(), registros[i].getData() ) );
+        bTree.Insere( ht.getIndexOf( registros[i].getCidade(), registros[i].getData() ) );
     }
 
     interface( avlTree, bTree, qTree, ht, registros );

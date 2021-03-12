@@ -3,11 +3,10 @@
 
 #include <iostream>
 #include "NoB.h"
-#include "./HashTable.h"
+#include "../HashTable.h"
+#include "auxiliar.h"
 
 using namespace std;
-
-int DataCompare( string,string );
 
 class ArvoreB
 {

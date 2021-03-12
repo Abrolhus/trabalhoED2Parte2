@@ -1,3 +1,6 @@
+#ifndef QUADTREE_H
+#define QUADTREE_H
+
 #include <iostream>
 #include "folhaQuadTree.h"
 #include <fstream>
@@ -20,4 +23,4 @@ public:
     folhaQuadTree* compara(folhaQuadTree *r, folhaQuadTree* i);
 };
 
-
+#endif
