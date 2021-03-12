@@ -7,6 +7,7 @@
 #include "LeituraArvoreQuad\quadTree.h"
 #include "interface.h"
 #include <vector>
+#include "math.h"
 
 using namespace std;
 
@@ -26,20 +27,27 @@ int main( int argc, char** argv ){
     ifstream file_covid(filename_covid);
     ifstream file_coords(filename_coords);
     
-    HashTable ht = HashTable(40);
+    HashTable ht = HashTable( (int)pow(2,22) );
+    cout << "Hashtable Criada" << endl;
     ArvoreAVL avlTree( &ht );
-    quadTree qTree(file_coords);
+    cout << "AVL Criada" << endl;
+    // quadTree qTree(file_coords);
     ArvoreB bTree( &ht , 8 );
+    cout << "B Criada" << endl;
 
     vector<Registro> registros = lerRegistrosParaHashTable(file_covid, ht);
 
+
+    int chave;
     for( int i = 0; i < registros.size(); i++ )
     {
-        avlTree.Insere( ht.getIndexOf( registros[i].getCidade(), registros[i].getData() ) );
-        bTree.Insere( ht.getIndexOf( registros[i].getCidade(), registros[i].getData() ) );
+        chave = ht.getIndexOf( registros[i].getCidade(), registros[i].getData() );
+        avlTree.Insere( chave );
+        bTree.Insere( chave );
     }
-
-    interface( avlTree, bTree, qTree, ht, registros );
+    cout << "AVL e B Carregadas" << endl;
+    // interface( avlTree, bTree, qTree, ht, registros );
+    interface( avlTree, bTree, ht, registros );
 
     return 0;
 
@@ -100,6 +108,7 @@ vector<Registro> lerRegistrosParaHashTable(std::ifstream& file, HashTable& ht){
         regs.push_back( reg );
         ht.insert(reg);
     }
+    cout << "Hashtable Carregada" << endl;
 
     return regs;
 
