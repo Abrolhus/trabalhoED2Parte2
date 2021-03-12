@@ -5,7 +5,9 @@
 #include "ArvoresBalanceadas/ArvoreB.h"
 #include "LeituraArvoreQuad/quadTree.h"
 #include "HashTable.h"
+#include <vector>
+#include "Registro.h"
 
-void interface( ArvoreAVL&, ArvoreB&, quadTree&, HashTable& );
+void interface( ArvoreAVL&, ArvoreB&, quadTree&, HashTable&, vector<Registro>& );
 
 #endif

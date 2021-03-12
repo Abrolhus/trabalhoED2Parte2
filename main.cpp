@@ -4,26 +4,43 @@
 #include <fstream>
 #include "ArvoresBalanceadas\ArvoreB.h"
 #include "ArvoresBalanceadas\ArvoreAVL.h"
+#include "LeituraArvoreQuad\quadTree.h"
 #include "interface.h"
+#include <vector>
 
 using namespace std;
+
+vector<Registro> registros;
+
 int main( int argc, char** argv ){
 
     string fname = "brazil_covid19_cities_processado.csv";
+    string f2name = "brazil_cities_coordinates.csv";
 
     if( argc == 2 )
-        fname = argv[0]+fname;        
+    {
+        fname = argv[0]+fname;
+        f2name = argv[0]+f2name;
+    }        
 
     void lerRegistrosParaHashTable(std::ifstream& file, HashTable& ht);
     HashTable ht = HashTable(40);
     ifstream file(fname);
     lerRegistrosParaHashTable(file, ht);
-    // ht.print();
+
+    ifstream file2(f2name);
+    quadTree qTree(file2);
 
     ArvoreAVL avlTree( &ht );
     ArvoreB bTree( &ht , 8 );
 
-    interface( avlTree, bTree );
+    for( int i = 0; i < registros.size(); i++ )
+    {
+        avlTree.Insere( ht.getIndexOf( registros[i].getCidade(), registros[i].getData() ) ) );
+        bTree.Insere( ht.getIndexOf( registros[i].getCidade(), registros[i].getData() ) ) );
+    }
+
+    interface( avlTree, bTree, qTree, ht, registros );
 
     return 0;
 
@@ -75,7 +92,9 @@ void lerRegistrosParaHashTable(std::ifstream& file, HashTable& ht){
         int mortes = stoi(line_aux.substr(0, line_aux.find(',')));
 
         //vet.push_back( new No(data,estado,cidade,codigo,casos,mortes) );
-        ht.insert(Registro(data, estado, cidade, int(codigo), casos, mortes));
+        Registro reg(data, estado, cidade, int(codigo), casos, mortes);
+        registros.push_back( reg );
+        ht.insert(reg);
     }
 
 }
