@@ -21,6 +21,8 @@ class ArvoreB
 
         void overflow( int val, NoB* current, NoB* left, NoB* right );
 
+        int AuxBusca( NoB*, int );
+
         HashTable* HashRef;
 
     public:
@@ -28,6 +30,7 @@ class ArvoreB
         ~ArvoreB();
 
         bool Busca( int val );
+        int BuscaCasos( int );
 
         void Insere( int val );
 

@@ -21,7 +21,8 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Regi
 
     cout << "========= INTERFACE =========" << endl;
     cout << "ETAPA 05" << endl;
-    cout << "5 - Realizar etapa 05" << endl << endl;
+    cout << "5 - Realizar etapa 05" << endl;
+    cout << "c - Obter total de casos" << endl;
     cout << "f - Preencher tabela hash" << endl << endl;
     cout << "Selecionado [ " << ( selectedTree == 'a' ? "Arvore AVL": selectedTree == 'b' ? "Arvore B": selectedTree == 'c' ? "Arvore QUAD": selectedTree == 'd' ? "Tabela Hash":"" ) << " ]" << " - (\\) para mudar" << endl;
     cout << "p - Printar" << endl;
@@ -103,16 +104,31 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Regi
 
             cout << "Gerando " << argsI[0] << " valores" << endl;
             randoms = hash.getNRandomHashCodes( argsI[0] );
+            
+            for( int i = 0; i < randoms.size(); i++ ) cout << randoms[i] << (i == randoms.size()-1 ? "": " - ");
+            cout << endl;
 
             cout << "Inserindo " << argsI[0] << " valores..." << endl;
             for( int i = 0; i < randoms.size(); i++ )
             {
+                cout << "Inserindo " << randoms[i] << " em AVL" << endl;
                 avlTree.Insere( randoms[i] );
+                cout << "Inserindo " << randoms[i] << " em B" << endl;
                 bTree.Insere( randoms[i] );
             }
 
-            
+        break;
 
+        case 'c':
+            cout << "Digite o código da cidade: " << endl;
+            cin >> argsI[0];
+
+            argsI[1] = avlTree.BuscaCasos( argsI[0] );
+            argsI[2] = bTree.BuscaCasos( argsI[0] );
+
+            cout << "Número de casos (AVL): " << argsI[1] << endl;
+            cout << "Número de casos (B): " << argsI[2] << endl;
+            
         break;
 
         case 'l':

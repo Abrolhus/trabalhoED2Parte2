@@ -10,12 +10,15 @@
 #include "math.h"
 #include "LeituraArvoreQuad\folhaQuadTree.h"
 #include "LeituraArvoreQuad\quadTree.h"
+#include <time.h>
 
 using namespace std;
 
 vector<Registro> lerRegistrosParaHashTable( std::ifstream&, HashTable& );
 
 int main( int argc, char** argv ){
+
+    srand(time(NULL));
 
     string filename_covid = "brazil_covid19_cities_processado.csv";
     string filename_coords = "brazil_cities_coordinates.csv";
