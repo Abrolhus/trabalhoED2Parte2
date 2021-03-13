@@ -59,7 +59,7 @@ void quadTree::inserir(folhaQuadTree* i){
     }
 }
 
-bool quadTree::confereIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<string>& s){
+bool quadTree::confereIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<int>& s){
     /*if (x0 < x1 && y0 < y1){
         if(raiz->getLatitude() >= x0 && raiz->getLatitude()<=x1){
             if(raiz->getLongitude() >= y0 && raiz->getLongitude()<= y1){
@@ -98,8 +98,6 @@ bool quadTree::confereIntervalo(folhaQuadTree* r, double x0, double x1, double y
             }
         }
     }
-    cout<< "chegou4" << endl;
-    //cout << r->getLatitude()<< r->getLongitude()<< endl;
     if(r->getLatitude() >= x0 && r->getLatitude()<=x1){
         if(r->getLongitude() >= y0 && r->getLongitude()<= y1){
             s.push_back(r->getCityCode());
@@ -126,7 +124,7 @@ bool quadTree::confereIntervalo(folhaQuadTree* r, double x0, double x1, double y
 }
 
 
-void quadTree:: buscaIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<string>& s){
+void quadTree:: buscaIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<int>& s){
     
     if(r != NULL){
         if(confereIntervalo(r, x0, x1, y0, y1, s)){
@@ -174,7 +172,7 @@ void quadTree:: buscaIntervalo(folhaQuadTree* r, double x0, double x1, double y0
     }
 }
 
-void quadTree::buscaIntervaloAux(vector<string>& s, double x0, double x1, double y0, double y1){
+void quadTree::buscaIntervaloAux(vector<int>& s, double x0, double x1, double y0, double y1){
     if(x1 < x0){
         double aux = 0;
         aux  = x0;
@@ -189,6 +187,9 @@ void quadTree::buscaIntervaloAux(vector<string>& s, double x0, double x1, double
     }
     folhaQuadTree* r = raiz;
     buscaIntervalo(r, x0, x1, y0, y1, s);
+    for (int i = 0; i < s.size(); i++){
+        s[i] = s[i]/10;
+    }
 }
 
 

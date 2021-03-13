@@ -13,7 +13,7 @@ private:
     folhaQuadTree* NW;
     folhaQuadTree* SW;
     string stateCode;
-    string cityCode;
+    int cityCode;
     string cidade;
     double longitude;
     double latitude;
@@ -23,7 +23,7 @@ private:
     char Noroeste;
     char Sudoeste;
 public:
-    folhaQuadTree(string stateCode, string cityCode, string cidade, double longitude, double latitude, string capital);
+    folhaQuadTree(string stateCode, int cityCode, string cidade, double longitude, double latitude, string capital);
     ~folhaQuadTree();
     double getLatitude() {return latitude;};
     double getLongitude(){return longitude;};
@@ -38,7 +38,7 @@ public:
     //void setStateCode(string stateCode);
     string getStateCode() {return stateCode;};
     //void setCityCode(string cityCode);
-    string getCityCode(){return cityCode;};
+    int getCityCode(){return cityCode;};
     void setFilho(char val, folhaQuadTree* valor);
     folhaQuadTree* getFilho(char val);
     char getNoroeste(){return Noroeste;};

@@ -42,6 +42,12 @@ int main( int argc, char** argv ){
     ArvoreAVL avlTree( &ht );
     cout << "AVL Criada" << endl;
     quadTree qTree = quadTree(lerArquivoParaQuadTree(file_coords));
+    //qTree.imprimir();
+    /*vector<int> s;
+    qTree.buscaIntervaloAux(s, -17.7573,-8.72073, -49.4412, -39.1162);
+    for (int i = 0; i < s.size(); i++){
+        cout<< s[i] << endl;
+    }*/
     ArvoreB bTree( &ht , 8 );
     cout << "B Criada" << endl;
 
@@ -152,7 +158,7 @@ vector<folhaQuadTree*> lerArquivoParaQuadTree(ifstream& file){
         string stateCode = line_aux.substr(0, line_aux.find(','));
         line_aux = line_aux.substr(line_aux.find(',')+1);
 
-        string cityCode = line_aux.substr(0, line_aux.find(','));
+        int cityCode = stof(line_aux.substr(0, line_aux.find(',')));
         line_aux = line_aux.substr(line_aux.find(',')+1);
 
         string cidade = line_aux.substr(0, line_aux.find(','));
