@@ -143,6 +143,25 @@ bool ArvoreAVL::Busca( int val )
     return false;
 }
 
+int ArvoreAVL::BuscaCasos( int val )
+{
+    if( raiz == NULL ) return 0;
+
+    return BuscaAux( raiz, val );
+}
+int ArvoreAVL::BuscaAux( NoAVL* no, int val )
+{
+    if( no == NULL ) return 0;
+    
+    Registro reg = HashRef->at( val );
+    Registro atual = HashRef->at( no->get() );
+
+    if( reg.getId() != atual.getId() ) return 0;
+
+    return BuscaAux( no->esq(), val ) + BuscaAux( no->dir(), val ) + atual.getCasos();
+}
+
+
 void ArvoreAVL::Print()
 {
     PrintAux( raiz );

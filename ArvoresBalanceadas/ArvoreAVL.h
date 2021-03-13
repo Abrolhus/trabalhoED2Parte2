@@ -25,6 +25,8 @@ class ArvoreAVL
 
         void LimparAux( NoAVL* );
 
+        int BuscaAux( NoAVL*, int );
+
         HashTable* HashRef;
 
     public:
@@ -34,6 +36,7 @@ class ArvoreAVL
         void Insere( int );
 
         bool Busca( int val );
+        int BuscaCasos( int val );
 
         void Print();
         void Limpar();

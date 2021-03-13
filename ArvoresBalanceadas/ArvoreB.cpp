@@ -76,6 +76,36 @@ bool ArvoreB::Busca( int val )
     return false;
 }
 
+int ArvoreB::BuscaCasos( int val )
+{
+    if( root == NULL ) return 0;
+
+    return AuxBusca( root, val );
+}
+int ArvoreB::AuxBusca( NoB* no, int val )
+{
+    if( no == NULL ) return 0;
+
+    int soma = 0;
+    int i;
+    for( i=0; i < size; i++ )
+    {
+        if( no->get(i) > val ) break; // SE CODIGO MAIOR PODE SAIR
+        if( no->get(i) == val ) 
+        {
+            if( !no->isLeaf() )
+                soma += AuxBusca( no->getChild(i), val );
+            soma += HashRef->at( no->get(i) ).getCasos(); // SE CODIGO CORRESPONDE, SOMA NUMERO DE CASOS DOS FILHOS DA ESQUERDA E DOS DA DIREITA
+        }
+        // SE NO MENOR, CONTINUA BUSCA
+    }
+
+    if( !no->isLeaf() )
+        soma += AuxBusca( no->getChild(i), val );
+
+    return soma;
+}
+
 void ArvoreB::Insere( int val )
 {
     if( root == NULL )
