@@ -8,6 +8,8 @@
 #include "interface.h"
 #include <vector>
 #include "math.h"
+#include "LeituraArvoreQuad\folhaQuadTree.h"
+#include "LeituraArvoreQuad\quadTree.h"
 
 using namespace std;
 
@@ -26,12 +28,19 @@ int main( int argc, char** argv ){
 
     ifstream file_covid(filename_covid);
     ifstream file_coords(filename_coords);
-    
+    //cout << q.getTam();
+    //q.imprimir();
+    /*vector<string> s;
+    q.buscaIntervaloAux(s, -17.7573,-8.72073, -49.4412, -39.1162);
+    cout << s[1];
+    for (int i = 0; i < s.size(); i++){
+        cout<< s[i] << endl;
+    }*/
     HashTable ht = HashTable( (int)pow(2,22) );
     cout << "Hashtable Criada" << endl;
     ArvoreAVL avlTree( &ht );
     cout << "AVL Criada" << endl;
-    // quadTree qTree(file_coords);
+    quadTree qTree(file_coords);
     ArvoreB bTree( &ht , 8 );
     cout << "B Criada" << endl;
 

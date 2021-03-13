@@ -15,16 +15,20 @@ class quadTree
 private:
     folhaQuadTree* raiz;
     int tam;
+    int itera;
 public:
     quadTree(ifstream &arquivo);
     ~quadTree();
-    void inserir(folhaQuadTree* raiz,folhaQuadTree *p);
+    void inserir(folhaQuadTree *p);
     /*bool marcarComoRemovido();
     quadTree reconstruir();*/
-    folhaQuadTree* compara(folhaQuadTree *r, folhaQuadTree* i);
-    void buscaIntervalo(folhaQuadTree* r, float x0, float x1, float y0, float y1, vector<string>& s);
-    bool confereIntervalo(folhaQuadTree* r, float x0, float x1, float y0, float y1, vector<string>& s);
-    vector<string>* buscaIntervaloAux(vector<string>* s, float x0, float x1, float y0, float y1);
+    char compara(folhaQuadTree *r, folhaQuadTree* i);
+    void buscaIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<string>& s);
+    bool confereIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<string>& s);
+    void buscaIntervaloAux(vector<string>& s, double x0, double x1, double y0, double y1);
+    void imprimir();
+    void imprimirAux(folhaQuadTree* r);
+    int getTam(){return tam;};
 };
 
 #endif
