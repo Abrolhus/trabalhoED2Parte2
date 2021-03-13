@@ -18,6 +18,15 @@ quadTree::quadTree(vector<folhaQuadTree*> vet)
 
 quadTree::~quadTree()
 {
+    desalocar(raiz);
+}
+
+void quadTree:: desalocar(folhaQuadTree* r){
+    if (r->getNE() != NULL) desalocar(r->getNE());
+    if (r->getSE() != NULL) desalocar(r->getSE());
+    if (r->getNW() != NULL) desalocar(r->getNW());
+    if (r->getSW() != NULL) desalocar(r->getSW());
+    delete r;
 }
 
 char quadTree::compara(folhaQuadTree *r, folhaQuadTree* i){

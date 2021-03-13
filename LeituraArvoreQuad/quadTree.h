@@ -29,6 +29,7 @@ public:
     void imprimir();
     void imprimirAux(folhaQuadTree* r);
     int getTam(){return tam;};
+    void desalocar(folhaQuadTree* r);
 };
 
 #endif

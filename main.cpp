@@ -63,7 +63,7 @@ int main( int argc, char** argv ){
     // }
     // cout << "AVL e B Carregadas" << endl;
     // interface( avlTree, bTree, qTree, ht, registros );
-    interface( avlTree, bTree, ht, registros );
+    interface( avlTree, bTree, ht, registros);
 
     return 0;
 
