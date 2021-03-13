@@ -55,13 +55,13 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Regi
             if( selectedTree == 'a' )
             {
                 for( int i = 0; i < argsI[0]; i++ )
-                    avlTree.Insere( hash.getIndexOf(regs[i].getCidade(),regs[i].getData()) );
+                    avlTree.Insere( hash.getIndexOf(regs[i].getCode(),regs[i].getData()) );
                 avlTree.Print();
             }
             else if( selectedTree == 'b' )
             {
                 for( int i = 0; i < argsI[0]; i++ )
-                    bTree.Insere( hash.getIndexOf(regs[i].getCidade(),regs[i].getData()) );
+                    bTree.Insere( hash.getIndexOf(regs[i].getCode(),regs[i].getData()) );
                 bTree.Print();
             }
             else if( selectedTree == 'c' )

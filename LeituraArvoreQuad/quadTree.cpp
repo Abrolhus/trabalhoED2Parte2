@@ -4,72 +4,29 @@
 
 using namespace std;
 
-quadTree::quadTree(ifstream& file)
+quadTree::quadTree(vector<folhaQuadTree*> vet)
 {
-    srand(time(NULL));
-
-    /**
-     * VERIFICA SE ARQUIVO FOI ABERTO CORRETAMENTE
-     * CASO NAO TENHA SIDO, FECHA O PROGRAMA COM CODIGO DE ERRO
-    **/
-    if( !file.is_open() ){
-        cout << "Não foi possível ler o arquivo" << endl;
-        exit(0);
-    }
-
-    /**
-     * INICIA AS VARIAVEIS DA CLASSE
-    **/
-    string line;
     this->tam = 0;
-    //this->pos = 0;
-    //while( getline(file,line) )
-    //    this->tam++;
-    //this->raiz = new folhaQuadTree[this->tam];
-    file.clear(ios_base::goodbit);
-    file.seekg(0, file.beg);
-
-    /**
-     * REALIZA A LEITURA DOS DADOS SALVANDO EM FORMA DE NÓS
-     * ESSES NÓS SÃO OBJETOS QUE ARMAZENAM OS DADOS DE CADA CIDADE
-    **/
-    getline(file,line); // ( LÊ E JOGA A PRIMEIRA LINHA FORA )
     this->itera = 0;
     this->raiz = NULL;
-    while( getline(file,line) ){
-        string line_aux = line;
-
-        string stateCode = line_aux.substr(0, line_aux.find(','));
-        line_aux = line_aux.substr(line_aux.find(',')+1);
-
-        string cityCode = line_aux.substr(0, line_aux.find(','));
-        line_aux = line_aux.substr(line_aux.find(',')+1);
-
-        string cidade = line_aux.substr(0, line_aux.find(','));
-        line_aux = line_aux.substr(line_aux.find(',')+1);
-
-        double latitude = stof(line_aux.substr(0, line_aux.find(',')));
-        line_aux = line_aux.substr(line_aux.find(',')+1);
-
-        double longitude = stof(line_aux.substr(0, line_aux.find(',')));
-        line_aux = line_aux.substr(line_aux.find(',')+1);
-
-        string capital = line_aux.substr(0, line_aux.find(','));
-        line_aux = line_aux.substr(line_aux.find(',')+1);
-
-        //vet.push_back( new No(data,estado,cidade,codigo,casos,mortes) );
-        /*if (tam == 0){
-            this->raiz = new folhaQuadTree(stateCode, cityCode, cidade, longitude, latitude, capital);
-            this->tam++;
-        }*/
-        folhaQuadTree *p = new folhaQuadTree(stateCode, cityCode, cidade, longitude, latitude, capital);
-        inserir(p);
-        this->tam++;
+    for(int i=0; i<vet.size(); i++){
+        inserir(vet[i]);
+        this->tam ++;
     }
+    cout << tam;
 }
 
 quadTree::~quadTree()
 {
+    desalocar(raiz);
+}
+
+void quadTree:: desalocar(folhaQuadTree* r){
+    if (r->getNE() != NULL) desalocar(r->getNE());
+    if (r->getSE() != NULL) desalocar(r->getSE());
+    if (r->getNW() != NULL) desalocar(r->getNW());
+    if (r->getSW() != NULL) desalocar(r->getSW());
+    delete r;
 }
 
 char quadTree::compara(folhaQuadTree *r, folhaQuadTree* i){
@@ -111,7 +68,7 @@ void quadTree::inserir(folhaQuadTree* i){
     }
 }
 
-bool quadTree::confereIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<string>& s){
+bool quadTree::confereIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<int>& s){
     /*if (x0 < x1 && y0 < y1){
         if(raiz->getLatitude() >= x0 && raiz->getLatitude()<=x1){
             if(raiz->getLongitude() >= y0 && raiz->getLongitude()<= y1){
@@ -150,8 +107,6 @@ bool quadTree::confereIntervalo(folhaQuadTree* r, double x0, double x1, double y
             }
         }
     }
-    cout<< "chegou4" << endl;
-    //cout << r->getLatitude()<< r->getLongitude()<< endl;
     if(r->getLatitude() >= x0 && r->getLatitude()<=x1){
         if(r->getLongitude() >= y0 && r->getLongitude()<= y1){
             s.push_back(r->getCityCode());
@@ -178,7 +133,7 @@ bool quadTree::confereIntervalo(folhaQuadTree* r, double x0, double x1, double y
 }
 
 
-void quadTree:: buscaIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<string>& s){
+void quadTree:: buscaIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<int>& s){
     
     if(r != NULL){
         if(confereIntervalo(r, x0, x1, y0, y1, s)){
@@ -226,7 +181,7 @@ void quadTree:: buscaIntervalo(folhaQuadTree* r, double x0, double x1, double y0
     }
 }
 
-void quadTree::buscaIntervaloAux(vector<string>& s, double x0, double x1, double y0, double y1){
+void quadTree::buscaIntervaloAux(vector<int>& s, double x0, double x1, double y0, double y1){
     if(x1 < x0){
         double aux = 0;
         aux  = x0;
@@ -241,6 +196,9 @@ void quadTree::buscaIntervaloAux(vector<string>& s, double x0, double x1, double
     }
     folhaQuadTree* r = raiz;
     buscaIntervalo(r, x0, x1, y0, y1, s);
+    for (int i = 0; i < s.size(); i++){
+        s[i] = s[i]/10;
+    }
 }
 
 

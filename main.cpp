@@ -15,6 +15,7 @@
 using namespace std;
 
 vector<Registro> lerRegistrosParaHashTable( std::ifstream&, HashTable& );
+vector<folhaQuadTree*> lerArquivoParaQuadTree(ifstream&);
 
 int main( int argc, char** argv ){
 
@@ -27,7 +28,7 @@ int main( int argc, char** argv ){
     {
         filename_covid = argv[1]+("/"+filename_covid);
         filename_coords = argv[1]+("/"+filename_coords);
-    }        
+    }
 
     ifstream file_covid(filename_covid);
     ifstream file_coords(filename_coords);
@@ -39,11 +40,17 @@ int main( int argc, char** argv ){
     for (int i = 0; i < s.size(); i++){
         cout<< s[i] << endl;
     }*/
-    HashTable ht = HashTable( (int)pow(2,22) );
+    HashTable ht = HashTable(3e6 -1);
     cout << "Hashtable Criada" << endl;
     ArvoreAVL avlTree( &ht );
     cout << "AVL Criada" << endl;
-    quadTree qTree(file_coords);
+    quadTree qTree = quadTree(lerArquivoParaQuadTree(file_coords));
+    //qTree.imprimir();
+    /*vector<int> s;
+    qTree.buscaIntervaloAux(s, -17.7573,-8.72073, -49.4412, -39.1162);
+    for (int i = 0; i < s.size(); i++){
+        cout<< s[i] << endl;
+    }*/
     ArvoreB bTree( &ht , 8 );
     cout << "B Criada" << endl;
 
@@ -59,7 +66,7 @@ int main( int argc, char** argv ){
     // }
     // cout << "AVL e B Carregadas" << endl;
     // interface( avlTree, bTree, qTree, ht, registros );
-    interface( avlTree, bTree, ht, registros );
+    interface( avlTree, bTree, ht, registros);
 
     return 0;
 
@@ -122,4 +129,56 @@ vector<Registro> lerRegistrosParaHashTable(std::ifstream& file, HashTable& ht){
 
     return regs;
 
+}
+
+vector<folhaQuadTree*> lerArquivoParaQuadTree(ifstream& file){
+    srand(time(NULL));
+    vector<folhaQuadTree*> vet;
+    /**
+     * VERIFICA SE ARQUIVO FOI ABERTO CORRETAMENTE
+     * CASO NAO TENHA SIDO, FECHA O PROGRAMA COM CODIGO DE ERRO
+    **/
+    if( !file.is_open() ){
+        cout << "Não foi possível ler o arquivo" << endl;
+        exit(0);
+    }
+
+    /**
+     * INICIA AS VARIAVEIS DA CLASSE
+    **/
+    string line;
+    file.clear(ios_base::goodbit);
+    file.seekg(0, file.beg);
+
+    /**
+     * REALIZA A LEITURA DOS DADOS SALVANDO EM FORMA DE NÓS
+     * ESSES NÓS SÃO OBJETOS QUE ARMAZENAM OS DADOS DE CADA CIDADE
+    **/
+    getline(file,line); // ( LÊ E JOGA A PRIMEIRA LINHA FORA )
+    while( getline(file,line) ){
+        string line_aux = line;
+
+        string stateCode = line_aux.substr(0, line_aux.find(','));
+        line_aux = line_aux.substr(line_aux.find(',')+1);
+
+        int cityCode = stof(line_aux.substr(0, line_aux.find(',')));
+        line_aux = line_aux.substr(line_aux.find(',')+1);
+
+        string cidade = line_aux.substr(0, line_aux.find(','));
+        line_aux = line_aux.substr(line_aux.find(',')+1);
+
+        double latitude = stof(line_aux.substr(0, line_aux.find(',')));
+        line_aux = line_aux.substr(line_aux.find(',')+1);
+
+        double longitude = stof(line_aux.substr(0, line_aux.find(',')));
+        line_aux = line_aux.substr(line_aux.find(',')+1);
+
+        string capital = line_aux.substr(0, line_aux.find(','));
+        line_aux = line_aux.substr(line_aux.find(',')+1);
+
+        folhaQuadTree *p = new folhaQuadTree(stateCode, cityCode, cidade, longitude, latitude, capital);
+
+        vet.push_back(p);
+    }
+    return vet;
 }
