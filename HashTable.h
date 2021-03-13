@@ -27,12 +27,12 @@ class HashTable{
     public:
         HashTable(int size);
         void insert(Registro);
-        void remove(std::string cidade, std::string data);
+        void remove(int codigoCidade, std::string data);
         float getLoadFactor();
         int getSize();
-        Registro& at(std::string cidade, std::string data);
+        Registro& at(int codigoCidade, std::string data);
         Registro& at(int id);
-        int getIndexOf(std::string cidade, std::string data);
+        int getIndexOf(int codigoCidade, std::string data);
         std::vector<int> getNRandomHashCodes(int);
 
         void clear();
@@ -40,6 +40,7 @@ class HashTable{
         int numeroDePares = 0;
         int nConfitos = 0;
         int numeroDeImpares = 0;
+        int sondagens = 0;
 
 
         // Registro* get( int chave ); // IMPLEMENTAR POSTERIORMENTE PARA AUXILIO A ARVORE AVL E B
@@ -47,7 +48,7 @@ class HashTable{
         // std::list<Registro>
         std::vector<Element> table;
         int size;
-        long hashFunction(std::string cidade, std::string data, int i);
+        long hashFunction(int codigoCidade, std::string data, int i);
 };
 
 
