@@ -25,7 +25,7 @@ int main( int argc, char** argv ){
     {
         filename_covid = argv[1]+("/"+filename_covid);
         filename_coords = argv[1]+("/"+filename_coords);
-    }        
+    }
 
     ifstream file_covid(filename_covid);
     ifstream file_coords(filename_coords);
@@ -37,7 +37,7 @@ int main( int argc, char** argv ){
     for (int i = 0; i < s.size(); i++){
         cout<< s[i] << endl;
     }*/
-    HashTable ht = HashTable( (int)pow(2,22) );
+    HashTable ht = HashTable(3e6 -1);
     cout << "Hashtable Criada" << endl;
     ArvoreAVL avlTree( &ht );
     cout << "AVL Criada" << endl;
