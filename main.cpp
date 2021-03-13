@@ -43,9 +43,9 @@ int main( int argc, char** argv ){
     cout << "AVL Criada" << endl;
     quadTree qTree = quadTree(lerArquivoParaQuadTree(file_coords));
     //qTree.imprimir();
-    /*vector<int> s;
+    vector<int> s;
     qTree.buscaIntervaloAux(s, -17.7573,-8.72073, -49.4412, -39.1162);
-    for (int i = 0; i < s.size(); i++){
+    /*for (int i = 0; i < s.size(); i++){
         cout<< s[i] << endl;
     }*/
     ArvoreB bTree( &ht , 8 );
