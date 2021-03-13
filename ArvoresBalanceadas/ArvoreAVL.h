@@ -23,6 +23,8 @@ class ArvoreAVL
         void rotDEsq( NoAVL* );
         void rotDDir( NoAVL* );
 
+        void LimparAux( NoAVL* );
+
         HashTable* HashRef;
 
     public:
@@ -34,6 +36,7 @@ class ArvoreAVL
         bool Busca( int val );
 
         void Print();
+        void Limpar();
 };
 
 #endif

@@ -5,28 +5,49 @@
 ArvoreAVL::ArvoreAVL( HashTable* Hash )
 {
     HashRef = Hash;
-    raiz = nullptr;
+    raiz = NULL;
 }
 
 ArvoreAVL::~ArvoreAVL()
 {
+    Limpar();
+}
 
+void ArvoreAVL::Limpar()
+{
+    if( raiz == NULL ) return;
+
+    LimparAux(raiz);
+
+    delete raiz;
+
+    raiz = NULL;
+}
+void ArvoreAVL::LimparAux( NoAVL* no )
+{
+    if( no == NULL ) return;
+
+    LimparAux( no->esq() );
+    LimparAux( no->dir() );
+
+    if( no->esq() != NULL ) delete no->esq();
+    if( no->dir() != NULL ) delete no->dir();
 }
 
 void ArvoreAVL::Insere( int key )
 {
-    if( raiz == nullptr )
+    if( raiz == NULL )
     {
         raiz = new NoAVL( key );
-        raiz->setEsq(nullptr);
-        raiz->setDir(nullptr);
+        raiz->setEsq(NULL);
+        raiz->setDir(NULL);
     }
     else
         InsereAux( key, raiz );
 }
 void ArvoreAVL::InsereAux( int key, NoAVL* no )
 {
-    if( no == nullptr ) return;
+    if( no == NULL ) return;
 
     Registro* reg_cur = &HashRef->at( no->get() );
     Registro* reg_new = &HashRef->at( key );
@@ -53,11 +74,11 @@ void ArvoreAVL::InsereAux( int key, NoAVL* no )
 
     NoAVL* prox = ( decision == 'r' ? no->dir():no->esq() );
     
-    if( prox == nullptr )
+    if( prox == NULL )
     {
         NoAVL* aux = new NoAVL( key );
-        aux->setDir(nullptr);
-        aux->setEsq(nullptr);
+        aux->setDir(NULL);
+        aux->setEsq(NULL);
         if( decision == 'r' )
             no->setDir(aux);
         else
@@ -68,9 +89,9 @@ void ArvoreAVL::InsereAux( int key, NoAVL* no )
 
     int fd,fe;
     fd = fe = 0;
-    if( no->dir() != nullptr )
+    if( no->dir() != NULL )
         fd = no->dir()->getFc();
-    if( no->esq() != nullptr )
+    if( no->esq() != NULL )
         fe = no->esq()->getFc();
 
     no->fixH();
@@ -99,7 +120,7 @@ bool ArvoreAVL::Busca( int val )
     Registro* reg_cur = &HashRef->at( val );
     Registro* reg_aux;
 
-    while( aux != nullptr )
+    while( aux != NULL )
     {
         if( aux->get() == val ) return true;
 
@@ -129,7 +150,7 @@ void ArvoreAVL::Print()
 
 void ArvoreAVL::PrintAux( NoAVL* no )
 {
-    if( no == nullptr ) return;
+    if( no == NULL ) return;
 
     // cout << no->get() << " -> fc = " << no->getFc() << " h = " << no->getH() << endl;
     no->print();

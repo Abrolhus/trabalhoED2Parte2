@@ -1,17 +1,40 @@
 #include "ArvoreB.h"
 
 #include <string>
+#include <stdio.h>
 
 ArvoreB::ArvoreB( HashTable* Hash, int size )
 {
-    root = nullptr;
+    root = NULL;
     this->size = size;
     HashRef = Hash;
 }
 
 ArvoreB::~ArvoreB()
 {
+    Limpar();
+}
 
+void ArvoreB::Limpar()
+{
+    if( root == NULL ) return;
+
+    clearAux( root );
+
+    root = NULL;
+}
+void ArvoreB::clearAux( NoB* no )
+{
+    if( no == NULL ) return;
+
+    int i;
+    for( i=0; i < size; i++ )
+    {
+        clearAux( no->getChild(i) );
+    }
+    clearAux( no->getChild(i) );
+
+    delete no;
 }
 
 bool ArvoreB::Busca( int val )
@@ -21,7 +44,7 @@ bool ArvoreB::Busca( int val )
     Registro* reg_cur = &HashRef->at( val );
     Registro* reg_aux;
 
-    while( aux != nullptr )
+    while( aux != NULL )
     {
         for( int i = 0; i < size; i++ )
         {
@@ -55,7 +78,7 @@ bool ArvoreB::Busca( int val )
 
 void ArvoreB::Insere( int val )
 {
-    if( root == nullptr )
+    if( root == NULL )
     {
         root = new NoB(size);
         root->setLeaf();
@@ -73,7 +96,7 @@ void ArvoreB::Insere( int val )
             reg_cur = &HashRef->at( aux->get(i) ); // BUSCA REGISTRO ASSOCIADO A CHAVE AUX[i]
         if( aux->get(i) == -1 ) // INSERE SE VAZIO
         {
-            if( aux->getChild(i) == nullptr ) // SE NÃO POSSUI VALORES A DIREITA DE AUX-1, INSERE
+            if( aux->getChild(i) == NULL ) // SE NÃO POSSUI VALORES A DIREITA DE AUX-1, INSERE
             {
                 aux->insert( val, i );
                 return;
@@ -89,11 +112,11 @@ void ArvoreB::Insere( int val )
         {
             if( aux->isLeaf() ) // SE NO FOLHA, OVERFLOW, SAI DO FOR
             {
-                overflow( val, aux, nullptr, nullptr );
+                overflow( val, aux, NULL, NULL );
                 return;
             }
 
-            if( aux->getChild(i) != nullptr )
+            if( aux->getChild(i) != NULL )
             {
                 aux = aux->getChild(i); // CASO NAO SEJA NO FOLHA, CONTINUA BUSCANDO LOCAL DE INSERCAO
                 i = -1;
@@ -101,12 +124,12 @@ void ArvoreB::Insere( int val )
         }
     }
 
-    overflow( val, aux, nullptr, nullptr );
+    overflow( val, aux, NULL, NULL );
 }
 
 void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right )
 {
-    if( current == nullptr )
+    if( current == NULL )
     {
         root = new NoB(size);
         current = root;
@@ -127,8 +150,8 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right )
     current->setChild( (i == size ? i-1:i), left );
     current->setChild( (i == size ? i:i+1), right );
 
-    if( left != nullptr ) left->setParent( current );
-    if( right != nullptr ) right->setParent( current );
+    if( left != NULL ) left->setParent( current );
+    if( right != NULL ) right->setParent( current );
 
     if( current->getPos() < size+1 ) return;
 
@@ -142,7 +165,7 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right )
         newRight->appendChild( current->getChild(j) );
 
         current->set( j, -1 );
-        current->setChild( j, nullptr );
+        current->setChild( j, NULL );
     }
     newRight->appendChild( current->getChild(size) );
     newRight->setLeaf( current->isLeaf() ); // SE AUX E FOLHA, NO DA DIREITA TAMBEM SERA
@@ -159,16 +182,16 @@ void ArvoreB::Print( bool overflow )
     int layer = 0;
     printAux( root, layer, of );
 }
-void ArvoreB::printAux( NoB* no, int& layer, bool& overflow )
+void ArvoreB::printAux( NoB* no, int& layer, bool& overflow)
 {   
-    if( no == nullptr ) return;
+    if( no == NULL ) return;
 
     for( int j = 0; j < layer; j++ ) cout << "  ";
     for( int i = 0; i < size+(overflow ? 1:0); i++ )
     {
         cout << no->get( i ) << ( i==size-1+(overflow ? 1:0) ? "":", ");
 
-        if( no->getChild(i) != nullptr )
+        if( no->getChild(i) != NULL )
         {
             layer++;
             cout << endl;

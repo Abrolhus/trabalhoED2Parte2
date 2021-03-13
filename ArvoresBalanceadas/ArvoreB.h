@@ -5,6 +5,7 @@
 #include "NoB.h"
 #include "../HashTable.h"
 #include "auxiliar.h"
+#include <fstream>
 
 using namespace std;
 
@@ -16,6 +17,7 @@ class ArvoreB
         int size;
 
         void printAux( NoB* no, int& layer, bool& overflow );
+        void clearAux( NoB* no );
 
         void overflow( int val, NoB* current, NoB* left, NoB* right );
 
@@ -30,6 +32,7 @@ class ArvoreB
         void Insere( int val );
 
         void Print( bool overflow = false );
+        void Limpar();
 };
 
 #endif

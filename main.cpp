@@ -45,16 +45,16 @@ int main( int argc, char** argv ){
     cout << "B Criada" << endl;
 
     vector<Registro> registros = lerRegistrosParaHashTable(file_covid, ht);
+    cout << "Registros lidos" << endl;
 
-
-    int chave;
-    for( int i = 0; i < registros.size(); i++ )
-    {
-        chave = ht.getIndexOf( registros[i].getCidade(), registros[i].getData() );
-        avlTree.Insere( chave );
-        bTree.Insere( chave );
-    }
-    cout << "AVL e B Carregadas" << endl;
+    // int chave;
+    // for( int i = 0; i < registros.size(); i++ )
+    // {
+    //     chave = ht.getIndexOf( registros[i].getCidade(), registros[i].getData() );
+    //     avlTree.Insere( chave );
+    //     bTree.Insere( chave );
+    // }
+    // cout << "AVL e B Carregadas" << endl;
     // interface( avlTree, bTree, qTree, ht, registros );
     interface( avlTree, bTree, ht, registros );
 
@@ -115,9 +115,7 @@ vector<Registro> lerRegistrosParaHashTable(std::ifstream& file, HashTable& ht){
         //vet.push_back( new No(data,estado,cidade,codigo,casos,mortes) );
         Registro reg(data, estado, cidade, int(codigo), casos, mortes);
         regs.push_back( reg );
-        ht.insert(reg);
     }
-    cout << "Hashtable Carregada" << endl;
 
     return regs;
 
