@@ -13,12 +13,16 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Regi
     int argsI[10];
     streambuf* bckpbuf = cout.rdbuf();
     ofstream otpbuf;
+    vector<int> randoms;
 
     unsigned char selectedTree = 'a';
 
     printOptions:
 
     cout << "========= INTERFACE =========" << endl;
+    cout << "ETAPA 05" << endl;
+    cout << "5 - Realizar etapa 05" << endl << endl;
+    cout << "f - Preencher tabela hash" << endl << endl;
     cout << "Selecionado [ " << ( selectedTree == 'a' ? "Arvore AVL": selectedTree == 'b' ? "Arvore B": selectedTree == 'c' ? "Arvore QUAD": selectedTree == 'd' ? "Tabela Hash":"" ) << " ]" << " - (\\) para mudar" << endl;
     cout << "p - Printar" << endl;
     cout << "n - Preencher N aleatorios" << endl;
@@ -76,15 +80,45 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Regi
 
         break;
 
-        case 'n':
+        case 'f':
+            hash.clear();
             for( int i = 0; i < regs.size(); i++ )
                 hash.insert( regs[i] );
+        break;
+
+        case 'n':
+            cout << "Digite um valor de N:" << endl;
+            cin >> argsI[0];
+
+            cout << "Limpando Hash..." << endl;
+            hash.clear();
+            cout << "Preenchendo Hash..." << endl;
+            for( int i = 0; i < regs.size(); i++ )
+                hash.insert( regs[i] );
+
+            cout << "Limpando AVL..." << endl;
+            avlTree.Limpar();
+            cout << "Limpando B..." << endl;
+            bTree.Limpar();
+
+            cout << "Gerando " << argsI[0] << " valores" << endl;
+            randoms = hash.getNRandomHashCodes( argsI[0] );
+
+            cout << "Inserindo " << argsI[0] << " valores..." << endl;
+            for( int i = 0; i < randoms.size(); i++ )
+            {
+                avlTree.Insere( randoms[i] );
+                bTree.Insere( randoms[i] );
+            }
+
+            
+
         break;
 
         case 'l':
             if( selectedTree == 'a' ) avlTree.Limpar();
             else if( selectedTree == 'b' ) bTree.Limpar();
-            // else if( selectedTree == 'c' ) hash.Limpar();
+            else if( selectedTree == 'd' ) hash.clear();
             // else if( selectedTree == 'd' ) avlTree.Limpar();
         break;
 
@@ -96,7 +130,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Regi
         case 'p':
             if( selectedTree == 'a' ) avlTree.Print();
             else if( selectedTree == 'b' ) bTree.Print();
-            // else if( selectedTree == 'b' ) bTree.Print();
+            else if( selectedTree == 'd' ) hash.print();
             // else if( selectedTree == 'b' ) bTree.Print();
         break;
         
