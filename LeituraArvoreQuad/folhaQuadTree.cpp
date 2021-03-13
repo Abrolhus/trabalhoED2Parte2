@@ -5,7 +5,7 @@
 using namespace std;
 
 
-folhaQuadTree::folhaQuadTree(string stateCode, string cityCode, string cidade, double longitude, double latitude, string capital )
+folhaQuadTree::folhaQuadTree(string stateCode, int cityCode, string cidade, double longitude, double latitude, string capital )
 {
     this->stateCode = stateCode;
     this->cityCode = cityCode;
