@@ -4,68 +4,16 @@
 
 using namespace std;
 
-quadTree::quadTree(ifstream& file)
+quadTree::quadTree(vector<folhaQuadTree*> vet)
 {
-    srand(time(NULL));
-
-    /**
-     * VERIFICA SE ARQUIVO FOI ABERTO CORRETAMENTE
-     * CASO NAO TENHA SIDO, FECHA O PROGRAMA COM CODIGO DE ERRO
-    **/
-    if( !file.is_open() ){
-        cout << "Não foi possível ler o arquivo" << endl;
-        exit(0);
-    }
-
-    /**
-     * INICIA AS VARIAVEIS DA CLASSE
-    **/
-    string line;
     this->tam = 0;
-    //this->pos = 0;
-    //while( getline(file,line) )
-    //    this->tam++;
-    //this->raiz = new folhaQuadTree[this->tam];
-    file.clear(ios_base::goodbit);
-    file.seekg(0, file.beg);
-
-    /**
-     * REALIZA A LEITURA DOS DADOS SALVANDO EM FORMA DE NÓS
-     * ESSES NÓS SÃO OBJETOS QUE ARMAZENAM OS DADOS DE CADA CIDADE
-    **/
-    getline(file,line); // ( LÊ E JOGA A PRIMEIRA LINHA FORA )
     this->itera = 0;
     this->raiz = NULL;
-    while( getline(file,line) ){
-        string line_aux = line;
-
-        string stateCode = line_aux.substr(0, line_aux.find(','));
-        line_aux = line_aux.substr(line_aux.find(',')+1);
-
-        string cityCode = line_aux.substr(0, line_aux.find(','));
-        line_aux = line_aux.substr(line_aux.find(',')+1);
-
-        string cidade = line_aux.substr(0, line_aux.find(','));
-        line_aux = line_aux.substr(line_aux.find(',')+1);
-
-        double latitude = stof(line_aux.substr(0, line_aux.find(',')));
-        line_aux = line_aux.substr(line_aux.find(',')+1);
-
-        double longitude = stof(line_aux.substr(0, line_aux.find(',')));
-        line_aux = line_aux.substr(line_aux.find(',')+1);
-
-        string capital = line_aux.substr(0, line_aux.find(','));
-        line_aux = line_aux.substr(line_aux.find(',')+1);
-
-        //vet.push_back( new No(data,estado,cidade,codigo,casos,mortes) );
-        /*if (tam == 0){
-            this->raiz = new folhaQuadTree(stateCode, cityCode, cidade, longitude, latitude, capital);
-            this->tam++;
-        }*/
-        folhaQuadTree *p = new folhaQuadTree(stateCode, cityCode, cidade, longitude, latitude, capital);
-        inserir(p);
-        this->tam++;
+    for(int i=0; i<vet.size(); i++){
+        inserir(vet[i]);
+        this->tam ++;
     }
+    cout << tam;
 }
 
 quadTree::~quadTree()
