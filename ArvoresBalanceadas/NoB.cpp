@@ -21,8 +21,13 @@ NoB::NoB( int n )
 
 NoB::~NoB()
 {
-    delete [] childs;
-    delete [] values;
+    // for( int i=0; i < size+2; i++ )
+    // {
+    //     delete childs[i];
+    //     childs[i] = nullptr;
+    // }
+    // delete [] childs;
+    // delete [] values;
 }
 
 int NoB::get( int i )

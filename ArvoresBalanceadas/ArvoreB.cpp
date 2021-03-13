@@ -1,40 +1,39 @@
 #include "ArvoreB.h"
 
-#include <string>
-#include <stdio.h>
-
 ArvoreB::ArvoreB( HashTable* Hash, int size )
 {
-    root = NULL;
+    root = nullptr;
     this->size = size;
     HashRef = Hash;
 }
 
 ArvoreB::~ArvoreB()
 {
-    Limpar();
+    // Limpar();
 }
 
 void ArvoreB::Limpar()
 {
-    if( root == NULL ) return;
-
-    clearAux( root );
-
-    root = NULL;
+    // clearAux( root );
+    // delete root;
+    root = nullptr;
+    return;
 }
 void ArvoreB::clearAux( NoB* no )
 {
-    if( no == NULL ) return;
+    return;
+//     if( no == nullptr ) return;
 
-    int i;
-    for( i=0; i < size; i++ )
-    {
-        clearAux( no->getChild(i) );
-    }
-    clearAux( no->getChild(i) );
+//     if( no->isLeaf() )
+//     {
+//         if( no->getParent() != nullptr ) no->getParent()->setLeaf();
+//         delete no;
+//         no = nullptr;
+//         return;
+//     }
 
-    delete no;
+//     for( int i = 0; i < size+2; i++ )
+//         clearAux( no->getChild(i) );
 }
 
 bool ArvoreB::Busca( int val )
@@ -44,7 +43,9 @@ bool ArvoreB::Busca( int val )
     Registro* reg_cur = &HashRef->at( val );
     Registro* reg_aux;
 
-    while( aux != NULL )
+    int comp;
+
+    while( aux != nullptr )
     {
         for( int i = 0; i < size; i++ )
         {
@@ -59,7 +60,7 @@ bool ArvoreB::Busca( int val )
                     aux = aux->getChild( i );
                     break;
                 }
-                else if( DataCompare( reg_aux->getData(), reg_cur->getData() ) == -1 )
+                else if( DataCompare( reg_aux->getData(), reg_cur->getData(), comp ) == -1 )
                 {
                     aux = aux->getChild( i );
                     break;
@@ -76,39 +77,61 @@ bool ArvoreB::Busca( int val )
     return false;
 }
 
-int ArvoreB::BuscaCasos( int val )
+int ArvoreB::BuscaCasos( int val, int& comp )
 {
-    if( root == NULL ) return 0;
-
-    return AuxBusca( root, val );
+    return AuxBusca( root, val, comp );    
 }
-int ArvoreB::AuxBusca( NoB* no, int val )
+int ArvoreB::AuxBusca( NoB* no, int val, int& comp )
 {
-    if( no == NULL ) return 0;
-
-    int soma = 0;
-    int i;
-    for( i=0; i < size; i++ )
+    if( no == nullptr )
     {
-        if( no->get(i) > val ) break; // SE CODIGO MAIOR PODE SAIR
-        if( no->get(i) == val ) 
-        {
-            if( !no->isLeaf() )
-                soma += AuxBusca( no->getChild(i), val );
-            soma += HashRef->at( no->get(i) ).getCasos(); // SE CODIGO CORRESPONDE, SOMA NUMERO DE CASOS DOS FILHOS DA ESQUERDA E DOS DA DIREITA
-        }
-        // SE NO MENOR, CONTINUA BUSCA
+        cout << "Folha" << endl;
+        return 0;
     }
 
-    if( !no->isLeaf() )
-        soma += AuxBusca( no->getChild(i), val );
+    NoB* aux = no;
 
-    return soma;
+    int soma = 0;
+    int i = 0;
+    for( i = 0; i < size; i++ )
+    {
+        int atual = HashRef->at( aux->get(i) ).getCode();
+        cout << "Comparando " << val << " com " << atual << endl;
+        comp++;
+        if( aux->get(i) == -1 || atual > val )
+            break;
+        else if( atual == val )
+            soma += AuxBusca( aux->getChild(i), val, comp ) + HashRef->at( aux->get(i) ).getCasos();
+    }
+
+    return soma + AuxBusca( aux->getChild(i), val, comp );
+    // if( no == nullptr ) return 0;
+
+    // int soma = 0;
+    // int i;
+    // for( i=0; i < size; i++ )
+    // {
+    //     if( no->get(i) > val ) break; // SE CODIGO MAIOR PODE SAIR
+    //     if( no->get(i) == val ) 
+    //     {
+    //         if( !no->isLeaf() )
+    //             soma += AuxBusca( no->getChild(i), val, comp );
+    //         soma += HashRef->at( no->get(i) ).getCasos(); // SE CODIGO CORRESPONDE, SOMA NUMERO DE CASOS DOS FILHOS DA ESQUERDA E DOS DA DIREITA
+    //     }
+    //     comp++;
+    //     // SE NO MENOR, CONTINUA BUSCA
+    // }
+    // comp++;
+
+    // if( !no->isLeaf() )
+    //     soma += AuxBusca( no->getChild(i), val, comp );
+
+    // return soma;
 }
 
-void ArvoreB::Insere( int val )
+void ArvoreB::Insere( int val, int& comp )
 {
-    if( root == NULL )
+    if( root == nullptr )
     {
         root = new NoB(size);
         root->setLeaf();
@@ -126,7 +149,7 @@ void ArvoreB::Insere( int val )
             reg_cur = &HashRef->at( aux->get(i) ); // BUSCA REGISTRO ASSOCIADO A CHAVE AUX[i]
         if( aux->get(i) == -1 ) // INSERE SE VAZIO
         {
-            if( aux->getChild(i) == NULL ) // SE NÃO POSSUI VALORES A DIREITA DE AUX-1, INSERE
+            if( aux->getChild(i) == nullptr ) // SE NÃO POSSUI VALORES A DIREITA DE AUX-1, INSERE
             {
                 aux->insert( val, i );
                 return;
@@ -138,15 +161,16 @@ void ArvoreB::Insere( int val )
             }
         }
         else
-        if( reg_cur->getId() > reg_new->getId() || DataCompare( reg_cur->getData(), reg_new->getData() ) == -1 ) // INSERE SE ESTIVER ENTRE ALGUM VALOR
+        if( reg_cur->getId() > reg_new->getId() || DataCompare( reg_cur->getData(), reg_new->getData(), comp ) == -1 ) // INSERE SE ESTIVER ENTRE ALGUM VALOR
         {
+            comp++;
             if( aux->isLeaf() ) // SE NO FOLHA, OVERFLOW, SAI DO FOR
             {
-                overflow( val, aux, NULL, NULL );
+                overflow( val, aux, nullptr, nullptr, comp );
                 return;
             }
 
-            if( aux->getChild(i) != NULL )
+            if( aux->getChild(i) != nullptr )
             {
                 aux = aux->getChild(i); // CASO NAO SEJA NO FOLHA, CONTINUA BUSCANDO LOCAL DE INSERCAO
                 i = -1;
@@ -154,12 +178,12 @@ void ArvoreB::Insere( int val )
         }
     }
 
-    overflow( val, aux, NULL, NULL );
+    overflow( val, aux, nullptr, nullptr, comp );
 }
 
-void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right )
+void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right, int& comp )
 {
-    if( current == NULL )
+    if( current == nullptr )
     {
         root = new NoB(size);
         current = root;
@@ -173,15 +197,17 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right )
     {
         if( current->get(i) != -1 )
             reg_aux = &HashRef->at( current->get(i) );
-        if( reg_aux->getId() > reg_cur->getId() || DataCompare(reg_aux->getData(), reg_cur->getData()) == -1 || current->get(i) == -1 ) break;
+        if( reg_aux->getId() > reg_cur->getId() || DataCompare(reg_aux->getData(), reg_cur->getData(),comp) == -1 || current->get(i) == -1 ) break;
+        comp++;
     }
+    comp++;
 
     current->insert( val, i );
     current->setChild( (i == size ? i-1:i), left );
     current->setChild( (i == size ? i:i+1), right );
 
-    if( left != NULL ) left->setParent( current );
-    if( right != NULL ) right->setParent( current );
+    if( left != nullptr ) left->setParent( current );
+    if( right != nullptr ) right->setParent( current );
 
     if( current->getPos() < size+1 ) return;
 
@@ -195,14 +221,14 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right )
         newRight->appendChild( current->getChild(j) );
 
         current->set( j, -1 );
-        current->setChild( j, NULL );
+        current->setChild( j, nullptr );
     }
     newRight->appendChild( current->getChild(size) );
     newRight->setLeaf( current->isLeaf() ); // SE AUX E FOLHA, NO DA DIREITA TAMBEM SERA
 
     current->setPos( size/2 );
 
-    overflow( pivo, current->getParent(), current, newRight );
+    overflow( pivo, current->getParent(), current, newRight, comp );
 
 }
 
@@ -214,14 +240,14 @@ void ArvoreB::Print( bool overflow )
 }
 void ArvoreB::printAux( NoB* no, int& layer, bool& overflow)
 {   
-    if( no == NULL ) return;
+    if( no == nullptr ) return;
 
     for( int j = 0; j < layer; j++ ) cout << "  ";
     for( int i = 0; i < size+(overflow ? 1:0); i++ )
     {
         cout << no->get( i ) << ( i==size-1+(overflow ? 1:0) ? "":", ");
 
-        if( no->getChild(i) != NULL )
+        if( no->getChild(i) != nullptr )
         {
             layer++;
             cout << endl;

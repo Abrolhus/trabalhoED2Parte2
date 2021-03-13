@@ -127,14 +127,14 @@ int HashTable::getIndexOf(int codigoCidade, std::string data){
 void HashTable::clear(){
 
     // this->table.clear();
-    for(auto element : this->table){
+    for(auto& element : this->table){
         element.flag = EMPTY;
     }// the elements are not erased, so if you are willing to some heavy elements, this solution may not work;
 }
 std::vector<int> HashTable::getNRandomHashCodes(int n){
     std::vector<int> hashCodes;
     std::vector<int> nRandomHashCodes;
-    for(auto element : this->table){
+    for(auto& element : this->table){
         if(element.flag == FULL){
             hashCodes.push_back(element.key);
         }
@@ -146,7 +146,7 @@ std::vector<int> HashTable::getNRandomHashCodes(int n){
         nRandomHashCodes.push_back(hashCodes.at(index));
         hashCodes.at(index) = hashCodes.at(i);
     }
-    std::cout << "\n" << nRandomHashCodes.size() << std::endl;
+    // std::cout << "\n" << nRandomHashCodes.size() << std::endl;
     return nRandomHashCodes;
 }
 

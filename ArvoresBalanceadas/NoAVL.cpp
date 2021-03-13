@@ -3,16 +3,23 @@
 NoAVL::NoAVL(){
     fator = 0; 
     h = 0;
+    noDir = nullptr;
+    noEsq = nullptr;
 }
 
 NoAVL::NoAVL( int val ){
     valor = val; 
     fator = 0; 
     h = 0;
+    noDir = nullptr;
+    noEsq = nullptr;
 }
 
 NoAVL::~NoAVL(){
-
+    // delete noDir;
+    // delete noEsq;
+    // noDir = nullptr;
+    // noEsq = nullptr;
 }
 
 void NoAVL::fixFc()

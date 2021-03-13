@@ -18,7 +18,7 @@ vector<Registro> lerRegistrosParaHashTable( std::ifstream&, HashTable& );
 vector<folhaQuadTree*> lerArquivoParaQuadTree(ifstream&);
 
 int main( int argc, char** argv ){
-
+    
     srand(time(NULL));
 
     string filename_covid = "brazil_covid19_cities_processado.csv";
@@ -51,7 +51,7 @@ int main( int argc, char** argv ){
     for (int i = 0; i < s.size(); i++){
         cout<< s[i] << endl;
     }*/
-    ArvoreB bTree( &ht , 8 );
+    ArvoreB bTree( &ht , 20 );
     cout << "B Criada" << endl;
 
     vector<Registro> registros = lerRegistrosParaHashTable(file_covid, ht);

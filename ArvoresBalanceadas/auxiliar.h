@@ -5,6 +5,6 @@
 
 using namespace std;
 
-int DataCompare( string data01, string data02 );
+int DataCompare( string data01, string data02, int& );
 
 #endif
