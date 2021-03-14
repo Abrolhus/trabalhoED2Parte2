@@ -1,6 +1,9 @@
 #include "HashTable.h"
 #include <math.h>
 HashTable::HashTable(int size){
+    /* inicialize the Hash Table's vector with all elements flagged as EMPTY.
+     * Uses the defaut Registro's constructor to inicialize the so called 'empty' Registro
+     */
     // inicialize all lists. TODO: verify if this is the correct procedure
     this->table  = std::vector<Element>();
     for (int i = 0; i < size; i++) {
@@ -17,6 +20,7 @@ HashTable::HashTable(int size){
 }
 
 void HashTable::insert(Registro reg){
+    /* Inserts Registro */
     int i = 0;
     int index;
     do {
@@ -36,15 +40,18 @@ void HashTable::insert(Registro reg){
 }
 
 void HashTable::remove(int codigoCidade, std::string data){
+    /* removes element */
 }
 
 void HashTable::print(){
+    /* Print out the table for debugging.
+     */
     int count = 0;
     for(int i = 0; i < this->table.size(); i++){
         if(this->table.at(i).flag == FULL){
             count++;
             // std::cout << this->table.at(i).value.getCidade() << " (" << this->table.at(i).value.getData() << ") " << std::endl;
-            std::cout << i << ": " << table.at(i).key << std::endl;
+            std::cout << table.at(i).value.getCode() << std::endl;
             if(i != table.at(i).key)
                 std::cout << "ERROR";
         }
@@ -55,7 +62,13 @@ void HashTable::print(){
 }
 
 long HashTable::hashFunction(int codigoCidade, std::string data, int i){
-    //simplest hashFunction for testing
+    /* Hash Function expecific for double hashing.
+     * (h(x, i) = h1(x) + i*h2(x)) mod m
+     * m: size of hash table
+     * h1: djb2
+     * h2: sdbm
+     * both djb2 and sdbm are avaliable at http://www.cse.yorku.ca/~oz/hash.html
+     */
     unsigned long hash = 5381;
     unsigned long hash2 = 0;
     std::string str = data + std::to_string(codigoCidade);
@@ -70,21 +83,16 @@ long HashTable::hashFunction(int codigoCidade, std::string data, int i){
         hash2 = c + (hash2 << 6) + (hash2 << 16) - hash2;
         j++;
     }
-    // if(hash2 % 2 == 1){ // garante que hash2 eh impar
-        // this->numeroDePares++;
-    // }
-    // else {
-        // hash2++;
-        // this->numeroDeImpares++;
-    // }
     return (hash + i*(hash2))%this->table.size();
-
-    // return (int)(((int)cidade[0] + (int)(data[0]) + i )% this->getSize());
 }
+
 int HashTable::getSize(){
     return this->size;
 }
+
 Registro& HashTable::at(int codigoCidade, std::string data){
+    /* returns reference to Registro at given key (codigoCidade, data)
+     */
     int index;
     int i = 0;
     while(i < this->getSize()){
@@ -98,14 +106,17 @@ Registro& HashTable::at(int codigoCidade, std::string data){
         i++;
     }
     // if(this->table.at(index).flag == FULL || this->table.at(index).flag == DELETE_ME){ // TODO: tirar redundancia;
-    // TODO: throw error;
+    // TODO: throw exception;
     return this->table.at(index).value;
 }
 Registro& HashTable::at(int index){
+    /* returns reference to Registro at given index / hashCode */
     // TODO: throw exception
     return this->table.at(index).value;
 }
 int HashTable::getIndexOf(int codigoCidade, std::string data){
+    /* returns index of Registro corresponding to both given city code and date
+     */
     int i = 0;
     int index;
     while(i < this->getSize()){
@@ -125,13 +136,16 @@ int HashTable::getIndexOf(int codigoCidade, std::string data){
 
 }
 void HashTable::clear(){
-
-    // this->table.clear();
-    for(auto element : this->table){
+    /* Erases all elements.
+     * It actually doesn't, only marks all of them as free space
+     */
+    for(auto& element : this->table){
         element.flag = EMPTY;
-    }// the elements are not erased, so if you are willing to some heavy elements, this solution may not work;
+    }// the elements are not erased, so if you are willing to store some heavy elements, this solution may not be suitable;
 }
 std::vector<int> HashTable::getNRandomHashCodes(int n){
+    /* returns index of N different random elements
+     */
     std::vector<int> hashCodes;
     std::vector<int> nRandomHashCodes;
     for(auto element : this->table){
