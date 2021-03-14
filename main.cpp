@@ -2,14 +2,14 @@
 #include "Registro.h"
 #include <iostream>
 #include <fstream>
-#include "ArvoresBalanceadas\ArvoreB.h"
-#include "ArvoresBalanceadas\ArvoreAVL.h"
-#include "LeituraArvoreQuad\quadTree.h"
-#include "interface.h"
+#include "ArvoresBalanceadas/ArvoreB.h"
+#include "ArvoresBalanceadas/ArvoreAVL.h"
+#include "LeituraArvoreQuad/quadTree.h"
+#include "Interface.h"
 #include <vector>
 #include "math.h"
-#include "LeituraArvoreQuad\folhaQuadTree.h"
-#include "LeituraArvoreQuad\quadTree.h"
+#include "LeituraArvoreQuad/folhaQuadTree.h"
+#include "LeituraArvoreQuad/quadTree.h"
 #include <time.h>
 
 using namespace std;
@@ -18,7 +18,7 @@ vector<Registro> lerRegistrosParaHashTable( std::ifstream&, HashTable& );
 vector<folhaQuadTree*> lerArquivoParaQuadTree(ifstream&);
 
 int main( int argc, char** argv ){
-    
+
     ofstream log("log.txt");
     cerr.rdbuf( log.rdbuf() );
 
