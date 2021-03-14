@@ -25,6 +25,8 @@ class ArvoreB
 
         int AuxBusca( NoB*, int, int& );
 
+        int CountAux( NoB* );
+
         HashTable* HashRef;
 
     public:
@@ -38,6 +40,8 @@ class ArvoreB
 
         void Print( bool overflow = false );
         void Limpar();
+
+        int Count();
 };
 
 #endif

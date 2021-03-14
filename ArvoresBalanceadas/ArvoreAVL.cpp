@@ -27,8 +27,6 @@ void ArvoreAVL::LimparAux( NoAVL* no )
     LimparAux(no->esq());
     LimparAux(no->dir());
 
-    cerr << "Deletando " << no->get() << endl;
-
     delete no;
 
     no = nullptr;
@@ -36,53 +34,46 @@ void ArvoreAVL::LimparAux( NoAVL* no )
 
 void ArvoreAVL::Insere( int key, int& comp )
 {
-    if( raiz == nullptr )
-    {
-        raiz = new NoAVL( key );
-    }
-    else
-        InsereAux( key, raiz, comp );
+    this->raiz = InsereAux( key, raiz, comp );
 }
-void ArvoreAVL::InsereAux( int key, NoAVL* no, int& comp )
+
+NoAVL* ArvoreAVL::InsereAux( int key, NoAVL* no, int& comp )
 {
-    if( no == nullptr ) return;
+    if ( no == nullptr )
+    {
+        return new NoAVL( key );
+    }
 
     Registro* reg_cur = &HashRef->at( no->get() );
     Registro* reg_new = &HashRef->at( key );
 
-    char decision = 'r';
+    // char decision = 'r';
 
     if( reg_new->getId() > reg_cur->getId() )
-        decision = 'r';
+        no->setDir( InsereAux( key, no->dir(), comp));
+        // decision = 'r';
     else if( reg_new->getId() < reg_cur->getId() )
-        decision = 'l';
+        no->setEsq( InsereAux( key, no->esq(), comp));
+        // decision = 'l';
     else if( stoi(reg_new->getData().substr(0,4)) > stoi( reg_cur->getData().substr(0,4) ) )
-        decision = 'r';
+        no->setDir( InsereAux( key, no->dir(), comp));
+        // decision = 'r';
     else if( stoi(reg_new->getData().substr(0,4)) < stoi( reg_cur->getData().substr(0,4) ) )
-        decision = 'l';
+        no->setEsq( InsereAux( key, no->esq(), comp));
+        // decision = 'l';
     else if( stoi(reg_new->getData().substr(5,2)) > stoi( reg_cur->getData().substr(5,2) ) )
-        decision = 'r';
+        no->setDir( InsereAux( key, no->dir(), comp));
+        // decision = 'r';
     else if( stoi(reg_new->getData().substr(5,2)) < stoi( reg_cur->getData().substr(5,2) ) )
-        decision = 'l';
+        no->setEsq( InsereAux( key, no->esq(), comp));
+        // decision = 'l';
     else if( stoi(reg_new->getData().substr(8,2)) > stoi(reg_cur->getData().substr(8,2)) )
-        decision = 'r';
+        no->setDir( InsereAux( key, no->dir(), comp));
+        // decision = 'r';
     else
-        decision = 'l';
-
+        no->setEsq( InsereAux( key, no->esq(), comp ));
+        // decision = 'l';
     comp++;
-
-    NoAVL* prox = ( decision == 'r' ? no->dir():no->esq() );
-    
-    if( prox == nullptr )
-    {
-        NoAVL* aux = new NoAVL( key );
-        if( decision == 'r' )
-            no->setDir(aux);
-        else
-            no->setEsq(aux);
-    }
-
-    InsereAux( key, prox, comp );
 
     int fd,fe;
     fd = fe = 0;
@@ -97,40 +88,40 @@ void ArvoreAVL::InsereAux( int key, NoAVL* no, int& comp )
     if( no->getFc() == 2 )
     {
         if( fd == 1 || fd == 0 )
-            rotSEsq( no );
+            no = rotSEsq( no );
         else if( fd == -1 )
-            rotDEsq( no );
+            no = rotDEsq( no );
     }
     else if( no->getFc() == -2 )
     {
         if( fe == -1 || fe == 0 )
-            rotSDir( no );
+            no = rotSDir( no );
         else if( fe == 1 )
-            rotDDir( no );
+            no = rotDDir( no );
     }
-
+    return no;
 }
 
 bool ArvoreAVL::Busca( int val )
 {
     NoAVL* aux = raiz;
-    Registro* reg_cur = &HashRef->at( val );
-    Registro* reg_aux;
+    Registro reg_cur = HashRef->at( val );
+    Registro reg_aux;
     int comp;
 
     while( aux != nullptr )
     {
         if( aux->get() == val ) return true;
 
-        reg_aux = &HashRef->at( aux->get() );
+        reg_aux = HashRef->at( aux->get() );
 
-        if( reg_aux->getId() > reg_cur->getId() )
+        if( reg_aux.getId() > reg_cur.getId() )
             aux = aux->esq();
-        else if( reg_aux->getId() < reg_cur->getId() )
+        else if( reg_aux.getId() < reg_cur.getId() )
             aux = aux->dir();
         else
         {
-            int DataComp = DataCompare( reg_aux->getData(), reg_cur->getData(), comp );
+            int DataComp = DataCompare( reg_aux.getData(), reg_cur.getData() );
             if( DataComp == -1 )
                 aux = aux->esq();
             else if( DataComp == 1 )
@@ -148,7 +139,7 @@ int ArvoreAVL::BuscaCasos( int val, int& comp )
     while( aux != nullptr )
     {
         int atual = HashRef->at( aux->get() ).getCode();
-        cout << "Comparando " << val << " com " << atual << endl;
+        // cerr << "Comparando " << val << " com " << atual << endl;
         if( atual > val )
             aux = aux->esq();
         else if( atual < val )
@@ -191,12 +182,11 @@ void ArvoreAVL::PrintAux( NoAVL* no )
     PrintAux( no->dir() );
 }
 
-void ArvoreAVL::rotSEsq( NoAVL* no )
+NoAVL* ArvoreAVL::rotSEsq( NoAVL* no )
 {
     // salva endereço de no->dir
     // e cria novo nó substituto de "no"
     NoAVL* aux = no->dir();
-    NoAVL* bckp = new NoAVL();
 
     // aponta direita do no pra esquerda de aux
     // e ajusta o novo fc do no
@@ -204,43 +194,32 @@ void ArvoreAVL::rotSEsq( NoAVL* no )
     no->fixFc();
     no->fixH();
 
-    (*bckp) = (*no);
-
     // aponta esquerda do aux para endereço do no substituto
     // e ajusta o novo fc do aux
-    aux->setEsq( bckp );
+    aux->setEsq( no );
     aux->fixFc();
     aux->fixH();
 
-    (*no) = (*aux);
-
-    delete aux;
-    aux = nullptr;
+    return aux;
 }
-void ArvoreAVL::rotSDir( NoAVL* no )
+NoAVL* ArvoreAVL::rotSDir( NoAVL* no )
 {
     NoAVL* aux = no->esq();
-    NoAVL* bckp = new NoAVL();
 
     no->setEsq( aux->dir() );
     no->fixFc();
     no->fixH();
 
-    (*bckp) = (*no);
-
-    aux->setDir( bckp );
+    aux->setDir( no );
     aux->fixFc();
     aux->fixH();
 
-    (*no) = (*aux);
-
-    delete aux;
-    aux = nullptr;
+    return aux;
 }
-void ArvoreAVL::rotDEsq( NoAVL* no )
+NoAVL* ArvoreAVL::rotDEsq( NoAVL* no )
 {
-    rotSDir( no->dir() );
-    rotSEsq( no );
+    no->setDir( rotSDir( no->dir() ) );
+    return rotSEsq( no );
     // NoAVL* aux = no->dir();
     // NoAVL* aux2 = aux->esq();
 
@@ -249,8 +228,13 @@ void ArvoreAVL::rotDEsq( NoAVL* no )
     // aux2->setEsq( no );
     // aux2->setDir( aux );
 }
-void ArvoreAVL::rotDDir( NoAVL* no )
+NoAVL* ArvoreAVL::rotDDir( NoAVL* no )
 {
-    rotSEsq( no->esq() );
-    rotSDir( no );
+    no->setEsq( rotSEsq( no->esq() ) );
+    return rotSDir( no );
+}
+
+int ArvoreAVL::Count()
+{
+    return 0;
 }

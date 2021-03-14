@@ -34,6 +34,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Regi
     cout << "p - Printar" << endl;
     cout << "i - Inserção de N registros" << endl;
     cout << "l - Limpar a estrutura" << endl;
+    cout << "t - Tamanho" << endl;
     cout << "s - Fechar programa" << endl << endl;
     cout << "OUTROS" << endl;
     cout << "h - Printar da hash" << endl;
@@ -69,7 +70,10 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Regi
             else if( selectedTree == 'b' )
             {
                 for( int i = 0; i < argsI[0]; i++ )
+                {
                     bTree.Insere( hash.getIndexOf(regs[i].getCode(),regs[i].getData()), argsI[9] );
+                    bTree2.Insere( hash.getIndexOf(regs[i].getCode(),regs[i].getData()), argsI[9] );
+                }
                 bTree.Print();
             }
             else if( selectedTree == 'c' )
@@ -128,7 +132,10 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Regi
             cout << "Inserindo " << argsI[0] << " valores (AVL)..." << endl;
             start = chrono::high_resolution_clock::now();
             for( int i = 0; i < randoms.size(); i++ )
+            {
+                cerr << "Inserindo " << randoms[i] << " em AVL" << endl;
                 avlTree.Insere( randoms[i], argsI[1] );
+            }
             end = chrono::high_resolution_clock::now();
             cout << "Duração da inserção (AVL): " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << "ns" << endl;
             cout << "Número de comparações (AVL): " << argsI[1] << endl;
@@ -137,7 +144,10 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Regi
             cout << "Inserindo " << argsI[0] << " valores (B[20])..." << endl;
             start = chrono::high_resolution_clock::now();
             for( int i = 0; i < randoms.size(); i++ )
+            {
+                cerr << "Inserindo " << randoms[i] << " em B[20]" << endl;
                 bTree.Insere( randoms[i], argsI[2] );
+            }
             end = chrono::high_resolution_clock::now();
             cout << "Duração da inserção (B[20]): " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << "ns" << endl;
             cout << "Número de comparações (B[20]): " << argsI[2] << endl;
@@ -146,7 +156,10 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Regi
             cout << "Inserindo " << argsI[0] << " valores (B[200])..." << endl;
             start = chrono::high_resolution_clock::now();
             for( int i = 0; i < randoms.size(); i++ )
+            {
+                cerr << "Inserindo " << randoms[i] << " em B[200]" << endl;
                 bTree2.Insere( randoms[i], argsI[3] );
+            }
             end = chrono::high_resolution_clock::now();
             cout << "Duração da inserção (B[200]): " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << "ns" << endl;
             cout << "Número de comparações (B[200]): " << argsI[3] << endl;
@@ -204,7 +217,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Regi
 
         case 'l':
             if( selectedTree == 'a' ) avlTree.Limpar();
-            else if( selectedTree == 'b' ) bTree.Limpar();
+            else if( selectedTree == 'b' ) { bTree.Limpar(); bTree2.Limpar(); }
             else if( selectedTree == 'd' ) hash.clear();
             // else if( selectedTree == 'd' ) avlTree.Limpar();
         break;
@@ -219,6 +232,14 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Regi
             else if( selectedTree == 'b' ) bTree.Print();
             else if( selectedTree == 'd' ) hash.print();
             // else if( selectedTree == 'b' ) bTree.Print();
+        break;
+
+        case 't':
+            if( selectedTree == 'a' ) cout << avlTree.Count();
+            else if( selectedTree == 'b' ) cout << bTree.Count();
+            // else if( selectedTree == 'd' ) hash.Count();
+
+            cout << endl;
         break;
 
         case 'h':

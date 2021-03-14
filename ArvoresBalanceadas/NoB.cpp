@@ -52,6 +52,12 @@ void NoB::setChild( int i, NoB* no )
 
 void NoB::appendChild( NoB* no )
 {
+    if( posChild > size+1 )
+    {
+        cerr << "Não foi possivel dar append no nó" << endl;
+        exit(1);
+    }
+
     childs[posChild] = no;
     posChild++;
 }
@@ -104,7 +110,7 @@ void NoB::append( int val )
 {
     if( pos > size )
     {
-        cout << "Não foi possível inserir valor " << val << " no nó ( overflow )" << endl;
+        cerr << "Não foi possível inserir valor " << val << " no nó ( overflow )" << endl;
         exit(1);
     }
 
@@ -122,7 +128,7 @@ void NoB::insert( int val )
 
     int i;
 
-    for( i = 0; i < size; i++ )
+    for( i = 0; i < size+1; i++ )
     {
         if( values[i] == -1 )
         {
@@ -133,20 +139,20 @@ void NoB::insert( int val )
         else
         if( val < values[i] )
         {
-            for( int k = size+1; k > i; k-- )
+            int k;
+            for( k = size; k > i; k-- )
             {
                 values[k] = values[k-1];
                 childs[k+1] = childs[k];
             }
-            // childs[i] = childs[i-1];
-            values[i] = val;
-            pos++;
+            childs[k+1] = nullptr;
+            values[k] = val;
+            if( pos < size+1 ) pos++;
             return;
         }
     }
 
-    values[i] = val;
-    pos++;
+    values[i-1] = val;
 }
 
 void NoB::insert( int val, int k )
@@ -157,14 +163,16 @@ void NoB::insert( int val, int k )
         exit(1);
     }
 
-    for( int i = size+1; i > k; i-- )
+    int i;
+    for( i = size; i > k; i-- )
     {
         values[i] = values[i-1];
         childs[i+1] = childs[i];
     }
-    // childs[k] = childs[k-1];
-    values[k] = val;
-    pos++;
+    childs[i+1] = nullptr;
+    values[i] = val;
+    if( pos < size+1 ) 
+        pos++;
 }
 
 void NoB::insert( int val, NoB* no )

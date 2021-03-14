@@ -19,6 +19,9 @@ vector<folhaQuadTree*> lerArquivoParaQuadTree(ifstream&);
 
 int main( int argc, char** argv ){
     
+    ofstream log("log.txt");
+    cerr.rdbuf( log.rdbuf() );
+
     srand(time(NULL));
 
     string filename_covid = "brazil_covid19_cities_processado.csv";

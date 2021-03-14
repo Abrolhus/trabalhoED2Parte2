@@ -15,13 +15,13 @@ class ArvoreAVL
 
         void balanceamento();
 
-        void InsereAux( int, NoAVL*, int& );
+        NoAVL* InsereAux( int, NoAVL*, int& );
         void PrintAux( NoAVL* );
 
-        void rotSEsq( NoAVL* );
-        void rotSDir( NoAVL* );
-        void rotDEsq( NoAVL* );
-        void rotDDir( NoAVL* );
+        NoAVL* rotSEsq( NoAVL* );
+        NoAVL* rotSDir( NoAVL* );
+        NoAVL* rotDEsq( NoAVL* );
+        NoAVL* rotDDir( NoAVL* );
 
         void LimparAux( NoAVL* );
 
@@ -40,6 +40,8 @@ class ArvoreAVL
 
         void Print();
         void Limpar();
+
+        int Count();
 };
 
 #endif
