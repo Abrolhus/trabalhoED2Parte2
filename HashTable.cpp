@@ -136,14 +136,8 @@ int HashTable::getIndexOf(int codigoCidade, std::string data){
 
 }
 void HashTable::clear(){
-<<<<<<< HEAD
-    /* Erases all elements.
-     * It actually doesn't, only marks all of them as free space
-     */
-=======
 
     // this->table.clear();
->>>>>>> de144c7a2d5f7e86762431e378f4c71bd96ab81c
     for(auto& element : this->table){
         element.flag = EMPTY;
     }// the elements are not erased, so if you are willing to store some heavy elements, this solution may not be suitable;

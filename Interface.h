@@ -9,6 +9,6 @@
 #include "Registro.h"
 
 // void interface( ArvoreAVL&, ArvoreB&, HashTable&, vector<Registro>& );
-void interface( ArvoreAVL&, ArvoreB&, quadTree&, HashTable&, vector<Registro>& );
+void interface( ArvoreAVL&, ArvoreB&, quadTree&, HashTable&, vector<Registro>& , vector<folhaQuadTree*>);
 
 #endif
