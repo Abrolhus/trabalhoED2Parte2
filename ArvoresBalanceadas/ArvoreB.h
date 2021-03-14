@@ -6,6 +6,8 @@
 #include "../HashTable.h"
 #include "auxiliar.h"
 #include <fstream>
+#include <string>
+#include <stdio.h>
 
 using namespace std;
 
@@ -19,7 +21,11 @@ class ArvoreB
         void printAux( NoB* no, int& layer, bool& overflow );
         void clearAux( NoB* no );
 
-        void overflow( int val, NoB* current, NoB* left, NoB* right );
+        void overflow( int val, NoB* current, NoB* left, NoB* right, int& );
+
+        int AuxBusca( NoB*, int, int& );
+        int CountAux( NoB* );
+        void InsereAux( int, int&, NoB* );
 
         HashTable* HashRef;
 
@@ -28,11 +34,14 @@ class ArvoreB
         ~ArvoreB();
 
         bool Busca( int val );
+        int BuscaCasos( int, int& );
 
-        void Insere( int val );
+        void Insere( int val, int& );
 
         void Print( bool overflow = false );
         void Limpar();
+
+        int Count();
 };
 
 #endif

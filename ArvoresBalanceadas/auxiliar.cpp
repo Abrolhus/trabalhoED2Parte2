@@ -8,19 +8,18 @@
  */
 int DataCompare( string data01, string data02 )
 {
-    return (
-        stoi(data01.substr(0,4)) < stoi(data02.substr(0,4)) ?
-            1:
-            stoi(data01.substr(0,4)) > stoi(data02.substr(0,4)) ?
-                -1:
-                stoi(data01.substr(5,2)) < stoi(data02.substr(5,2)) ?
-                    1:
-                    stoi(data01.substr(5,2)) > stoi(data02.substr(5,2)) ?
-                        -1:
-                        stoi(data01.substr(8,2)) < stoi(data02.substr(8,2)) ?
-                            1:
-                            stoi(data01.substr(8,2)) > stoi(data02.substr(8,2)) ?
-                                -1:
-                                0
-    );
+    if( stoi(data01.substr(0,4)) < stoi(data02.substr(0,4)) )
+        return 1;
+    else if( stoi(data01.substr(0,4)) > stoi(data02.substr(0,4)) )
+        return -1;
+    else if( stoi(data01.substr(5,2)) < stoi(data02.substr(5,2)) )
+        return 1;
+    else if( stoi(data01.substr(5,2)) > stoi(data02.substr(5,2)) )
+        return -1;
+    else if( stoi(data01.substr(8,2)) < stoi(data02.substr(8,2)) )
+        return 1;
+    else if( stoi(data01.substr(8,2)) > stoi(data02.substr(8,2)) )
+        return -1;
+    else
+        return 0;
 }

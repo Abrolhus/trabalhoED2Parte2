@@ -10,6 +10,7 @@
 #include "math.h"
 #include "LeituraArvoreQuad\folhaQuadTree.h"
 #include "LeituraArvoreQuad\quadTree.h"
+#include <time.h>
 
 using namespace std;
 
@@ -17,6 +18,11 @@ vector<Registro> lerRegistrosParaHashTable( std::ifstream&, HashTable& );
 vector<folhaQuadTree*> lerArquivoParaQuadTree(ifstream&);
 
 int main( int argc, char** argv ){
+    
+    ofstream log("log.txt");
+    cerr.rdbuf( log.rdbuf() );
+
+    srand(time(NULL));
 
     string filename_covid = "brazil_covid19_cities_processado.csv";
     string filename_coords = "brazil_cities_coordinates.csv";
@@ -43,12 +49,12 @@ int main( int argc, char** argv ){
     cout << "AVL Criada" << endl;
     quadTree qTree = quadTree(lerArquivoParaQuadTree(file_coords));
     //qTree.imprimir();
-    /*vector<int> s;
+    vector<int> s;
     qTree.buscaIntervaloAux(s, -17.7573,-8.72073, -49.4412, -39.1162);
-    for (int i = 0; i < s.size(); i++){
+    /*for (int i = 0; i < s.size(); i++){
         cout<< s[i] << endl;
     }*/
-    ArvoreB bTree( &ht , 8 );
+    ArvoreB bTree( &ht , 4 );
     cout << "B Criada" << endl;
 
     vector<Registro> registros = lerRegistrosParaHashTable(file_covid, ht);

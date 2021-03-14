@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <string>
 #include <vector>
+#include <chrono>
 
 using namespace std;
 
@@ -23,8 +24,8 @@ public:
     /*bool marcarComoRemovido();
     quadTree reconstruir();*/
     char compara(folhaQuadTree *r, folhaQuadTree* i);
-    void buscaIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<int>& s);
-    bool confereIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<int>& s);
+    void buscaIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<int>& s, int& comps);
+    bool confereIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<int>& s, int& comps);
     void buscaIntervaloAux(vector<int>& s, double x0, double x1, double y0, double y1);
     void imprimir();
     void imprimirAux(folhaQuadTree* r);

@@ -136,9 +136,14 @@ int HashTable::getIndexOf(int codigoCidade, std::string data){
 
 }
 void HashTable::clear(){
+<<<<<<< HEAD
     /* Erases all elements.
      * It actually doesn't, only marks all of them as free space
      */
+=======
+
+    // this->table.clear();
+>>>>>>> de144c7a2d5f7e86762431e378f4c71bd96ab81c
     for(auto& element : this->table){
         element.flag = EMPTY;
     }// the elements are not erased, so if you are willing to store some heavy elements, this solution may not be suitable;
@@ -148,7 +153,7 @@ std::vector<int> HashTable::getNRandomHashCodes(int n){
      */
     std::vector<int> hashCodes;
     std::vector<int> nRandomHashCodes;
-    for(auto element : this->table){
+    for(auto& element : this->table){
         if(element.flag == FULL){
             hashCodes.push_back(element.key);
         }
@@ -160,7 +165,7 @@ std::vector<int> HashTable::getNRandomHashCodes(int n){
         nRandomHashCodes.push_back(hashCodes.at(index));
         hashCodes.at(index) = hashCodes.at(i);
     }
-    std::cout << "\n" << nRandomHashCodes.size() << std::endl;
+    // std::cout << "\n" << nRandomHashCodes.size() << std::endl;
     return nRandomHashCodes;
 }
 

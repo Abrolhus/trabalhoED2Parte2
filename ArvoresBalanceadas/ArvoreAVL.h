@@ -15,15 +15,17 @@ class ArvoreAVL
 
         void balanceamento();
 
-        void InsereAux( int, NoAVL* );
+        NoAVL* InsereAux( int, NoAVL*, int& );
         void PrintAux( NoAVL* );
 
-        void rotSEsq( NoAVL* );
-        void rotSDir( NoAVL* );
-        void rotDEsq( NoAVL* );
-        void rotDDir( NoAVL* );
+        NoAVL* rotSEsq( NoAVL* );
+        NoAVL* rotSDir( NoAVL* );
+        NoAVL* rotDEsq( NoAVL* );
+        NoAVL* rotDDir( NoAVL* );
 
         void LimparAux( NoAVL* );
+
+        int BuscaAux( NoAVL*, int, int& );
 
         HashTable* HashRef;
 
@@ -31,12 +33,15 @@ class ArvoreAVL
         ArvoreAVL( HashTable* Hash );
         ~ArvoreAVL();
 
-        void Insere( int );
+        void Insere( int, int& );
 
         bool Busca( int val );
+        int BuscaCasos( int val, int& );
 
         void Print();
         void Limpar();
+
+        int Count();
 };
 
 #endif
