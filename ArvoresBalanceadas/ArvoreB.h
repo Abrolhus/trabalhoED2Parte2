@@ -24,8 +24,8 @@ class ArvoreB
         void overflow( int val, NoB* current, NoB* left, NoB* right, int& );
 
         int AuxBusca( NoB*, int, int& );
-
         int CountAux( NoB* );
+        void InsereAux( int, int&, NoB* );
 
         HashTable* HashRef;
 

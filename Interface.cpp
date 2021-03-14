@@ -72,7 +72,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Regi
                 for( int i = 0; i < argsI[0]; i++ )
                 {
                     bTree.Insere( hash.getIndexOf(regs[i].getCode(),regs[i].getData()), argsI[9] );
-                    bTree2.Insere( hash.getIndexOf(regs[i].getCode(),regs[i].getData()), argsI[9] );
+                    // bTree2.Insere( hash.getIndexOf(regs[i].getCode(),regs[i].getData()), argsI[9] );
                 }
                 bTree.Print();
             }

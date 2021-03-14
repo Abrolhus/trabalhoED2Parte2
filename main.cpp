@@ -54,7 +54,7 @@ int main( int argc, char** argv ){
     for (int i = 0; i < s.size(); i++){
         cout<< s[i] << endl;
     }*/
-    ArvoreB bTree( &ht , 20 );
+    ArvoreB bTree( &ht , 4 );
     cout << "B Criada" << endl;
 
     vector<Registro> registros = lerRegistrosParaHashTable(file_covid, ht);

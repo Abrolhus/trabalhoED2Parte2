@@ -5,15 +5,16 @@
 
 using namespace std;
 
+#include <vector>
+
 class NoB
 {
     private:
-        int* values;
-        NoB** childs;
+        vector<NoB*> childs;
+        vector<int> values;
+
         NoB* parent;
 
-        int pos;
-        int posChild;
         int size;
 
         bool leaf;
@@ -27,7 +28,8 @@ class NoB
         void append( int val );
         void insert( int val );
         void insert( int val, int k );
-        void insert( int val, NoB* no );
+        // void insert( int val, NoB* no );
+        void pop( int );
 
         NoB* getChild( int i );
         void setChild( int i, NoB* no );
