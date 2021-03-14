@@ -5,9 +5,6 @@ NoB::NoB( int n )
     size = n;
     leaf = false;
     parent = nullptr;
-
-    for( int i = 0; i < size+2; i++ )
-        childs.push_back(nullptr);
 }
 
 NoB::~NoB()

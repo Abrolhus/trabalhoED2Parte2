@@ -135,8 +135,10 @@ void ArvoreB::Insere( int val, int& comp )
     if( root == nullptr )
     {
         NoB* no = new NoB(size);
-        no->setLeaf();
+        no->setLeaf(true);
         no->append( val );
+        no->appendChild( nullptr );
+        no->appendChild( nullptr );
 
         root = no;
 
@@ -154,14 +156,16 @@ void ArvoreB::InsereAux( int val, int& comp, NoB* no )
     Registro reg_cur;
     Registro reg_new = HashRef->at( val );
     
+    cerr << "No " << (no->isLeaf() ? "é":"não") << " é folha" << endl;
     while( !no->isLeaf() )
     {
         cerr << "Iterando um no" << endl;
         int i;
         for( i = 0; i < no->getPos(); i++ )
         {
+            reg_cur = HashRef->at( no->get(i) );
             comp++;
-            cerr << "Comparando com posicao " << i << endl;
+            cerr << "Comparando com posicao " << i << " ( " << reg_new.getCode() << "-" << reg_new.getData() << " ) com ( " << reg_cur.getCode() << "-" << reg_cur.getData() << " )" << endl;
             if( reg_new.getCode() < reg_cur.getCode() )
             {
                 cerr << reg_new.getCode() << " menor que " << reg_cur.getCode() << endl;
@@ -182,10 +186,12 @@ void ArvoreB::InsereAux( int val, int& comp, NoB* no )
                 }
             }
         }
+        cerr << "Chegou ao final" << endl;
         InsereAux( val,comp, no->getChild(i) );
         return;
     }
 
+    cerr << "Chamando overflow" << endl;
     overflow( val, no, nullptr, nullptr, comp );
 
     // int i;
@@ -312,11 +318,14 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right, int& comp 
 
     current->insert( val, i );
     if( i == 0 )
+    {
+        cerr << "Setando filho esq em " << i << endl;
         current->insertChild( i, left );
+    }
+    cerr << "Novo filho dir em " << i+1 << endl;
     current->insertChild( i+1, right );
 
     // cerr << "Setando filho esq em " << i << endl;
-    cerr << "Novo filho dir em " << i+1 << endl;
 
     // current->setChild( i, left )
 
@@ -352,13 +361,12 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right, int& comp 
     }
     newRight->appendChild( current->getChild(j) );
 
-    for( j = (current->getPos()/2)+1; j < current->getPos(); j++ )
+    for( j = (current->getPos()/2)+1; j < current->getPos(); )
     {
         current->pop( j );
         current->popChild( j );
     }
     current->popChild( j );
-
 
     // newRight->setChild( l,current->getChild(k) );
     // current->setChild( k, nullptr );

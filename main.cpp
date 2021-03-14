@@ -49,8 +49,8 @@ int main( int argc, char** argv ){
     cout << "AVL Criada" << endl;
     quadTree qTree = quadTree(lerArquivoParaQuadTree(file_coords));
     //qTree.imprimir();
-    vector<int> s;
-    qTree.buscaIntervaloAux(s, -17.7573,-8.72073, -49.4412, -39.1162);
+    //vector<int> s;
+    //qTree.buscaIntervaloAux(s, -17.7573,-8.72073, -49.4412, -39.1162);
     /*for (int i = 0; i < s.size(); i++){
         cout<< s[i] << endl;
     }*/
@@ -69,7 +69,7 @@ int main( int argc, char** argv ){
     // }
     // cout << "AVL e B Carregadas" << endl;
     // interface( avlTree, bTree, qTree, ht, registros );
-    interface( avlTree, bTree, ht, registros);
+    interface( avlTree, bTree, qTree, ht, registros, lerArquivoParaQuadTree(file_coords));
 
     return 0;
 

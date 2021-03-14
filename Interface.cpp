@@ -4,10 +4,11 @@
 #include <string>
 #include <chrono>
 
+
 using namespace std;
 
-void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Registro>& regs )
-// void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& hash, vector<Registro>& regs )
+// void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Registro>& regs )
+void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& hash, vector<Registro>& regs, vector<folhaQuadTree*> vet)
 {
     string args[10];
     char command;
@@ -72,13 +73,21 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Regi
                 for( int i = 0; i < argsI[0]; i++ )
                 {
                     bTree.Insere( hash.getIndexOf(regs[i].getCode(),regs[i].getData()), argsI[9] );
-                    // bTree2.Insere( hash.getIndexOf(regs[i].getCode(),regs[i].getData()), argsI[9] );
+                    bTree2.Insere( hash.getIndexOf(regs[i].getCode(),regs[i].getData()), argsI[9] );
                 }
                 bTree.Print();
             }
             else if( selectedTree == 'c' )
             {
-                
+                auto ts = chrono::high_resolution_clock::now();
+                for(int i=0; i< argsI[0]; i++){
+                    quad.inserir(vet[i]);
+                }
+                auto te = chrono::high_resolution_clock::now();
+                double duration = chrono::duration_cast<chrono::milliseconds>(te-ts).count();
+                cout<< "<<<< QuadTree >>>>" << endl;
+                cout << "Tempo de insercao: " << duration << endl;
+                quad.imprimir();
             }
             else if( selectedTree == 'd' )
             {
