@@ -50,5 +50,7 @@ void NoB::insert( int x )
     values.push_back( x );
 }
 void NoB::pop( int pos ){ values.erase( values.begin()+pos ); }
+void NoB::popChild( int pos ){ childs.erase( childs.begin()+pos ); }
 
 void NoB::insert( int val, int k ){ values.insert( values.begin()+k, 1, val ); }
+void NoB::insertChild( int pos, NoB* no ){ childs.insert( childs.begin()+pos, 1, no ); }

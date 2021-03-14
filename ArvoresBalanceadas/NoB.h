@@ -30,9 +30,11 @@ class NoB
         void insert( int val, int k );
         // void insert( int val, NoB* no );
         void pop( int );
+        void popChild( int );
 
         NoB* getChild( int i );
         void setChild( int i, NoB* no );
+        void insertChild( int i, NoB* no );
         void appendChild( NoB* no );
 
         int getPos();

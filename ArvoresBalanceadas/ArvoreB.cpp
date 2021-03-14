@@ -96,15 +96,13 @@ int ArvoreB::AuxBusca( NoB* no, int val, int& comp )
         comp++;
         if( atual > val )
         {
-            cerr << "Valor menor ou igual a -1" << endl;
-            break;
+            return AuxBusca( no->getChild(i), val, comp );
         }
         else if( atual == val )
         {
-            cerr << "Encontrado" << endl;
-            soma += AuxBusca( aux->getChild(i), val, comp ) + HashRef->at( aux->get(i) ).getCasos();
+            soma += HashRef->at( aux->get(i) ).getCasos();
+            soma += AuxBusca( aux->getChild(i), val, comp );
         }
-        cerr << "Seguindo em frente i:" << i << endl;
     }
 
     return soma + AuxBusca( aux->getChild(i), val, comp );
@@ -147,6 +145,7 @@ void ArvoreB::Insere( int val, int& comp )
         return;
     }
 
+    cerr << "Inserindo " << val << endl;
     InsereAux( val, comp, root );
 
 }
@@ -162,8 +161,10 @@ void ArvoreB::InsereAux( int val, int& comp, NoB* no )
         for( i = 0; i < no->getPos(); i++ )
         {
             comp++;
+            cerr << "Comparando com posicao " << i << endl;
             if( reg_new.getCode() < reg_cur.getCode() )
             {
+                cerr << reg_new.getCode() << " menor que " << reg_cur.getCode() << endl;
                 InsereAux( val, comp, no->getChild(i) );
                 return;
             }
@@ -174,6 +175,7 @@ void ArvoreB::InsereAux( int val, int& comp, NoB* no )
                     comp++;
                     if( DataCompare( reg_new.getData(), reg_cur.getData() ) == 1 )
                     {
+                        cerr << reg_new.getData() << " menor que " << reg_cur.getData() << endl;
                         InsereAux( val,comp, no->getChild(i) );
                         return;
                     }
@@ -307,17 +309,21 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right, int& comp 
     comp++;
 
     cerr << "Inserido " << val << " na posição " << i << endl;
+
     current->insert( val, i );
-    for( int j = current->getPosChild()-1; j > i; j-- )
-        current->setChild( j+1, current->getChild(j) );
-    cerr << "Setando filho esq em " << i << endl;
-    cerr << "Setando filho dir em " << i+1 << endl;
-    current->setChild( i, left );
-    current->setChild( i+1, right );
+    if( i == 0 )
+        current->insertChild( i, left );
+    current->insertChild( i+1, right );
+
+    // cerr << "Setando filho esq em " << i << endl;
+    cerr << "Novo filho dir em " << i+1 << endl;
+
+    // current->setChild( i, left )
+
     // current->setChild( (i == size ? i-1:i), left );
     // current->setChild( (i == size ? i:i+1), right );
 
-    if( left != nullptr ) left->setParent( current );
+    // if( left != nullptr ) left->setParent( current );
     if( right != nullptr ) right->setParent( current );
 
     if( current->getPos() < size+1 ) return;
@@ -328,21 +334,38 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right, int& comp 
     NoB* newLeft = current;
     NoB* newRight = new NoB(size);
 
-    int j,k,l;
-    for( j = (current->getPos()/2)+1,k=(current->getPos()/2)+1,l=0; j < current->getPos(); k++,l++)
-    {
-        cerr << "jogando pra la " << endl;
-        newRight->append( current->get(j) );
-        newRight->setChild( l, current->getChild(k) );
+    int iPivo = current->getPos()/2;
+    int j;
+    // for( j = (current->getPos()/2)+1, k=(current->getPos()/2)+1, l=0; j < current->getPos(); k++,l++)
+    // {
+    //     cerr << "jogando pra la " << endl;
+    //     newRight->append( current->get(j) );
+    //     newRight->setChild( l, current->getChild(k) );
 
-        current->pop( j );
-        current->setChild( k, nullptr );
+    //     current->pop( j );
+    //     current->setChild( k, nullptr );
+    // }
+    for( j = (current->getPos()/2)+1; j < current->getPos(); j++ )
+    {
+        newRight->append( current->get(j) );
+        newRight->appendChild( current->getChild(j) );
     }
-    newRight->setChild( l,current->getChild(k) );
-    current->setChild( k, nullptr );
+    newRight->appendChild( current->getChild(j) );
+
+    for( j = (current->getPos()/2)+1; j < current->getPos(); j++ )
+    {
+        current->pop( j );
+        current->popChild( j );
+    }
+    current->popChild( j );
+
+
+    // newRight->setChild( l,current->getChild(k) );
+    // current->setChild( k, nullptr );
+
     newRight->setLeaf( current->isLeaf() ); // SE AUX E FOLHA, NO DA DIREITA TAMBEM SERA
 
-    current->pop( j-1 );
+    current->pop( iPivo );
 
     cerr << current->getPos() << " POS CURR" << endl;
 
