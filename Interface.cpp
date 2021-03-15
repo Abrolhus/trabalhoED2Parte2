@@ -4,10 +4,11 @@
 #include <string>
 #include <chrono>
 
+
 using namespace std;
 
 // void interface( ArvoreAVL& avlTree, ArvoreB& bTree, HashTable& hash, vector<Registro>& regs )
-void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& hash, vector<Registro>& regs )
+void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& hash, vector<Registro>& regs, vector<folhaQuadTree*> vet)
 {
     string args[10];
     char command;
@@ -15,6 +16,11 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
     streambuf* bckpbuf = cout.rdbuf();
     ofstream otpbuf;
     vector<int> randoms;
+    int compsB=0;
+    vector<int> chavesRegiao;
+    int somaAvl = 0;
+    int somaB = 0;
+    int compsAvl = 0;
 
     ArvoreB bTree2( &hash, 200);
 
@@ -29,6 +35,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
     cout << "5 - Realizar etapa 05" << endl;
     cout << "n - Preencher N aleatorios" << endl;
     cout << "c - Obter total de casos" << endl;
+    cout << "x - Estabelecer area geografica de busca" << endl;
     cout << "f - Preencher tabela hash" << endl << endl;
     cout << "Selecionado [ " << ( selectedTree == 'a' ? "Arvore AVL": selectedTree == 'b' ? "Arvore B": selectedTree == 'c' ? "Arvore QUAD": selectedTree == 'd' ? "Tabela Hash":"" ) << " ]" << " - (\\) para mudar" << endl;
     cout << "p - Printar" << endl;
@@ -78,9 +85,15 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
             }
             else if( selectedTree == 'c' )
             {
-                for( int i = 0; i < argsI[0]; i++ )
-                    quad.Insere( hash.getIndexOf(regs[i].getCode(),regs[i].getData()), argsI[9] );
-                quad.Print();
+                auto ts = chrono::high_resolution_clock::now();
+                for(int i=0; i< argsI[0]; i++){
+                    quad.inserir(vet[i]);
+                }
+                auto te = chrono::high_resolution_clock::now();
+                double duration = chrono::duration_cast<chrono::milliseconds>(te-ts).count();
+                cout<< "<<<< QuadTree >>>>" << endl;
+                cout << "Tempo de insercao: " << duration << endl;
+                quad.imprimir();
             }
             else if( selectedTree == 'd' )
             {
@@ -252,6 +265,29 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
                  << "Codigo: " << hash.at( argsI[0] ).getCode() << endl
                  << "Casos: " << hash.at( argsI[0] ).getCasos() << endl
                  << "Data: " << hash.at( argsI[0] ).getData() << endl;
+        break;
+
+        case 'x':
+            cout<< "Digite os valores de (x0, y0) e (x1,y1) " << endl;
+            double x0, y0, x1, y1;
+            cin >> x0 >> y0 >> x1 >> y1;
+            somaB= 0;
+            somaAvl = 0;
+            compsB = 0;
+            compsAvl = 0;
+            for(int i = 0; i < vet.size(); i++){
+                quad.inserir(vet[i]);
+            }
+            quad.buscaIntervaloAux(chavesRegiao, x0, x1, y0, y1);
+            
+            for(int i = 0; i < chavesRegiao.size(); i++){
+                somaAvl += avlTree.BuscaCasos(chavesRegiao[i], compsAvl);
+                somaB += bTree.BuscaCasos(chavesRegiao[i], compsB);
+            }
+
+            cout << "Casos pela arvore AVL: " << somaAvl << endl;
+            cout << "Casos pela arvore B: " << somaB << endl;
+            
         break;
         
         default: 

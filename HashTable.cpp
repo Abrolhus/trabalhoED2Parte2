@@ -136,9 +136,6 @@ int HashTable::getIndexOf(int codigoCidade, std::string data){
 
 }
 void HashTable::clear(){
-    /* Erases all elements.
-     * It actually doesn't, only marks all of them as free space
-     */
 
     // this->table.clear();
     for(auto& element : this->table){

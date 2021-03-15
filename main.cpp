@@ -2,14 +2,14 @@
 #include "Registro.h"
 #include <iostream>
 #include <fstream>
-#include "ArvoresBalanceadas\ArvoreB.h"
-#include "ArvoresBalanceadas\ArvoreAVL.h"
-#include "LeituraArvoreQuad\quadTree.h"
-#include "interface.h"
+#include "ArvoresBalanceadas/ArvoreB.h"
+#include "ArvoresBalanceadas/ArvoreAVL.h"
+#include "LeituraArvoreQuad/quadTree.h"
+#include "Interface.h"
 #include <vector>
 #include "math.h"
-#include "LeituraArvoreQuad\folhaQuadTree.h"
-#include "LeituraArvoreQuad\quadTree.h"
+#include "LeituraArvoreQuad/folhaQuadTree.h"
+#include "LeituraArvoreQuad/quadTree.h"
 #include <time.h>
 
 using namespace std;
@@ -18,7 +18,7 @@ vector<Registro> lerRegistrosParaHashTable( std::ifstream&, HashTable& );
 vector<folhaQuadTree*> lerArquivoParaQuadTree(ifstream&);
 
 int main( int argc, char** argv ){
-    
+
     ofstream log("log.txt");
     cerr.rdbuf( log.rdbuf() );
 
@@ -47,10 +47,10 @@ int main( int argc, char** argv ){
     cout << "Hashtable Criada" << endl;
     ArvoreAVL avlTree( &ht );
     cout << "AVL Criada" << endl;
-    quadTree qTree = quadTree(lerArquivoParaQuadTree(file_coords));
+    quadTree qTree = quadTree();
     //qTree.imprimir();
-    vector<int> s;
-    qTree.buscaIntervaloAux(s, -17.7573,-8.72073, -49.4412, -39.1162);
+    //vector<int> s;
+    //qTree.buscaIntervaloAux(s, -17.7573,-8.72073, -49.4412, -39.1162);
     /*for (int i = 0; i < s.size(); i++){
         cout<< s[i] << endl;
     }*/
@@ -69,7 +69,7 @@ int main( int argc, char** argv ){
     // }
     // cout << "AVL e B Carregadas" << endl;
     // interface( avlTree, bTree, qTree, ht, registros );
-    interface( avlTree, bTree, qTree, ht, registros);
+    interface( avlTree, bTree, qTree, ht, registros, lerArquivoParaQuadTree(file_coords));
 
     return 0;
 

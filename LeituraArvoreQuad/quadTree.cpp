@@ -4,15 +4,11 @@
 
 using namespace std;
 
-quadTree::quadTree(vector<folhaQuadTree*> vet)
+quadTree::quadTree()
 {
     this->tam = 0;
     this->itera = 0;
     this->raiz = NULL;
-    for(int i=0; i<vet.size(); i++){
-        inserir(vet[i]);
-        this->tam ++;
-    }
     //cout << tam;
 }
 
@@ -62,7 +58,7 @@ void quadTree::inserir(folhaQuadTree* i){
             if(r == NULL){
                 pai->setFilho(quadrante, i);
             }
-            this-> itera++;
+            //this-> itera++;
         }
         
     }
@@ -212,11 +208,15 @@ void quadTree::buscaIntervaloAux(vector<int>& s, double x0, double x1, double y0
     for (int i = 0; i < s.size(); i++){
         s[i] = s[i]/10;
     }
+    if (s.size() == 0){
+        cout<< "Nenhuma cidade encontrada no intervalo" << endl;
+        return;
+    } 
     auto te = chrono::high_resolution_clock::now();
     double duration = chrono::duration_cast<chrono::milliseconds>(te-ts).count();
     cout<< "<<<< QuadTree >>>>" << endl;
-    cout << "Tempo de busca do intervalo: " << duration << endl;
-    cout << "Comparacoes: " << comps << endl;
+    cout << "Tempo de busca do intervalo quadTree: " << duration << endl;
+    cout << "Comparacoes quadTree: " << comps << endl << endl;
 }
 
 

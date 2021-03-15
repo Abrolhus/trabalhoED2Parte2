@@ -18,7 +18,7 @@ private:
     int tam;
     int itera;
 public:
-    quadTree(vector<folhaQuadTree*> vet);
+    quadTree();
     ~quadTree();
     void inserir(folhaQuadTree *p);
     /*bool marcarComoRemovido();
