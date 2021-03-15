@@ -47,7 +47,7 @@ int main( int argc, char** argv ){
     cout << "Hashtable Criada" << endl;
     ArvoreAVL avlTree( &ht );
     cout << "AVL Criada" << endl;
-    quadTree qTree = quadTree(lerArquivoParaQuadTree(file_coords));
+    quadTree qTree = quadTree();
     //qTree.imprimir();
     //vector<int> s;
     //qTree.buscaIntervaloAux(s, -17.7573,-8.72073, -49.4412, -39.1162);

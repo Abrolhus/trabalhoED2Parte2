@@ -4,7 +4,7 @@
 
 using namespace std;
 
-quadTree::quadTree(vector<folhaQuadTree*> vet)
+quadTree::quadTree()
 {
     this->tam = 0;
     this->itera = 0;
