@@ -215,8 +215,8 @@ void quadTree::buscaIntervaloAux(vector<int>& s, double x0, double x1, double y0
     auto te = chrono::high_resolution_clock::now();
     double duration = chrono::duration_cast<chrono::milliseconds>(te-ts).count();
     cout<< "<<<< QuadTree >>>>" << endl;
-    cout << "Tempo de busca do intervalo: " << duration << endl;
-    cout << "Comparacoes: " << comps << endl;
+    cout << "Tempo de busca do intervalo quadTree: " << duration << endl;
+    cout << "Comparacoes quadTree: " << comps << endl << endl;
 }
 
 

@@ -20,6 +20,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
     vector<int> chavesRegiao;
     int somaAvl = 0;
     int somaB = 0;
+    int compsAvl = 0;
 
     ArvoreB bTree2( &hash, 200);
 
@@ -272,13 +273,15 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
             cin >> x0 >> y0 >> x1 >> y1;
             somaB= 0;
             somaAvl = 0;
+            compsB = 0;
+            compsAvl = 0;
             for(int i = 0; i < vet.size(); i++){
                 quad.inserir(vet[i]);
             }
             quad.buscaIntervaloAux(chavesRegiao, x0, x1, y0, y1);
             
             for(int i = 0; i < chavesRegiao.size(); i++){
-                somaAvl += avlTree.BuscaCasos(chavesRegiao[i], compsB);
+                somaAvl += avlTree.BuscaCasos(chavesRegiao[i], compsAvl);
                 somaB += bTree.BuscaCasos(chavesRegiao[i], compsB);
             }
 
