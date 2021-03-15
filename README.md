@@ -12,13 +12,7 @@ Para rodar o código por linha de comando, digitar no repositorio:
    ```
 
 * Linux ou OSX:
-  * Usando g++:
-  ```
-   g++ -std=c++11  -o trab *.cpp # compila e gera executavel
-   ./trab # executa o arquivo
-  ```
-  * Usando cmake:
-  ```
+* ```
   mkdir build && cd build
   cmake ..
   make
