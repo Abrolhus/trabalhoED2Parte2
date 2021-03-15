@@ -25,7 +25,6 @@ void HashTable::insert(Registro reg){
     int index;
     do {
     if(i >10)
-        std::cout << i << " " ;
         index = this->hashFunction(reg.getCode(), reg.getData(), i);
         i++;
     } while(this->table.at(index).flag == FULL && i != this->table.size());
@@ -56,9 +55,8 @@ void HashTable::print(){
                 std::cout << "ERROR";
         }
     }
-    std::cout << count << std::endl;
-    std::cout << "acessos: " << nConfitos/(float)1431490 << std::endl;
-    std::cout << this->table.size() << std::endl;
+    std::cout << "Espaco Ocupado: " << count << std::endl;
+    std::cout << "Tamanho: " << this->table.size() << std::endl;
 }
 
 long HashTable::hashFunction(int codigoCidade, std::string data, int i){
@@ -102,16 +100,27 @@ Registro& HashTable::at(int codigoCidade, std::string data){
             if(element->value.getCode() == codigoCidade && element->value.getData() == data){
                 return element->value;
             }
+            else {
+                continue;
+            }
+        }
+        else if(element->flag == DELETE_ME){
+            continue;
+        }
+        else {
+            throw "Invalid access";
         }
         i++;
     }
+    throw "Invalid access (2)";
     // if(this->table.at(index).flag == FULL || this->table.at(index).flag == DELETE_ME){ // TODO: tirar redundancia;
     // TODO: throw exception;
-    return this->table.at(index).value;
 }
 Registro& HashTable::at(int index){
-    /* returns reference to Registro at given index / hashCode */
-    // TODO: throw exception
+    /* returns reference to Registro at given index/hashCode */
+    if(this->table.at(index).flag != FULL){
+        throw "Invalid access";
+    }
     return this->table.at(index).value;
 }
 int HashTable::getIndexOf(int codigoCidade, std::string data){
