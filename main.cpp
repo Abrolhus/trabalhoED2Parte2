@@ -35,40 +35,19 @@ int main( int argc, char** argv ){
 
     ifstream file_covid(filename_covid);
     ifstream file_coords(filename_coords);
-    //cout << q.getTam();
-    //q.imprimir();
-    /*vector<string> s;
-    q.buscaIntervaloAux(s, -17.7573,-8.72073, -49.4412, -39.1162);
-    cout << s[1];
-    for (int i = 0; i < s.size(); i++){
-        cout<< s[i] << endl;
-    }*/
+
     HashTable ht = HashTable(3e6 -1);
     cout << "Hashtable Criada" << endl;
     ArvoreAVL avlTree( &ht );
     cout << "AVL Criada" << endl;
     quadTree qTree = quadTree();
-    //qTree.imprimir();
-    //vector<int> s;
-    //qTree.buscaIntervaloAux(s, -17.7573,-8.72073, -49.4412, -39.1162);
-    /*for (int i = 0; i < s.size(); i++){
-        cout<< s[i] << endl;
-    }*/
+
     ArvoreB bTree( &ht , 4 );
     cout << "B Criada" << endl;
 
     vector<Registro> registros = lerRegistrosParaHashTable(file_covid, ht);
     cout << "Registros lidos" << endl;
 
-    // int chave;
-    // for( int i = 0; i < registros.size(); i++ )
-    // {
-    //     chave = ht.getIndexOf( registros[i].getCidade(), registros[i].getData() );
-    //     avlTree.Insere( chave );
-    //     bTree.Insere( chave );
-    // }
-    // cout << "AVL e B Carregadas" << endl;
-    // interface( avlTree, bTree, qTree, ht, registros );
     interface( avlTree, bTree, qTree, ht, registros, lerArquivoParaQuadTree(file_coords));
 
     return 0;

@@ -2,7 +2,7 @@
 
 NoB::NoB( int n )
 {
-    size = n;
+    size = n-1;
     leaf = false;
     parent = nullptr;
 }
@@ -28,7 +28,7 @@ int NoB::getPosChild(){ return childs.size(); }
 
 bool NoB::isLeaf(){ return leaf; }
 void NoB::setLeaf( bool x ){ leaf = x; }
-bool NoB::full(){ return values.size() == size; }
+bool NoB::full(){ return values.size() == size-1; }
 void NoB::setParent( NoB* no ){ parent = no; }
 NoB* NoB::getParent(){ return parent;}
 void NoB::append( int val ){ values.push_back(val); }
