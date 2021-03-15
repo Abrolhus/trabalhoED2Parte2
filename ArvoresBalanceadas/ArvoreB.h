@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "NoB.h"
-#include "../HashTable.h"
+#include "../HashTable/HashTable.h"
 #include "auxiliar.h"
 #include <fstream>
 #include <string>

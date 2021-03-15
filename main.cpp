@@ -1,4 +1,4 @@
-#include "HashTable.h"
+#include "HashTable/HashTable.h"
 #include "Registro.h"
 #include <iostream>
 #include <fstream>

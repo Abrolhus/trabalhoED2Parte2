@@ -55,7 +55,7 @@ void quadTree::inserir(folhaQuadTree* i){
             folhaQuadTree* pai = r;
             char quadrante = compara(pai, i);
             r = pai->getFilho(quadrante); 
-            if(r == NULL){
+            if(r == NULL){ // se r=null portanto eh quadrante vazio
                 pai->setFilho(quadrante, i);
             }
             //this-> itera++;
@@ -65,34 +65,13 @@ void quadTree::inserir(folhaQuadTree* i){
 }
 
 bool quadTree::confereIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<int>& s, int& comps){
-    /*if (x0 < x1 && y0 < y1){
-        if(raiz->getLatitude() >= x0 && raiz->getLatitude()<=x1){
-            if(raiz->getLongitude() >= y0 && raiz->getLongitude()<= y1){
-                raiz->getCityCode(); //adicionar ao retorno
-            }
-        }
-    }
-    if(x0 > x1 && y0 > y1){
-        if(raiz->getLatitude() <= x0 && raiz->getLatitude() >= x1){
-            if(raiz->getLongitude() <= y0 && raiz->getLongitude() >= y1){
-                raiz->getCityCode(); //adicionar ao retorno
-            }
-        }
-    }
-    if(x0 < x1 && y0 > y1){
-        if(raiz->getLatitude() <= x0 && raiz->getLatitude() >= x1){
-            if(raiz->getLongitude() <= y0 && raiz->getLongitude() >= y1){
-                raiz->getCityCode(); //adicionar ao retorno
-            }
-        }
-    }*/
 
     if (x0 == x1){
         if(r->getLatitude() == x0){
                 if(r->getLongitude() >= y0 && r->getLongitude()<= y1){
-                    s.push_back(r->getCityCode());
+                    s.push_back(r->getCityCode()); 
                     comps = comps+4;
-                    return true; //adicionar ao retorno
+                    return true; 
                 }
         }
     }
@@ -109,39 +88,24 @@ bool quadTree::confereIntervalo(folhaQuadTree* r, double x0, double x1, double y
         if(r->getLongitude() >= y0 && r->getLongitude()<= y1){
             s.push_back(r->getCityCode());
             comps = comps+4;
-            return true; //adicionar ao retorno
+            return true; 
         }
     }
 
     return false;
-    
-    /*else{
-        if(r->getLatitude() <= x0 && r->getLatitude() >= x1){
-            if(y0 < y1){
-                if(r->getLongitude() >= y0 && r->getLongitude()<= y1){
-                    r->getCityCode(); //adicionar ao retorno
-                }
-            }
-            else{
-                if(r->getLongitude() <= y0 && r->getLongitude() >= y1){
-                    r->getCityCode(); //adicionar ao retorno
-                }
-            }
-        } 
-    }*/
 }
 
 
 void quadTree:: buscaIntervalo(folhaQuadTree* r, double x0, double x1, double y0, double y1, vector<int>& s, int& comps){
     
     if(r != NULL){
-        if(confereIntervalo(r, x0, x1, y0, y1, s, comps)){
+        if(confereIntervalo(r, x0, x1, y0, y1, s, comps)){ // caso o no esteja dentro do intervalo, todos os quadrantes vao estar, portanto devem ser acessados
             if(r->getNE() != NULL) buscaIntervalo(r->getNE(), x0, x1, y0, y1, s, comps);
             if(r->getSE() != NULL) buscaIntervalo(r->getSE(), x0, x1, y0, y1, s, comps);
             if(r->getNW() != NULL) buscaIntervalo(r->getNW(), x0, x1, y0, y1, s, comps);
             if(r->getSW() != NULL) buscaIntervalo(r->getSW(), x0, x1, y0, y1, s, comps);
         }
-        else{
+        else{ // caso o no nao esteja no intervalo, vamos analisar em qual quadrante(s) do no o intervalo se encontra
             if(r->getLatitude() > x0 && r->getLatitude() > x1){
                 if (r->getLongitude() > y0 && r->getLongitude() > y1){
                     comps = comps+2;
@@ -191,7 +155,7 @@ void quadTree:: buscaIntervalo(folhaQuadTree* r, double x0, double x1, double y0
 void quadTree::buscaIntervaloAux(vector<int>& s, double x0, double x1, double y0, double y1){
     auto ts = chrono::high_resolution_clock::now();
     int comps=0;
-    if(x1 < x0){
+    if(x1 < x0){ //ajustando os valores do intervalo para reduzir comparações
         double aux = 0;
         aux  = x0;
         x0 = x1;
@@ -204,7 +168,7 @@ void quadTree::buscaIntervaloAux(vector<int>& s, double x0, double x1, double y0
         y1 = aux;
     }
     folhaQuadTree* r = raiz;
-    buscaIntervalo(r, x0, x1, y0, y1, s, comps);
+    buscaIntervalo(r, x0, x1, y0, y1, s, comps); // vai atualizar o vetor passando como valores os codigos de cidade dentro do intervalo
     for (int i = 0; i < s.size(); i++){
         s[i] = s[i]/10;
     }
