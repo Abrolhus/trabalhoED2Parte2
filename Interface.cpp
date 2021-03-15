@@ -21,6 +21,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
     int somaAvl = 0;
     int somaB = 0;
     int compsAvl = 0;
+    long int times[5];
 
     ArvoreB bTree2( &hash, 200);
 
@@ -78,8 +79,9 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
             {
                 for( int i = 0; i < argsI[0]; i++ )
                 {
-                    bTree.Insere( hash.getIndexOf(regs[i].getCode(),regs[i].getData()), argsI[9] );
-                    bTree2.Insere( hash.getIndexOf(regs[i].getCode(),regs[i].getData()), argsI[9] );
+                    bTree.Insere( regs[i], argsI[9] );
+                    argsI[9] = 0;
+                    bTree2.Insere( regs[i], argsI[9] );
                 }
                 bTree.Print();
             }
@@ -161,7 +163,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
             for( int i = 0; i < randoms.size(); i++ )
             {
                 cerr << "Inserindo " << randoms[i] << " em B[20]" << endl;
-                bTree.Insere( randoms[i], argsI[2] );
+                bTree.Insere( hash.at( randoms[i] ), argsI[2] );
             }
             end = chrono::high_resolution_clock::now();
             cout << "Duração da inserção (B[20]): " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << "ns" << endl;
@@ -173,7 +175,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
             for( int i = 0; i < randoms.size(); i++ )
             {
                 cerr << "Inserindo " << randoms[i] << " em B[200]" << endl;
-                bTree2.Insere( randoms[i], argsI[3] );
+                bTree2.Insere( hash.at( randoms[i] ), argsI[3] );
             }
             end = chrono::high_resolution_clock::now();
             cout << "Duração da inserção (B[200]): " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << "ns" << endl;
@@ -275,18 +277,37 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
             somaAvl = 0;
             compsB = 0;
             compsAvl = 0;
+
             for(int i = 0; i < vet.size(); i++){
                 quad.inserir(vet[i]);
             }
+
+            otpbuf.open("resultado.txt",ofstream::app);
+            cout.rdbuf( otpbuf.rdbuf() );
+
+            start = chrono::high_resolution_clock::now();
             quad.buscaIntervaloAux(chavesRegiao, x0, x1, y0, y1);
-            
             for(int i = 0; i < chavesRegiao.size(); i++){
                 somaAvl += avlTree.BuscaCasos(chavesRegiao[i], compsAvl);
+            }
+            end = chrono::high_resolution_clock::now();
+            times[0] = chrono::duration_cast<chrono::nanoseconds>(end-start).count();
+            
+            start = chrono::high_resolution_clock::now();
+            for(int i = 0; i < chavesRegiao.size(); i++){
                 somaB += bTree.BuscaCasos(chavesRegiao[i], compsB);
             }
+            end = chrono::high_resolution_clock::now();
+            times[1] = chrono::duration_cast<chrono::nanoseconds>(end-start).count();
 
             cout << "Casos pela arvore AVL: " << somaAvl << endl;
             cout << "Casos pela arvore B: " << somaB << endl;
+
+            cout << "Tempo gasto pela arvore AVL: " << times[0] << " ns" << endl;
+            cout << "Tempo gasto pela arvore B: " << times[1] << " ns" << endl;
+
+            cout.rdbuf(bckpbuf);
+            otpbuf.close();
             
         break;
         

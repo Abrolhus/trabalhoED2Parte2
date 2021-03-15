@@ -130,170 +130,80 @@ int ArvoreB::AuxBusca( NoB* no, int val, int& comp )
     // return soma;
 }
 
-void ArvoreB::Insere( int val, int& comp )
+void ArvoreB::Insere( Registro val, int& comp )
 {
     if( root == nullptr )
     {
         NoB* no = new NoB(size);
         no->setLeaf(true);
-        no->append( val );
+        no->append( HashRef->getIndexOf(val.getCode(), val.getData()) );
         no->appendChild( nullptr );
         no->appendChild( nullptr );
 
         root = no;
 
-        cerr << "Gerada raiz" << endl;
-        cerr << "Inserido " << val << endl;
+        // cerr << "Gerada raiz" << endl;
+        // cerr << "Inserido " << val << endl;
         return;
     }
 
-    cerr << "Inserindo " << val << endl;
+    // cerr << "Inserindo " << val << endl;
     InsereAux( val, comp, root );
 
 }
-void ArvoreB::InsereAux( int val, int& comp, NoB* no )
+void ArvoreB::InsereAux( Registro val, int& comp, NoB* no )
 {
     Registro reg_cur;
-    Registro reg_new = HashRef->at( val );
     
-    cerr << "No " << (no->isLeaf() ? "é":"não") << " é folha" << endl;
+    // cerr << "No " << (no->isLeaf() ? "é":"não") << " é folha" << endl;
     while( !no->isLeaf() )
     {
-        cerr << "Iterando um no" << endl;
+        // cerr << "Iterando um no" << endl;
         int i;
         for( i = 0; i < no->getPos(); i++ )
         {
             reg_cur = HashRef->at( no->get(i) );
             comp++;
-            cerr << "Comparando com posicao " << i << " ( " << reg_new.getCode() << "-" << reg_new.getData() << " ) com ( " << reg_cur.getCode() << "-" << reg_cur.getData() << " )" << endl;
-            if( reg_new.getCode() < reg_cur.getCode() )
+            // cerr << "Comparando com posicao " << i << " ( " << reg_new.getCode() << "-" << reg_new.getData() << " ) com ( " << reg_cur.getCode() << "-" << reg_cur.getData() << " )" << endl;
+            if( val.getCode() < reg_cur.getCode() )
             {
-                cerr << reg_new.getCode() << " menor que " << reg_cur.getCode() << endl;
+                cerr << val.getCode() << " menor que " << reg_cur.getCode() << endl;
                 InsereAux( val, comp, no->getChild(i) );
                 return;
             }
             else
             {
-                if( reg_new.getCode() == reg_cur.getCode() )
+                if( val.getCode() == reg_cur.getCode() )
                 {
                     comp++;
-                    if( DataCompare( reg_new.getData(), reg_cur.getData() ) == 1 )
+                    if( DataCompare( val.getData(), reg_cur.getData() ) == 1 )
                     {
-                        cerr << reg_new.getData() << " menor que " << reg_cur.getData() << endl;
+                        // cerr << val.getData() << " menor que " << reg_cur.getData() << endl;
                         InsereAux( val,comp, no->getChild(i) );
                         return;
                     }
                 }
             }
         }
-        cerr << "Chegou ao final" << endl;
+        // cerr << "Chegou ao final" << endl;
         InsereAux( val,comp, no->getChild(i) );
         return;
     }
 
-    cerr << "Chamando overflow" << endl;
+    // cerr << "Chamando overflow" << endl;
     overflow( val, no, nullptr, nullptr, comp );
-
-    // int i;
-    // for( i = 0; i < no->getPos(); i++ )
-    // {
-    //     comp++;
-    //     reg_cur = HashRef->at( no->get(i) );
-    //     cerr << "Comparando " << reg_new.getCode() << " com " << reg_cur.getCode() << endl;
-    //     if( reg_new.getCode() < reg_cur.getCode() )
-    //     {
-    //         if( no->isLeaf() )
-    //         {
-    //             cerr << "No folha" << endl;
-    //             if( no->full() )
-    //             {
-    //                 cerr << "No cheio, overflow" << endl;
-    //                 overflow( val, no, nullptr, nullptr, comp );
-    //             }
-    //             else
-    //             {
-    //                 cerr << "Inserindo em " << i << endl;
-    //                 no->insert( i, val );
-    //                 cerr << "Inserido " << val << endl;
-    //                 return;
-    //             }
-    //         }
-    //         else
-    //         {
-    //             cerr << "No nao folha, recursividade" << endl;
-    //             InsereAux( val, comp, no->getChild(i) );
-    //             return;
-    //         }
-    //     }
-    //     else if( reg_new.getCode() == reg_cur.getCode() && DataCompare( reg_new.getData(), reg_cur.getData() ) == 1 )
-    //     {
-    //         cerr << "Comparando por data" << endl;
-    //         if( no->isLeaf() )
-    //         {
-    //             cerr << "No folha" << endl;
-    //             if( no->full() )
-    //             {
-    //                 cerr << "No cheio, overflow" << endl;
-    //                 overflow( val, no, nullptr, nullptr, comp );
-    //             }
-    //             else
-    //             {
-    //                 cerr << "Inserindo em " << i << endl;
-    //                 no->insert( i, val );
-    //                 cerr << "Inserido " << val << endl;
-    //                 return;
-    //             }
-    //         }
-    //         else
-    //         {
-    //             cerr << "No nao folha, recursividade" << endl;
-    //             InsereAux( val, comp, no->getChild(i) );
-    //             return;
-    //         }
-    //     }
-    // }
-
-    // cerr << "Chegou ao fim" << endl;
-    // if( no->full() )
-    // {
-    //     cerr << "No cheio" << endl;
-    //     if( no->isLeaf() )
-    //     {
-    //         cerr << "No folha, overflow" << endl;
-    //         overflow( val, no, nullptr, nullptr, comp );
-    //     }
-    //     else
-    //     {
-    //         cerr << "No nao folha, recursivo" << endl;
-    //         InsereAux( val, comp, no->getChild(i) );
-    //     }
-    // }
-    // else
-    // {
-    //     if( no->isLeaf() )
-    //     {
-    //         cerr << "Inserido " << val << endl;
-    //         no->append( val );
-    //     }
-    //     else
-    //     {
-    //         cerr << "No nao folha, recursividade" << endl;
-    //         InsereAux(val, comp, no->getChild(i));
-    //     }
-    // }
 }
 
-void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right, int& comp )
+void ArvoreB::overflow( Registro val, NoB* current, NoB* left, NoB* right, int& comp )
 {
     if( current == nullptr )
     {
         current = new NoB(size);
         current->setLeaf(false);
         root = current;
-        cerr << "Nova raiz" << endl;
+        // cerr << "Nova raiz" << endl;
     }
 
-    Registro reg_new = HashRef->at( val );
     Registro reg_cur;
 
     int i;
@@ -302,27 +212,27 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right, int& comp 
         if( current->get(i) != -1 )
             reg_cur = HashRef->at( current->get(i) );
 
-        if( reg_cur.getId() > reg_new.getId() ) 
+        if( reg_cur.getId() > val.getId() ) 
             break;
         else if( reg_cur.getId() == reg_cur.getId() )
         {
             comp++;
-            if( DataCompare(reg_cur.getData(), reg_new.getData()) == -1 )
+            if( DataCompare(reg_cur.getData(), val.getData()) == -1 )
                 break;
         } 
         comp++;
     }
     comp++;
 
-    cerr << "Inserido " << val << " na posição " << i << endl;
+    // cerr << "Inserido " << val << " na posição " << i << endl;
 
-    current->insert( val, i );
+    current->insert( HashRef->getIndexOf( val.getCode(), val.getData() ), i );
     if( i == 0 )
     {
-        cerr << "Setando filho esq em " << i << endl;
+        // cerr << "Setando filho esq em " << i << endl;
         current->insertChild( i, left );
     }
-    cerr << "Novo filho dir em " << i+1 << endl;
+    // cerr << "Novo filho dir em " << i+1 << endl;
     current->insertChild( i+1, right );
 
     // cerr << "Setando filho esq em " << i << endl;
@@ -337,7 +247,7 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right, int& comp 
 
     if( current->getPos() < size+1 ) return;
 
-    cerr << "Explosao de tamanho: " << current->getPos() << endl;
+    // cerr << "Explosao de tamanho: " << current->getPos() << endl;
 
     int pivo = current->get( current->getPos()/2 );
     NoB* newLeft = current;
@@ -345,15 +255,7 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right, int& comp 
 
     int iPivo = current->getPos()/2;
     int j;
-    // for( j = (current->getPos()/2)+1, k=(current->getPos()/2)+1, l=0; j < current->getPos(); k++,l++)
-    // {
-    //     cerr << "jogando pra la " << endl;
-    //     newRight->append( current->get(j) );
-    //     newRight->setChild( l, current->getChild(k) );
 
-    //     current->pop( j );
-    //     current->setChild( k, nullptr );
-    // }
     for( j = (current->getPos()/2)+1; j < current->getPos(); j++ )
     {
         newRight->append( current->get(j) );
@@ -375,16 +277,16 @@ void ArvoreB::overflow( int val, NoB* current, NoB* left, NoB* right, int& comp 
 
     current->pop( iPivo );
 
-    cerr << current->getPos() << " POS CURR" << endl;
+    // cerr << current->getPos() << " POS CURR" << endl;
 
-    cerr << "Novo no esq: " << endl;
-    for( int i = 0; i < current->getPos(); i++ )
-        cerr << HashRef->at( current->get(i) ).getCode() << (i==current->getPos()-1 ? "\n":",");
-    cerr << "Novo no dir: " << endl;
-    for( int i = 0; i < newRight->getPos(); i++ )
-        cerr << HashRef->at( newRight->get(i) ).getCode() << (i==newRight->getPos()-1 ? "\n":",");
+    // cerr << "Novo no esq: " << endl;
+    // for( int i = 0; i < current->getPos(); i++ )
+    //     cerr << HashRef->at( current->get(i) ).getCode() << (i==current->getPos()-1 ? "\n":",");
+    // cerr << "Novo no dir: " << endl;
+    // for( int i = 0; i < newRight->getPos(); i++ )
+    //     cerr << HashRef->at( newRight->get(i) ).getCode() << (i==newRight->getPos()-1 ? "\n":",");
     
-    overflow( pivo, current->getParent(), newLeft, newRight, comp );
+    overflow( HashRef->at(pivo), current->getParent(), newLeft, newRight, comp );
 }
 
 void ArvoreB::Print( bool overflow )
