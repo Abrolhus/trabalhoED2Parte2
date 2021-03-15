@@ -18,7 +18,7 @@ private:
     double longitude;
     double latitude;
     string capital;
-    char Nordeste;
+    char Nordeste; // variaveis para possibilitar a insercao
     char Sudeste;
     char Noroeste;
     char Sudoeste;
@@ -27,8 +27,6 @@ public:
     ~folhaQuadTree();
     double getLatitude() {return latitude;};
     double getLongitude(){return longitude;};
-    //void setLatitude(float latitude);
-    //void setLongitude(float longitude);
     folhaQuadTree* getNE() {return NE;};
     folhaQuadTree* getSE() {return SE;};
     folhaQuadTree* getNW() {return NW;};
