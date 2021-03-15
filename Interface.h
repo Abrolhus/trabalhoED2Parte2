@@ -4,7 +4,7 @@
 #include "ArvoresBalanceadas/ArvoreAVL.h"
 #include "ArvoresBalanceadas/ArvoreB.h"
 #include "LeituraArvoreQuad/quadTree.h"
-#include "HashTable.h"
+#include "HashTable/HashTable.h"
 #include <vector>
 #include "Registro.h"
 

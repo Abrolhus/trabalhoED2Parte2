@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "NoAVL.h"
-#include "../HashTable.h"
+#include "../HashTable/HashTable.h"
 #include "auxiliar.h"
 
 using namespace std;
