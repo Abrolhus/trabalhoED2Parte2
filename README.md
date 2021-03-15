@@ -2,7 +2,7 @@
 Trabalho de ED2, parte 2 \
 Parte 1: https://github.com/abreuthrj/Trabalho_ED2
 
-# Compilação - Thiago
+# Compilação
 
 Para rodar o código por linha de comando, digitar no repositorio:
 * Windows:
