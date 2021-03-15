@@ -16,11 +16,13 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
     streambuf* bckpbuf = cout.rdbuf();
     ofstream otpbuf;
     vector<int> randoms;
-    int compsB=0;
+    int compsB20=0;
+    int compsB200=0;
     vector<int> chavesRegiao;
     int somaAvl = 0;
-    int somaB = 0;
-    int compsAvl = 0;
+    int somaB20 = 0;
+    int somaB200 = 0;
+    int compsAVL = 0;
 
     ArvoreB bTree2( &hash, 200);
 
@@ -36,6 +38,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
     cout << "n - Preencher N aleatorios" << endl;
     cout << "c - Obter total de casos" << endl;
     cout << "x - Estabelecer area geografica de busca" << endl;
+    cout << "y - S2: Casos em cidades de um intervalo geografico" << endl;
     cout << "f - Preencher tabela hash" << endl << endl;
     cout << "Selecionado [ " << ( selectedTree == 'a' ? "Arvore AVL": selectedTree == 'b' ? "Arvore B": selectedTree == 'c' ? "Arvore QUAD": selectedTree == 'd' ? "Tabela Hash":"" ) << " ]" << " - (\\) para mudar" << endl;
     cout << "p - Printar" << endl;
@@ -67,7 +70,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
                 otpbuf.open("saida.txt",ofstream::app);
                 cout.rdbuf( otpbuf.rdbuf() );
             }
-            
+
             if( selectedTree == 'a' )
             {
                 for( int i = 0; i < argsI[0]; i++ )
@@ -133,7 +136,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
 
             cout << "Gerando " << argsI[0] << " valores" << endl;
             randoms = hash.getNRandomHashCodes( argsI[0] );
-            
+
             // for( int i = 0; i < randoms.size(); i++ ) cout << randoms[i] << (i == randoms.size()-1 ? "": " - ");
             // cout << endl;
 
@@ -268,29 +271,161 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
         break;
 
         case 'x':
+        {
+            int n;
+            cout << "Digite quantos valores aleatorios em cada arvore: " << endl;
+            cin >> n;
             cout<< "Digite os valores de (x0, y0) e (x1,y1) " << endl;
             double x0, y0, x1, y1;
             cin >> x0 >> y0 >> x1 >> y1;
-            somaB= 0;
+            somaB20 = 0;
+            somaB200 = 0;
             somaAvl = 0;
-            compsB = 0;
-            compsAvl = 0;
+            compsB20 = 0;
+            compsB200 = 0;
+            compsAVL = 0;
+            chrono::high_resolution_clock::time_point start, end;
             for(int i = 0; i < vet.size(); i++){
                 quad.inserir(vet[i]);
             }
-            quad.buscaIntervaloAux(chavesRegiao, x0, x1, y0, y1);
-            
-            for(int i = 0; i < chavesRegiao.size(); i++){
-                somaAvl += avlTree.BuscaCasos(chavesRegiao[i], compsAvl);
-                somaB += bTree.BuscaCasos(chavesRegiao[i], compsB);
+            hash.clear();
+            for( int i = 0; i < regs.size(); i++ ){
+                hash.insert( regs[i] );
             }
+            auto nAleatorios = hash.getNRandomHashCodes(n);
+            for(auto hashCode : nAleatorios){
+                avlTree.Insere(hashCode, argsI[9]);
+                bTree.Insere(hashCode, argsI[9]);
+            }// ou seja, ambas estruturas com o mesmo numero de elementos;
+            quad.buscaIntervaloAux(chavesRegiao, x0, x1, y0, y1);
+
+            start = chrono::high_resolution_clock::now();
+            for(int i = 0; i < chavesRegiao.size(); i++){
+              somaAvl += avlTree.BuscaCasos(chavesRegiao[i], compsAVL);
+            }
+            end = chrono::high_resolution_clock::now();
+            int duracaoAVL = chrono::duration_cast<chrono::nanoseconds>(end-start).count();
+            start = chrono::high_resolution_clock::now();
+            for(int i = 0; i < chavesRegiao.size(); i++){
+                somaB20 += bTree.BuscaCasos(chavesRegiao[i], compsB20);
+            }
+            end = chrono::high_resolution_clock::now();
+            int duracaoB20 = chrono::duration_cast<chrono::nanoseconds>(end-start).count();
+            for(int i = 0; i < chavesRegiao.size(); i++){
+                somaB200 += bTree2.BuscaCasos(chavesRegiao[i], compsB200);
+            }
+            end = chrono::high_resolution_clock::now();
+            int duracaoB200 = chrono::duration_cast<chrono::nanoseconds>(end-start).count();
+
 
             cout << "Casos pela arvore AVL: " << somaAvl << endl;
-            cout << "Casos pela arvore B: " << somaB << endl;
-            
+            cout << "nComparacoes AVL: " << compsAVL << endl;
+            cout << "Duração da Busca (AVL): " << duracaoAVL << "ns" << endl;
+            cout << "Casos pela arvore B(20): " << somaB20 << endl;
+            cout << "nComparacoes B(20): " << compsB20 << endl;
+            cout << "Duração da Busca (B(20)): " << duracaoB20<< "ns" << endl;
+            cout << "Casos pela arvore B(200): " << somaB200 << endl;
+            cout << "nComparacoes B(200): " << compsB200 << endl;
+            cout << "Duração da Busca (B(200)): " << duracaoB200<< "ns" << endl;
+        }
+        case 'y':
+        {
+            int m, n;
+            float mediaCompsAVL = 0, mediaCompsB20 = 0, mediaCompsB200 = 0,
+                mediaDuracaoAVL = 0, mediaDuracaoB20 = 0, mediaDuracaoB200 = 0,
+                mediaCasosAVL = 0, mediaCasosB20 = 0, mediaCasosB200 = 0;
+            cout << "Quantas iteracoes (M)? ";
+            cin >> m;
+            cout << "Digite quantos valores aleatorios em cada arvore: " << endl;
+            cin >> n;
+            cout<< "Digite os valores de (x0, y0) e (x1,y1) " << endl;
+            double x0, y0, x1, y1;
+            cin >> x0 >> y0 >> x1 >> y1;
+            chrono::high_resolution_clock::time_point start, end;
+            for(int i = 0; i < vet.size(); i++){
+                quad.inserir(vet[i]);
+            }
+            hash.clear();
+            for( int i = 0; i < regs.size(); i++ ){
+                hash.insert( regs[i] );
+            }
+            for(int i = 0; i < m; i++){
+                // mediaCompsAVL = 0, mediaCompsB20 = 0, mediaCompsB200 = 0,
+                // mediaDuracaoAVL = 0, mediaDuracaoB20 = 0, mediaDuracaoB200 = 0,
+                // mediaCasosAVL = 0, mediaCasosB20 = 0, mediaCasosB200 = 0;
+                somaB20 = 0;
+                somaB200 = 0;
+                somaAvl = 0;
+                compsB20 = 0;
+                compsB200 = 0;
+                compsAVL = 0;
+                auto nAleatorios = hash.getNRandomHashCodes(n);
+                avlTree.Limpar();
+                bTree.Limpar();
+                for(auto hashCode : nAleatorios){
+                    avlTree.Insere(hashCode, argsI[9]);
+                    bTree.Insere(hashCode, argsI[9]);
+                }// ou seja, ambas estruturas com o mesmo numero de elementos;
+                quad.buscaIntervaloAux(chavesRegiao, x0, x1, y0, y1);
+
+                start = chrono::high_resolution_clock::now();
+                for(int i = 0; i < chavesRegiao.size(); i++){
+                  somaAvl += avlTree.BuscaCasos(chavesRegiao[i], compsAVL);
+                }
+                end = chrono::high_resolution_clock::now();
+                int duracaoAVL = chrono::duration_cast<chrono::nanoseconds>(end-start).count();
+                start = chrono::high_resolution_clock::now();
+                for(int i = 0; i < chavesRegiao.size(); i++){
+                    somaB20 += bTree.BuscaCasos(chavesRegiao[i], compsB20);
+                }
+                end = chrono::high_resolution_clock::now();
+                int duracaoB20 = chrono::duration_cast<chrono::nanoseconds>(end-start).count();
+                for(int i = 0; i < chavesRegiao.size(); i++){
+                    somaB200 += bTree2.BuscaCasos(chavesRegiao[i], compsB200);
+                }
+                end = chrono::high_resolution_clock::now();
+                int duracaoB200 = chrono::duration_cast<chrono::nanoseconds>(end-start).count();
+
+                mediaDuracaoAVL += duracaoAVL;
+                mediaDuracaoB20 += duracaoB20;
+                mediaDuracaoB200 += duracaoB200;
+                mediaCasosAVL += somaAvl;
+                mediaCasosB20 += somaB20;
+                mediaCasosB200 += somaB200;
+                mediaCompsAVL += compsAVL;
+                mediaCompsB20 += compsB20;
+                mediaCompsB200 += compsB200;
+
+
+                cout << endl;
+                cout << " ----------- RODADA "<< i <<" ----------- " << endl;
+                cout << "Casos pela arvore AVL: " << somaAvl << endl;
+                cout << "nComparacoes AVL: " << compsAVL << endl;
+                cout << "Duração da Busca (AVL): " << duracaoAVL << "ns" << endl;
+                cout << "Casos pela arvore B(20): " << somaB20 << endl;
+                cout << "nComparacoes B(20): " << compsB20 << endl;
+                cout << "Duração da Busca (B(20)): " << duracaoB20<< "ns" << endl;
+                cout << "Casos pela arvore B(200): " << somaB200 << endl;
+                cout << "nComparacoes B(200): " << compsB200 << endl;
+                cout << "Duração da Busca (B(200)): " << duracaoB200<< "ns" << endl;
+            }
+            cout << " ||||||||||| RESULTADOS |||||||||| " << endl;
+            cout << "Media de Casos AVL: " << mediaCasosAVL/m << endl;
+            cout << "Media de Casos B20: " << mediaCasosB20/m << endl;
+            cout << "Media de Casos B200: " << mediaCasosB200/m << endl;
+            cout << "Media de Duracao AVL: " << mediaDuracaoAVL/m << endl;
+            cout << "Media de Duracao B20: " << mediaDuracaoB20/m << endl;
+            cout << "Media de Duracao B200: " << mediaDuracaoB200/m << endl;
+            cout << "Media de Comps AVL: " << mediaCompsAVL/m << endl;
+            cout << "Media de Comps B20: " << mediaCompsB20/m << endl;
+            cout << "Media de Comps B200: " << mediaCompsB200/m << endl;
+
+
+        }
+
         break;
-        
-        default: 
+
+        default:
             goto readCommand;
         break;
     }
