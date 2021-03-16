@@ -21,11 +21,11 @@ class ArvoreB
         void printAux( NoB* no, int& layer, bool& overflow );
         void clearAux( NoB* no );
 
-        void overflow( int val, NoB* current, NoB* left, NoB* right, int& );
+        void overflow( Registro, NoB* current, NoB* left, NoB* right, int& );
 
         int AuxBusca( NoB*, int, int& );
         int CountAux( NoB* );
-        void InsereAux( int, int&, NoB* );
+        void InsereAux( Registro, int&, NoB* );
 
         HashTable* HashRef;
 
@@ -36,7 +36,7 @@ class ArvoreB
         bool Busca( int val );
         int BuscaCasos( int, int& );
 
-        void Insere( int val, int& );
+        void Insere( Registro, int& );
 
         void Print( bool overflow = false );
         void Limpar();
