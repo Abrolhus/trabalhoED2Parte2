@@ -35,3 +35,9 @@ build/
 
 /*.bat
 Dataset/
+
+# Results
+/*.txt
+
+# Debugs
+/debug

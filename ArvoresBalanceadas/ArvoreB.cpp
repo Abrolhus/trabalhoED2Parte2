@@ -135,85 +135,267 @@ void ArvoreB::Insere( Registro val, int& comp )
     if( root == nullptr )
     {
         root = new NoB(size);
-        root->setLeaf(true);
-        root->append( HashRef->getIndexOf( val.getCode(), val.getData() ) );
+        root->append( HashRef->getIndexOf(val.getCode(), val.getData() ) );
         root->appendChild(nullptr);
+        root->appendChild(nullptr);
+        root->setLeaf(true);
         return;
     }
 
     InsereAux( val, comp, root );
+    // if( root == nullptr )
+    // {
+    //     NoB* no = new NoB(size);
+    //     no->setLeaf(true);
+    //     no->append( HashRef->getIndexOf(val.getCode(), val.getData()) );
+    //     no->appendChild( nullptr );
+    //     no->appendChild( nullptr );
+
+    //     root = no;
+
+    //     // cerr << "Gerada raiz" << endl;
+    //     // cerr << "Inserido " << val << endl;
+    //     return;
+    // }
+
+    // // cerr << "Inserindo " << val << endl;
+    // InsereAux( val, comp, root );
+
 }
 void ArvoreB::InsereAux( Registro val, int& comp, NoB* no )
 {
-    Registro atual;
+    if( no == nullptr ) return;
+
     while( !no->isLeaf() )
     {
+        Registro atual;
         int i = 0;
         for( i = 0; i < no->getPos(); i++ )
         {
             atual = HashRef->at( no->get(i) );
-            if( (val.getCode() < atual.getCode()) || ( val.getCode() == atual.getCode() && DataCompare( val.getData(), atual.getData() ) == 1 ) )
+            comp++;
+            if( val.getCode() < atual.getCode() || ( val.getCode() == atual.getCode() && DataCompare( val.getData(), atual.getData() ) == 1 ) )
             {
                 InsereAux( val, comp, no->getChild(i) );
                 return;
             }
         }
+        cout << "no " << (no->isLeaf() ? "folha":"nao folha") << endl;
+        cout << "i " << i << endl;
         InsereAux( val, comp, no->getChild(i) );
         return;
     }
 
     overflow( val, no, nullptr, nullptr, comp );
+    // Registro reg_cur;
+    
+    // // cerr << "No " << (no->isLeaf() ? "é":"não") << " é folha" << endl;
+    // while( !no->isLeaf() )
+    // {
+    //     // cerr << "Iterando um no" << endl;
+    //     int i;
+    //     for( i = 0; i < no->getPos(); i++ )
+    //     {
+    //         reg_cur = HashRef->at( no->get(i) );
+    //         comp++;
+    //         // cerr << "Comparando com posicao " << i << " ( " << reg_new.getCode() << "-" << reg_new.getData() << " ) com ( " << reg_cur.getCode() << "-" << reg_cur.getData() << " )" << endl;
+    //         if( val.getCode() < reg_cur.getCode() )
+    //         {
+    //             cerr << val.getCode() << " menor que " << reg_cur.getCode() << endl;
+    //             InsereAux( val, comp, no->getChild(i) );
+    //             return;
+    //         }
+    //         else
+    //         {
+    //             if( val.getCode() == reg_cur.getCode() )
+    //             {
+    //                 comp++;
+    //                 if( DataCompare( val.getData(), reg_cur.getData() ) == 1 )
+    //                 {
+    //                     // cerr << val.getData() << " menor que " << reg_cur.getData() << endl;
+    //                     InsereAux( val,comp, no->getChild(i) );
+    //                     return;
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     // cerr << "Chegou ao final" << endl;
+    //     InsereAux( val,comp, no->getChild(i) );
+    //     return;
+    // }
+
+    // // cerr << "Chamando overflow" << endl;
+    // overflow( val, no, nullptr, nullptr, comp );
 }
 
 void ArvoreB::overflow( Registro val, NoB* current, NoB* left, NoB* right, int& comp )
 {
-    if( current == nullptr )
+        if( current == nullptr )
     {
+        cout << "nullnode" << endl;
         current = new NoB(size);
-        current->setLeaf(false);
-        current->append( HashRef->getIndexOf( val.getCode(), val.getData() ) );
-        current->appendChild(left);
-        current->appendChild(right);
+        root = current;
+        root->setLeaf(false);
+        root->append( HashRef->getIndexOf( val.getCode(),val.getData() ) );
+        root->appendChild(left);
+        root->appendChild(right);
+        if( left != nullptr ) left->setParent(current);
+        if( right != nullptr ) right->setParent(current);
         return;
     }
+
+    // if( !current->isLeaf() )
+    // {
+    //     cout << "nao folha" << endl;
+    //     left->setParent(current);
+    //     right->setParent(current);
+    // }
 
     Registro atual;
 
     int i = 0;
     for( i = 0; i < current->getPos(); i++ )
     {
-        atual = HashRef->at( current->get( i ) );
-        if( (val.getCode() < atual.getCode()) || ( val.getCode() == atual.getCode() && DataCompare( val.getData(), atual.getData() ) == 1 ) )
+        atual = HashRef->at( current->get(i) );
+        comp++;
+        if( val.getCode() < atual.getCode() || ( val.getCode() == atual.getCode() && DataCompare( val.getData(), atual.getData() ) == 1 ) )
             break;
     }
 
+    // cout << "Inserindo " << val << " em " << i << endl;
+
+    // cout << "tams v " << current->getPos() << endl;
+    // cout << "tams c " << current->getPosChild() << endl;
     current->insert( HashRef->getIndexOf( val.getCode(), val.getData() ), i );
+    current->setChild(i, left);
     current->insertChild( i+1, right );
-    current->setChild( i, left );
-
-    if( left != nullptr ) left->setParent( current );
-    if( right != nullptr ) right->setParent( current );
-
+    // cout << "tams f v" << current->getPos() << endl;
+    // cout << "tams f c" << current->getPosChild() << endl;
+    
     if( current->getPos() < size ) return;
 
-    Registro subir = HashRef->at( current->get( current->getPos()/2 ) );
-    NoB* novo = new NoB(size);
-    novo->setLeaf(current->isLeaf());
+    NoB* newNode = new NoB(size);
+    newNode->setLeaf( current->isLeaf() );
+    newNode->setParent( current->getParent() );
 
-    int j = 0;
-    for( j = (current->getPos()/2)+1; j < current->getPos(); )
+    i = current->getPos()/2;
+    Registro save = HashRef->at( current->get( i ) );
+    // cout << "pivo " << save << endl;
+    // cout << "numero de childs " << current->getPosChild() << endl;
+
+    for( int j=i+1 ; j < current->getPos(); )
     {
-        novo->append( current->get(j) );
-        novo->appendChild( current->getChild(j) );
+        // cout << "jogando pra la " << current->get(j) << endl;
+        newNode->append( current->get(j) );
+        newNode->appendChild( current->getChild(j) );
 
         current->pop(j);
         current->popChild(j);
     }
-    current->popChild(j);
-    current->pop(j-1);
+    newNode->appendChild( current->getChild(i+1) );
+    current->popChild(i+1);
+    current->pop( i );
 
-    overflow( subir, current->getParent(), left, novo, comp );
+    left = current;
+    // cout << "chamando ov " << endl;
+    overflow( save, current->getParent(), left, newNode, comp );
 
+    // if( current == nullptr )
+    // {
+    //     current = new NoB(size);
+    //     current->setLeaf(false);
+    //     root = current;
+    //     // cerr << "Nova raiz" << endl;
+    // }
+
+    // Registro reg_cur;
+
+    // int i;
+    // for( i = 0; i < current->getPos(); i++ ) // BUSCA POSICAO NA QUAL VAL SERA INSERIDO
+    // {
+    //     if( current->get(i) != -1 )
+    //         reg_cur = HashRef->at( current->get(i) );
+
+    //     if( reg_cur.getId() > val.getId() ) 
+    //         break;
+    //     else if( reg_cur.getId() == reg_cur.getId() )
+    //     {
+    //         comp++;
+    //         if( DataCompare(reg_cur.getData(), val.getData()) == -1 )
+    //             break;
+    //     } 
+    //     comp++;
+    // }
+    // comp++;
+
+    // // cerr << "Inserido " << val << " na posição " << i << endl;
+
+    // current->insert( HashRef->getIndexOf( val.getCode(), val.getData() ), i );
+    // // if( i == 0 )
+    // // {
+    // //     // cerr << "Setando filho esq em " << i << endl;
+    // //     current->insertChild( i, left );
+    // //     current->setChild( i+1, right );
+    // // }
+    // // else
+    // // {
+    //     current->setChild( i, left );
+    //     current->insertChild( i+1, right );
+    // // }
+    // // cerr << "Novo filho dir em " << i+1 << endl;
+
+    // // cerr << "Setando filho esq em " << i << endl;
+
+    // // current->setChild( i, left )
+
+    // // current->setChild( (i == size ? i-1:i), left );
+    // // current->setChild( (i == size ? i:i+1), right );
+
+    // if( left != nullptr ) left->setParent( current );
+    // if( right != nullptr ) right->setParent( current );
+
+    // if( current->getPos() < size+1 ) return;
+
+    // // cerr << "Explosao de tamanho: " << current->getPos() << endl;
+
+    // int pivo = current->get( current->getPos()/2 );
+    // NoB* newLeft = current;
+    // NoB* newRight = new NoB(size);
+
+    // int iPivo = (current->getPos()-1)/2;
+    // int j;
+
+    // for( j = current->getPos()/2; j < current->getPos(); j++ )
+    // {
+    //     newRight->append( current->get(j) );
+    //     newRight->appendChild( current->getChild(j) );
+    // }
+    // newRight->appendChild( current->getChild(j) );
+
+    // for( j = (current->getPos()/2)+1; j < current->getPos(); )
+    // {
+    //     current->pop( j );
+    //     current->popChild( j );
+    // }
+    // current->popChild( j );
+
+    // // newRight->setChild( l,current->getChild(k) );
+    // // current->setChild( k, nullptr );
+
+    // newRight->setLeaf( current->isLeaf() ); // SE AUX E FOLHA, NO DA DIREITA TAMBEM SERA
+
+    // current->pop( iPivo );
+
+    // // cerr << current->getPos() << " POS CURR" << endl;
+
+    // // cerr << "Novo no esq: " << endl;
+    // // for( int i = 0; i < current->getPos(); i++ )
+    // //     cerr << HashRef->at( current->get(i) ).getCode() << (i==current->getPos()-1 ? "\n":",");
+    // // cerr << "Novo no dir: " << endl;
+    // // for( int i = 0; i < newRight->getPos(); i++ )
+    // //     cerr << HashRef->at( newRight->get(i) ).getCode() << (i==newRight->getPos()-1 ? "\n":",");
+    
+    // overflow( HashRef->at(pivo), current->getParent(), newLeft, newRight, comp );
 }
 
 void ArvoreB::Print( bool overflow )
