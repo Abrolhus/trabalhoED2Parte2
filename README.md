@@ -7,8 +7,8 @@ Parte 1: https://github.com/abreuthrj/Trabalho_ED2
 Para rodar o código por linha de comando, digitar no repositorio:
 * Windows:
     ```
-    g++ *.cpp ArvoresBalanceadas/*.cpp LeituraArvoreQuad/*.cpp -I .\ -o trab.exe -finput-charset=utf-8
-   .\Trab.exe // executar o arquivo
+    g++ *.cpp ArvoresBalanceadas/*.cpp LeituraArvoreQuad/*.cpp HashTable/*.cpp -I .\ -o trab.exe -finput-charset=utf-8
+   .\trab.exe // executar o arquivo
    ```
 
 * Linux ou OSX:
