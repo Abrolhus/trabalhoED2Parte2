@@ -24,7 +24,6 @@ void HashTable::insert(Registro reg){
     int i = 0;
     int index;
     do {
-    if(i >10)
         index = this->hashFunction(reg.getCode(), reg.getData(), i);
         i++;
     } while(this->table.at(index).flag == FULL && i != this->table.size());

@@ -15,7 +15,7 @@ class ArvoreAVL
 
         void balanceamento();
 
-        NoAVL* InsereAux( int, NoAVL*, int& );
+        NoAVL* InsereAux( Registro, NoAVL*, int& );
         void PrintAux( NoAVL* );
 
         NoAVL* rotSEsq( NoAVL* );
@@ -33,7 +33,7 @@ class ArvoreAVL
         ArvoreAVL( HashTable* Hash );
         ~ArvoreAVL();
 
-        void Insere( int, int& );
+        void Insere( Registro, int& );
 
         bool Busca( int val );
         int BuscaCasos( int val, int& );

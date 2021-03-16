@@ -32,47 +32,30 @@ void ArvoreAVL::LimparAux( NoAVL* no )
     no = nullptr;
 }
 
-void ArvoreAVL::Insere( int key, int& comp )
+void ArvoreAVL::Insere( Registro key, int& comp )
 {
     this->raiz = InsereAux( key, raiz, comp );
 }
 
-NoAVL* ArvoreAVL::InsereAux( int key, NoAVL* no, int& comp )
+NoAVL* ArvoreAVL::InsereAux( Registro key, NoAVL* no, int& comp )
 {
     if ( no == nullptr )
     {
-        return new NoAVL( key );
+        return new NoAVL( HashRef->getIndexOf( key.getCode(), key.getData() ) );
     }
 
-    Registro* reg_cur = &HashRef->at( no->get() );
-    Registro* reg_new = &HashRef->at( key );
+    Registro reg_cur = HashRef->at( no->get() );
 
-    // char decision = 'r';
 
-    if( reg_new->getId() > reg_cur->getId() )
+    if( key.getId() > reg_cur.getId() )
         no->setDir( InsereAux( key, no->dir(), comp));
-        // decision = 'r';
-    else if( reg_new->getId() < reg_cur->getId() )
+    else if( key.getId() < reg_cur.getId() )
         no->setEsq( InsereAux( key, no->esq(), comp));
-        // decision = 'l';
-    else if( stoi(reg_new->getData().substr(0,4)) > stoi( reg_cur->getData().substr(0,4) ) )
+    else if( DataCompare( key.getData(), reg_cur.getData() ) == -1 )
         no->setDir( InsereAux( key, no->dir(), comp));
-        // decision = 'r';
-    else if( stoi(reg_new->getData().substr(0,4)) < stoi( reg_cur->getData().substr(0,4) ) )
-        no->setEsq( InsereAux( key, no->esq(), comp));
-        // decision = 'l';
-    else if( stoi(reg_new->getData().substr(5,2)) > stoi( reg_cur->getData().substr(5,2) ) )
-        no->setDir( InsereAux( key, no->dir(), comp));
-        // decision = 'r';
-    else if( stoi(reg_new->getData().substr(5,2)) < stoi( reg_cur->getData().substr(5,2) ) )
-        no->setEsq( InsereAux( key, no->esq(), comp));
-        // decision = 'l';
-    else if( stoi(reg_new->getData().substr(8,2)) > stoi(reg_cur->getData().substr(8,2)) )
-        no->setDir( InsereAux( key, no->dir(), comp));
-        // decision = 'r';
     else
-        no->setEsq( InsereAux( key, no->esq(), comp ));
-        // decision = 'l';
+        no->setEsq( InsereAux( key, no->esq(), comp));
+
     comp++;
 
     int fd,fe;
@@ -99,6 +82,7 @@ NoAVL* ArvoreAVL::InsereAux( int key, NoAVL* no, int& comp )
         else if( fe == 1 )
             no = rotDDir( no );
     }
+
     return no;
 }
 
@@ -139,14 +123,14 @@ int ArvoreAVL::BuscaCasos( int val, int& comp )
     while( aux != nullptr )
     {
         int atual = HashRef->at( aux->get() ).getCode();
-        // cerr << "Comparando " << val << " com " << atual << endl;
+        comp++;
+
         if( atual > val )
             aux = aux->esq();
         else if( atual < val )
             aux = aux->dir();
         else
             return BuscaAux( aux, val, comp );
-        comp++;
     }
 
     return 0;
@@ -157,8 +141,7 @@ int ArvoreAVL::BuscaAux( NoAVL* no, int val, int& comp )
     
     Registro atual = HashRef->at( no->get() );
 
-    if( atual.getCode() != val )
-        return 0;
+    if( atual.getCode() != val ) return 0;
 
     return BuscaAux( no->esq(), val, comp ) + BuscaAux( no->dir(), val, comp ) + atual.getCasos();
 }

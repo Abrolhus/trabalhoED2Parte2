@@ -21,7 +21,14 @@ NoB::~NoB()
 int NoB::get( int i ){ return values[i]; }
 void NoB::set( int i, int val ){ values[i] = val; }
 NoB* NoB::getChild( int i ){ return childs[i]; }
-void NoB::setChild( int i, NoB* no ){ childs[i] = no; }
+void NoB::setChild( int i, NoB* no )
+{ 
+    if( childs.size() == 0 )
+    {
+        childs.push_back(no);
+    }
+    childs[i] = no; 
+}
 void NoB::appendChild( NoB* no ){ childs.push_back(no); }
 int NoB::getPos(){ return values.size(); }
 int NoB::getPosChild(){ return childs.size(); }
@@ -49,5 +56,20 @@ void NoB::insert( int x )
 void NoB::pop( int pos ){ values.erase( values.begin()+pos ); }
 void NoB::popChild( int pos ){ childs.erase( childs.begin()+pos ); }
 
-void NoB::insert( int val, int k ){ values.insert( values.begin()+k, 1, val ); }
-void NoB::insertChild( int pos, NoB* no ){ childs.insert( childs.begin()+pos, 1, no ); }
+void NoB::insert( int val, int k )
+{ 
+    if( k >= values.size() )
+    {
+        values.push_back( val ); 
+        return;
+    }
+    values.insert( values.begin()+k, 1, val ); 
+}
+void NoB::insertChild( int pos, NoB* no ){
+    if( pos >= childs.size() )
+    {
+        childs.push_back( no );
+        return;
+    }
+    childs.insert( childs.begin()+pos, 1, no );
+}
