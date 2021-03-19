@@ -299,7 +299,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
             }
             auto nAleatorios = hash.getNRandomHashCodes(n);
             for(auto hashCode : nAleatorios){
-                avlTree.Insere(hashCode, argsI[9]);
+                avlTree.Insere(hash.at(hashCode), argsI[9]);
                 bTree.Insere(hash.at(hashCode), argsI[9]);
             }// ou seja, ambas estruturas com o mesmo numero de elementos;
             quad.buscaIntervaloAux(chavesRegiao, x0, x1, y0, y1);
@@ -368,7 +368,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
                 avlTree.Limpar();
                 bTree.Limpar();
                 for(auto hashCode : nAleatorios){
-                    avlTree.Insere(hashCode, argsI[9]);
+                    avlTree.Insere(hash.at(hashCode), argsI[9]);
                     bTree.Insere(hash.at(hashCode), argsI[9]);
                 }// ou seja, ambas estruturas com o mesmo numero de elementos;
                 quad.buscaIntervaloAux(chavesRegiao, x0, x1, y0, y1);
@@ -472,7 +472,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
                     avlTree.Limpar();
                     bTree.Limpar();
                     for(auto hashCode : nAleatorios){
-                        avlTree.Insere(hashCode, argsI[9]);
+                        avlTree.Insere(hash.at(hashCode), argsI[9]);
                         // bTree.Insere(hash.at(hashCode), argsI[9]);
                     }// ou seja, ambas estruturas com o mesmo numero de elementos;
 
