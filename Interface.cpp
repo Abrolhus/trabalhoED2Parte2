@@ -72,7 +72,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
             if( selectedTree == 'a' )
             {
                 for( int i = 0; i < argsI[0]; i++ )
-                    avlTree.Insere( hash.getIndexOf(regs[i].getCode(),regs[i].getData()), argsI[9] );
+                    avlTree.Insere( hash.at(regs[i].getCode(),regs[i].getData()), argsI[9] );
                 avlTree.Print();
             }
             else if( selectedTree == 'b' )
@@ -151,7 +151,7 @@ void interface( ArvoreAVL& avlTree, ArvoreB& bTree, quadTree& quad, HashTable& h
             for( int i = 0; i < randoms.size(); i++ )
             {
                 cerr << "Inserindo " << randoms[i] << " em AVL" << endl;
-                avlTree.Insere( randoms[i], argsI[1] );
+                avlTree.Insere( hash.at(randoms[i]), argsI[1] );
             }
             end = chrono::high_resolution_clock::now();
             cout << "Duração da inserção (AVL): " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << "ns" << endl;
